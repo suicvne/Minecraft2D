@@ -179,25 +179,19 @@ namespace Minecraft2D.Screens
         private void DrawLightmapToTexture(GameTime gameTime)
         {
             MainGame.GlobalGraphicsDevice.SetRenderTarget(worldLightmapPass);
-            MainGame.GlobalGraphicsDevice.Clear(Color.Black);
-            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
-                BlendState.Additive,
-                SamplerState.PointClamp,
-                DepthStencilState.None,
-                RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
-            for (int x = 0; x < world.Lightmap.GetLength(1); x++)
-            {
-                for (int y = 0; y < world.Lightmap.GetLength(0); y++)
-                {
-                    if(world.Lightmap[y, x] == 1f)
-                        MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
-                            new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
-                }
-            }
-            //MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
-            //    new Rectangle(0, 0, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height),
-            //    Color.White);
-            MainGame.GlobalSpriteBatch.End();
+            world.DrawLightmap(gameTime);
+            //for (int x = 0; x < world.Lightmap.GetLength(1); x++)
+            //{
+            //    for (int y = 0; y < world.Lightmap.GetLength(0); y++)
+            //    {
+            //        if(world.Lightmap[y, x] == 1f)
+            //            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
+            //                new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
+            //    }
+            //}
+            ////MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
+            ////    new Rectangle(0, 0, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height),
+            ////    Color.White);
             MainGame.GlobalGraphicsDevice.SetRenderTarget(null);
         }
 

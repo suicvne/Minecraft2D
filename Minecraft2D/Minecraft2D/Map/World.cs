@@ -13,11 +13,11 @@ namespace Minecraft2D.Map
     public class World
     {
         private Tile[,] tiles = new Tile[256, 100];
-        public float[,] Lightmap { get; set; }
+        public int[,] Lightmap { get; set; }
 
         private Random ran = new Random((int)DateTime.Now.Millisecond * 69);
         private PresetBlocks presets = new PresetBlocks();
-        private long worldTime = 6000;
+        private long worldTime = 18000;
         public Color BlockTint = Color.White; //Full daytime
         public Color SkyColor = Color.CornflowerBlue;
 
@@ -26,7 +26,7 @@ namespace Minecraft2D.Map
 
         public World()
         {
-            Lightmap = new float[256, 100];
+            Lightmap = new int[256, 100];
             WorldSize = new Vector2(tiles.GetLength(1) * 32, tiles.GetLength(0) * 32);
             for (int x = 0; x < 100; x++)
             {
@@ -84,7 +84,7 @@ namespace Minecraft2D.Map
                 for (int y = 0; y < tiles.GetLength(0); y++)
                 {
                     if (tiles[y, x].Type == TileType.Air)
-                        Lightmap[y, x] = 1f;
+                        Lightmap[y, x] = 1;
                 }
             }
         }
@@ -208,10 +208,36 @@ namespace Minecraft2D.Map
                 tiles[tY, tX].Position = new Vector2(tX * 32, tY * 32);
 
                 if (tiles[tY, tX].Type == TileType.Air)
-                    Lightmap[tY, tX] = 1f;
+                    Lightmap[tY, tX] = 1;
                 else
-                    Lightmap[tY, tX] = 0f;
+                    Lightmap[tY, tX] = 0;
             }
+        }
+
+        public void DrawLightmap(GameTime gameTime)
+        {
+            viewportRect = new Rectangle((int)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2),
+                    (int)MainGame.GameCamera.Pos.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2),
+                    MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
+            MainGame.GlobalGraphicsDevice.Clear(Color.Black);
+            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
+                BlendState.Additive,
+                SamplerState.PointClamp,
+                DepthStencilState.None,
+                RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
+            for (int x = 0; x < Lightmap.GetLength(1); x++)
+            {
+                for(int y = 0; y < Lightmap.GetLength(0); y++)
+                {
+                    Rectangle objectBounds = new Rectangle(x * 32, y * 32, 32 * 5, 32 * 5); //radius of the lightmap
+                    if(viewportRect.Intersects(objectBounds))
+                    {
+                        if(Lightmap[y, x] == 1f)
+                            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"), new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
+                    }
+                }
+            }
+            MainGame.GlobalSpriteBatch.End();
         }
 
         public void Draw(GameTime gameTime)
@@ -237,7 +263,7 @@ namespace Minecraft2D.Map
                 {
                     tilesToBeRendered.Add(block);
                     if(block.Type == TileType.Air)
-                        Lightmap[y, x] = 1f; //it'll either be 1f or 0f i guess
+                        Lightmap[y, x] = 1; //it'll either be 1f or 0f i guess
                 }
             }
             
@@ -254,7 +280,7 @@ namespace Minecraft2D.Map
                         MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"),
                             new Rectangle(Convert.ToInt32(block.Position.X), Convert.ToInt32(block.Position.Y), 32, 32), //scaling to 32
                             new Rectangle(block.TextureRegion.X, block.TextureRegion.Y, 16, 16),
-                            Color.White,
+                            BlockTint,
                             0f,
                             Vector2.Zero,
                             SpriteEffects.None,
