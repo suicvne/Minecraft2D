@@ -243,6 +243,7 @@ namespace Minecraft2D.Map
                         {
                             if (y < 35) //ensures the underground is dark
                             {
+
                                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"), new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
                                 RenderedLights++;
                             }

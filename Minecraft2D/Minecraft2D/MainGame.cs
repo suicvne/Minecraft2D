@@ -109,6 +109,11 @@ namespace Minecraft2D
             base.Initialize();
             GlobalInputHelper = new InputHelper();
             EnableOrDisableCloseButton(false);
+
+#if DEBUG
+            graphics.SynchronizeWithVerticalRetrace = false;
+            this.IsFixedTimeStep = false;
+#endif
         }
 
         protected override void LoadContent()
