@@ -41,8 +41,8 @@ namespace Minecraft2D.Graphics
 
             HeadRegion = new SkinRegion(8, 8, 16, 16);
             HeadTop = new SkinRegion(8, 0, 16, 16);
-            HeadLeft = new SkinRegion(0, 8, 16, 16);
-            HeadRight = new SkinRegion(16, 8, 16, 16);
+            HeadRight = new SkinRegion(0, 8, 16, 16);
+            HeadLeft = new SkinRegion(16, 8, 16, 16);
             HeadBack = new SkinRegion(32, 8, 16, 16);
 
             OutsideLeg = new SkinRegion(0, 20, 4, 12);

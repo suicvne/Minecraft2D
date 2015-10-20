@@ -82,6 +82,7 @@
     <Compile Include="Graphics\SkinRegion.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Map\Entity.cs" />
+    <Compile Include="Map\Player.cs" />
     <Compile Include="Map\PresetBlocks.cs" />
     <Compile Include="Map\Tile.cs" />
     <Compile Include="Map\World.cs" />

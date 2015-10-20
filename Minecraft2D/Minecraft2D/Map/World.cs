@@ -17,12 +17,16 @@ namespace Minecraft2D.Map
 
         private Random ran = new Random((int)DateTime.Now.Millisecond * 69);
         private PresetBlocks presets = new PresetBlocks();
-        private long worldTime = 18000;
+        private long worldTime = 6000;
         public Color BlockTint = Color.White; //Full daytime
         public Color SkyColor = Color.CornflowerBlue;
 
         public Vector2 WorldSize { get; set; }
         public long WorldTime { get { return worldTime; } set{ worldTime = value; } }
+
+        public int RenderedLights { get; internal set; }
+
+        public Player player { get; internal set; }
 
         public World()
         {
@@ -75,6 +79,8 @@ namespace Minecraft2D.Map
             }
             if (File.Exists("World1.wld"))
                 LoadWorld("World1.wld");
+            GenerateLightmap();
+
         }
 
         private void GenerateLightmap()
@@ -216,6 +222,7 @@ namespace Minecraft2D.Map
 
         public void DrawLightmap(GameTime gameTime)
         {
+            RenderedLights = 0;
             viewportRect = new Rectangle((int)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2),
                     (int)MainGame.GameCamera.Pos.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2),
                     MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
@@ -232,22 +239,31 @@ namespace Minecraft2D.Map
                     Rectangle objectBounds = new Rectangle(x * 32, y * 32, 32 * 5, 32 * 5); //radius of the lightmap
                     if(viewportRect.Intersects(objectBounds))
                     {
-                        if(Lightmap[y, x] == 1f)
-                            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"), new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
+                        if (Lightmap[y, x] == 1f)
+                        {
+                            if (y < 35) //ensures the underground is dark
+                            {
+                                MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"), new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
+                                RenderedLights++;
+                            }
+                        }
                     }
                 }
             }
             MainGame.GlobalSpriteBatch.End();
         }
-
+        
+        private Vector2 LightSize = new Vector2(32 * 5, 32 * 5);
         public void Draw(GameTime gameTime)
         {
+            if (player == null)
+                player = new Player();
+
             MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
                 BlendState.AlphaBlend,
                 SamplerState.PointClamp,
                 DepthStencilState.None,
                 RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
-
             List<Tile> tilesToBeRendered = new List<Tile>();
 
             viewportRect = new Rectangle((int)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2),
@@ -262,8 +278,8 @@ namespace Minecraft2D.Map
                 if (viewportRect.Intersects(objectBounds))
                 {
                     tilesToBeRendered.Add(block);
-                    if(block.Type == TileType.Air)
-                        Lightmap[y, x] = 1; //it'll either be 1f or 0f i guess
+                    //if(block.Type == TileType.Air)
+                    //    Lightmap[y, x] = 1; //it'll either be 1f or 0f i guess
                 }
             }
             
@@ -299,6 +315,8 @@ namespace Minecraft2D.Map
                     }
             }
             MainGame.GlobalSpriteBatch.End();
+
+            player.Draw(gameTime);
         }
     }
 }

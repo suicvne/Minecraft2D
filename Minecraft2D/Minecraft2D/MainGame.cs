@@ -62,7 +62,7 @@ namespace Minecraft2D
             else
                 WriteSettings();
 
-            this.Window.Title = "2DCraft";
+            this.Window.Title = "Minecraft 2D Alpha";
         }
 
 

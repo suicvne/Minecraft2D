@@ -111,6 +111,14 @@ namespace Minecraft2D.Screens
                 {
                     MainGame.GameOptions.ShowDebugInformation = !MainGame.GameOptions.ShowDebugInformation;
                 }
+                else if(MainGame.GlobalInputHelper.IsCurPress(Keys.Left))
+                {
+                    world.player.Move(new Vector2(-2, 0));
+                }
+                else if (MainGame.GlobalInputHelper.IsCurPress(Keys.Right))
+                {
+                    world.player.Move(new Vector2(2, 0));
+                }
                 else if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(MainGame.GameOptions.MoveUp))
                 {
                     MainGame.GameCamera.Move(new Vector2(0, -5));
@@ -224,14 +232,44 @@ namespace Minecraft2D.Screens
             MainGame.GlobalSpriteBatch.End();
 
 
-            //MainGame.GlobalGraphicsDevice.Clear(Color.Black);
-            //MainGame.GlobalSpriteBatch.Draw(worldRenderTarget, new Rectangle(0, 0, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height), Color.White);MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+            MainGame.GlobalSpriteBatch.Begin();
+
+            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Minecraft 2D", new Vector2(0, 2), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+            if (MainGame.GameOptions.ShowDebugInformation)
+            {
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Cam X: " + MainGame.GameCamera.Pos.X, new Vector2(0, 18), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Cam Y: " + MainGame.GameCamera.Pos.Y, new Vector2(0, 18 * 2), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "FPS: " + framerate, new Vector2(0, 18 * 3), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "World Time: " + world.WorldTime, new Vector2(0, 18 * 4), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "World Size: " + world.WorldSize.X + " x " + world.WorldSize.Y, new Vector2(0, 18 * 5), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+
+                string WorldArea = string.Format("{0} x {1}", world.viewportRect.Width, world.viewportRect.Height);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Rendered Area: " + WorldArea, new Vector2(0, 18 * 6), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Rendered Lights: " + world.RenderedLights, new Vector2(0, 18 * 7), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+
+                MainGame.GlobalSpriteBatch.End();
+
+                MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
+                    BlendState.AlphaBlend,
+                    SamplerState.PointClamp,
+                    DepthStencilState.None,
+                    RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
+                DrawRectangle(new Rectangle((int)world.player.Position.X, 
+                    (int)world.player.Position.Y, 
+                    world.player.Hitbox.Width, 
+                    world.player.Hitbox.Height), Color.Green);
+                MainGame.GlobalSpriteBatch.End();
+            }
+            
+            if(!MainGame.GameOptions.ShowDebugInformation)
+                MainGame.GlobalSpriteBatch.End();
 
             MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(mouseState.X, mouseState.Y, 32, 32), Color.White);
             MainGame.GlobalSpriteBatch.End();
 
             
+
 
             elapsedMs++;
         }

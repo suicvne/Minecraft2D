@@ -31,7 +31,7 @@ namespace Minecraft2D
         {
             if (MainGame.GlobalContentManager != null)
             {
-                MainGame.CustomContentManager.AddTexture("default", MainGame.GlobalContentManager.Load<Texture2D>("outline"));
+                MainGame.CustomContentManager.AddTexture("default", MainGame.GlobalContentManager.Load<Texture2D>("default"));
                 MainGame.CustomContentManager.AddSpriteFont("minecraft", MainGame.GlobalContentManager.Load<SpriteFont>("minecraft"));
                 MainGame.CustomContentManager.AddTexture("terrain", MainGame.GlobalContentManager.Load<Texture2D>("terrain"));
                 MainGame.CustomContentManager.AddTexture("crosshair", MainGame.GlobalContentManager.Load<Texture2D>("crosshair"));
