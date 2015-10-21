@@ -10,6 +10,13 @@ namespace Minecraft2D.Screens
 {
     public class TitleScreen : Screen
     {
+        List<Button> ButtonList = new List<Button>();
+
+        public TitleScreen()
+        {
+            ButtonList.Add(new Button(new Vector2i(120, 120), new Rectangle(0, 0, 32, 32), ""));
+        }
+
         public override void Draw(GameTime gameTime)
         {
             int tx, ty;
@@ -26,12 +33,19 @@ namespace Minecraft2D.Screens
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("minecraft-logo"), new Rectangle((MainGame.GlobalGraphicsDevice.Viewport.Width / 2) - WidgetsMap.Minec.RegionWidth, 32, 155 , 44), WidgetsMap.Minec.ToRectangle(), Color.White);
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("minecraft-logo"), new Rectangle((MainGame.GlobalGraphicsDevice.Viewport.Width / 2), 31, 119, 44), WidgetsMap.raft.ToRectangle(), Color.White);
+
+            foreach (var button in ButtonList)
+                button.Draw(gameTime);
+
+            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32), Color.White);
+
             MainGame.GlobalSpriteBatch.End();
         }
 
         public override void Update(GameTime gameTime)
         {
-            //
+            foreach (var button in ButtonList)
+                button.Update(gameTime);
         }
     }
 }

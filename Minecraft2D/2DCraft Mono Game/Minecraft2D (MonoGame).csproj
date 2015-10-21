@@ -38,6 +38,7 @@
     <ApplicationIcon>Game.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Graphics\Button.cs" />
     <Compile Include="Graphics\Camera2D.cs" />
     <Compile Include="Graphics\ContentManager.cs" />
     <Compile Include="Graphics\WidgetsMap.cs" />
