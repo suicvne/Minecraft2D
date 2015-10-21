@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,11 @@ namespace Minecraft2D.Graphics
             Y = y;
             RegionWidth = width;
             RegionHeight = height;
+        }
+
+        public Rectangle ToRectangle()
+        {
+            return new Rectangle(X, Y, RegionWidth, RegionHeight);
         }
     }
 }

@@ -85,7 +85,7 @@ namespace Minecraft2D.Screens
                         (float)Math.Floor(worldMousePosition.Y / 32));
                     world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, airP);
                 }
-                if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(MainGame.GameOptions.JumpKey))
+                if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.JumpKey))
                 {
                     world.SaveWorld("World1.wld");
                     Environment.Exit(0);
@@ -119,25 +119,25 @@ namespace Minecraft2D.Screens
                 {
                     world.player.Move(new Vector2(2, 0));
                 }
-                else if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(MainGame.GameOptions.MoveUp))
+                else if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveUp))
                 {
                     MainGame.GameCamera.Move(new Vector2i(0, -5));
                     if (MainGame.GameCamera.Pos.Y < minY)
                         MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, minY);
                 }
-                else if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(MainGame.GameOptions.MoveRight))
+                else if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveRight))
                 {
                     MainGame.GameCamera.Move(new Vector2i(5, 0));
                     if (MainGame.GameCamera.Pos.X > maxX)
                         MainGame.GameCamera.Pos = new Vector2i(maxX, MainGame.GameCamera.Pos.Y);
                 }
-                else if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(MainGame.GameOptions.MoveLeft))
+                else if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveLeft))
                 {
                     MainGame.GameCamera.Move(new Vector2i(-5, 0));
                     if (MainGame.GameCamera.Pos.X < minX)
                         MainGame.GameCamera.Pos = new Vector2i(minX, MainGame.GameCamera.Pos.Y);
                 }
-                else if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(MainGame.GameOptions.MoveDown))
+                else if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveDown))
                 {
                     MainGame.GameCamera.Move(new Vector2i(0, 5));
                     if (MainGame.GameCamera.Pos.Y > maxY)

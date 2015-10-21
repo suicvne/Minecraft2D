@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Graphics\Camera2D.cs" />
     <Compile Include="Graphics\ContentManager.cs" />
+    <Compile Include="Graphics\WidgetsMap.cs" />
     <Compile Include="Map\Entity.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="MainGame.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Map\Tile.cs" />
     <Compile Include="Graphics\Vector2i.cs" />
     <Compile Include="Map\World.cs" />
+    <Compile Include="Screens\TitleScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
