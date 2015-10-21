@@ -21,22 +21,22 @@ namespace Minecraft2D.Graphics
             Enabled = true;
             Selected = false;
             Position = new Vector2i(0, 0);
-            Size = new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth, WidgetsMap.EnabledButton.RegionHeight);
+            Size = new Rectangle(Position.X, Position.Y, WidgetsMap.EnabledButton.RegionWidth, WidgetsMap.EnabledButton.RegionHeight);
             ButtonText = this.ToString();
         }
         public Button(Vector2i pos, Rectangle size, string text)
         {
             Position = pos;
-            Size = size;
+            Size = new Rectangle(pos.X, pos.Y, size.Width, size.Height);
             ButtonText = text;
         }
 
         public void Update(GameTime gameTime)
         {
             Rectangle mouseBounds = new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X + 8, 
-                MainGame.GlobalInputHelper.CurrentMouseState.Y + 8, 32, 32);
+                MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32);
 
-            if (mouseBounds.Intersects(new Rectangle(Position.X, Position.Y, Size.Width, Size.Height)))
+            if (mouseBounds.Intersects(Size))
                 Selected = true;
             else
                 Selected = false;
@@ -48,13 +48,15 @@ namespace Minecraft2D.Graphics
 
         public void Draw(GameTime gameTime)
         {
+            int textX = (int)(Size.Center.X - MainGame.CustomContentManager.GetFont("minecraft").MeasureString(ButtonText).X / 2);
+
             if (Selected)
             {
                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("widgets"),
                     new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
                     new Rectangle(WidgetsMap.HighlightedButton.X, WidgetsMap.HighlightedButton.Y, WidgetsMap.HighlightedButton.RegionWidth, WidgetsMap.HighlightedButton.RegionHeight), Color.White);
                 MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), this.ButtonText, 
-                    new Vector2(120, 120), 
+                    new Vector2(textX, Size.Y + 13), 
                     Color.White);
             }
             else
@@ -62,6 +64,9 @@ namespace Minecraft2D.Graphics
                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("widgets"),
                     new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
                     new Rectangle(WidgetsMap.EnabledButton.X, WidgetsMap.EnabledButton.Y, WidgetsMap.EnabledButton.RegionWidth, WidgetsMap.EnabledButton.RegionHeight), Color.White);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), this.ButtonText,
+                    new Vector2(textX, Size.Y + 13),
+                    Color.White);
             }
         }
     }

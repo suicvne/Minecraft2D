@@ -14,15 +14,23 @@ namespace Minecraft2D.Screens
 
         public TitleScreen()
         {
-            Button ExitButton = new Button(new Vector2i(120, 120), new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "");
+            Button ExitButton = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDevice.Viewport.Height - 120), new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Exit");
+            Button PlayButton = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDevice.Viewport.Height - 260), new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Load Test World");
+
             ExitButton.Clicked += ExitButton_Clicked;
+            PlayButton.Clicked += () => 
+            {
+                MainGame.manager.PushScreen(GameScreens.GAME);
+            };
 
             ButtonList.Add(ExitButton);
+            ButtonList.Add(PlayButton);
         }
 
         private void ExitButton_Clicked()
         {
-            Environment.Exit(0);
+            MainGame.WriteSettings();
+            MainGame.GameExiting = true;
         }
 
         public override void Draw(GameTime gameTime)
@@ -32,7 +40,7 @@ namespace Minecraft2D.Screens
             ty = (int)Math.Floor((double)MainGame.GlobalGraphicsDevice.Viewport.Height / 32);
 
             MainGame.GlobalGraphicsDevice.Clear(Color.CornflowerBlue);
-
+            
             MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
             
             for(int x = 0; x < tx; x++)
@@ -46,6 +54,9 @@ namespace Minecraft2D.Screens
                 button.Draw(gameTime);
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32), Color.White);
+
+            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"),
+                "Minecraft 2D Alpha", new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
 
             MainGame.GlobalSpriteBatch.End();
         }

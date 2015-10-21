@@ -25,6 +25,12 @@ namespace Minecraft2D.Screens
         {
             world = new World();
 
+            MainGame.WindowClosing += () =>
+            {
+                world.SaveWorld("World1.wld");
+                MainGame.WriteSettings();
+            };
+
             worldRenderTarget = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
             worldLightmapPass = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
             allTogether = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
@@ -85,11 +91,6 @@ namespace Minecraft2D.Screens
                         (float)Math.Floor(worldMousePosition.Y / 32));
                     world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, airP);
                 }
-                if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.JumpKey))
-                {
-                    world.SaveWorld("World1.wld");
-                    Environment.Exit(0);
-                }
                 else if(MainGame.GlobalInputHelper.CurrentMouseState.RightButton == ButtonState.Pressed)
                 {
                     Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
@@ -110,6 +111,11 @@ namespace Minecraft2D.Screens
                 else if (MainGame.GlobalInputHelper.IsNewPress(Keys.F3))
                 {
                     MainGame.GameOptions.ShowDebugInformation = !MainGame.GameOptions.ShowDebugInformation;
+                }
+                else if(MainGame.GlobalInputHelper.IsNewPress(Keys.Escape))
+                {
+                    world.SaveWorld("World1.wld");
+                    MainGame.manager.PushScreen(GameScreens.MAIN);
                 }
                 else if(MainGame.GlobalInputHelper.IsCurPress(Keys.Left))
                 {
@@ -267,8 +273,10 @@ namespace Minecraft2D.Screens
                 string WorldArea = string.Format("{0} x {1}", world.viewportRect.Width, world.viewportRect.Height);
                 MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Rendered Area: " + WorldArea, new Vector2(0, 18 * 6), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
                 MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Rendered Lights: " + world.RenderedLights, new Vector2(0, 18 * 7), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "VSync Enabled: " + MainGame.GameOptions.Vsync, new Vector2(0, 18 * 8), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
 
                 MainGame.GlobalSpriteBatch.End();
+
 
                 MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
                     BlendState.AlphaBlend,

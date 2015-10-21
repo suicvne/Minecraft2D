@@ -6,9 +6,11 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Minecraft2D.Screens;
+using Microsoft.Xna.Framework.Input;
 
 namespace Minecraft2D
 {
+    public delegate void GameWindowClosing();
     public class MainGame : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
@@ -30,8 +32,16 @@ namespace Minecraft2D
             ColorSourceBlend = Blend.DestinationColor,
             ColorDestinationBlend = Blend.Zero,
             ColorBlendFunction = BlendFunction.Add
-        }; 
+        };
+        public static int V_WIDTH = 800, V_HEIGHT = 480;
+        public static Rectangle ClientBounds { get; internal set; }
+        public static bool GameExiting { get; set; }
 
+        public static event GameWindowClosing WindowClosing;
+
+        private System.Windows.Forms.Form FormReference;
+
+        #region Ugly PInvoke Stuff
         [DllImport("user32.dll")]
         static extern bool EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
         [DllImport("user32.dll")]
@@ -41,10 +51,13 @@ namespace Minecraft2D
         internal const UInt32 MF_GRAYED = 0x00000001;
         internal const UInt32 MF_DISABLED = 0x00000002;
         internal const uint MF_BYCOMMAND = 0x00000000;
+        #endregion
 
         public MainGame()
         {
-            EnableOrDisableCloseButton(true);
+            GameExiting = false;
+            FormReference = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
+
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             this.Window.AllowUserResizing = true;
@@ -52,6 +65,12 @@ namespace Minecraft2D
             {
                 if(manager != null)
                     manager.RecalculateMinMax();
+            };
+
+            FormReference.FormClosing += (sender, e) => 
+            {
+                if (WindowClosing != null)
+                    WindowClosing();
             };
 
             GameOptions = new Options.Options();
@@ -62,7 +81,7 @@ namespace Minecraft2D
 
             this.Window.Title = "Minecraft 2D Alpha";
         }
-
+        
 
         public void EnableOrDisableCloseButton(bool Enabled)
         {
@@ -106,12 +125,17 @@ namespace Minecraft2D
         {
             base.Initialize();
             GlobalInputHelper = new InputHelper();
-            EnableOrDisableCloseButton(false);
+            //EnableOrDisableCloseButton(false);
 
-#if DEBUG
-            graphics.SynchronizeWithVerticalRetrace = false;
-            this.IsFixedTimeStep = false;
-#endif
+            int x, y;
+            x = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - FormReference.Width / 2;//- this.Window.ClientBounds.Width;
+            y = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - FormReference.Height / 2;// - this.Window.ClientBounds.Height;
+            FormReference.Location = new System.Drawing.Point(x, y);
+
+            graphics.SynchronizeWithVerticalRetrace = GameOptions.Vsync;
+            this.IsFixedTimeStep = GameOptions.Vsync;
+            graphics.IsFullScreen = GameOptions.Fullscreen;
+            graphics.ApplyChanges();
         }
 
         protected override void LoadContent()
@@ -132,7 +156,31 @@ namespace Minecraft2D
         
         protected override void Update(GameTime gameTime)
         {
+            if(GameExiting)
+            {
+                try
+                { this.Exit(); }
+                catch { Console.WriteLine("Exit failed??"); }
+                
+            }
+
             GlobalInputHelper.Update();
+
+            if(GlobalInputHelper.IsNewPress(Keys.F11))
+            {
+                graphics.IsFullScreen = !graphics.IsFullScreen;
+                graphics.ApplyChanges();
+                GameOptions.Fullscreen = graphics.IsFullScreen;
+            }
+
+            if(GlobalInputHelper.IsNewPress(Keys.F12))
+            {
+                GameOptions.Vsync = !GameOptions.Vsync;
+                graphics.SynchronizeWithVerticalRetrace = !graphics.SynchronizeWithVerticalRetrace;
+                this.IsFixedTimeStep = !IsFixedTimeStep;
+                graphics.ApplyChanges();
+            }
+
             manager.Update(gameTime);
 
             base.Update(gameTime);

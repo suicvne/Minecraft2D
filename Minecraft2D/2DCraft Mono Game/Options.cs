@@ -10,6 +10,8 @@ namespace Minecraft2D.Options
     {
         public bool UseController { get; set; }
         public bool ShowDebugInformation { get; set; }
+        public bool Fullscreen { get; set; }
+        public bool Vsync { get; set; }
 
         public Keys JumpKey { get; set; }
         public Keys MoveLeft { get; set; }
@@ -26,6 +28,8 @@ namespace Minecraft2D.Options
             MoveRight = Keys.D;
             MoveUp = Keys.W;
             MoveDown = Keys.S;
+            Vsync = false;
+            Fullscreen = false;
         }
     }
 }
