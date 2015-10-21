@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Minecraft2D.Graphics
 {
+    public delegate void MouseClicked();
     public class Button
     {
         public Vector2i Position { get; set; }
@@ -13,6 +14,7 @@ namespace Minecraft2D.Graphics
         public bool Selected { get; set; }
         public bool Enabled { get; set; }
         public string ButtonText { get; set; }
+        public event MouseClicked Clicked;
 
         public Button()
         {
@@ -38,6 +40,10 @@ namespace Minecraft2D.Graphics
                 Selected = true;
             else
                 Selected = false;
+
+            if (Selected && MainGame.GlobalInputHelper.CurrentMouseState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+                if (Clicked != null)
+                    Clicked();
         }
 
         public void Draw(GameTime gameTime)
@@ -47,6 +53,9 @@ namespace Minecraft2D.Graphics
                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("widgets"),
                     new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
                     new Rectangle(WidgetsMap.HighlightedButton.X, WidgetsMap.HighlightedButton.Y, WidgetsMap.HighlightedButton.RegionWidth, WidgetsMap.HighlightedButton.RegionHeight), Color.White);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), this.ButtonText, 
+                    new Vector2(120, 120), 
+                    Color.White);
             }
             else
             {

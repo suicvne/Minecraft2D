@@ -14,7 +14,15 @@ namespace Minecraft2D.Screens
 
         public TitleScreen()
         {
-            ButtonList.Add(new Button(new Vector2i(120, 120), new Rectangle(0, 0, 32, 32), ""));
+            Button ExitButton = new Button(new Vector2i(120, 120), new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "");
+            ExitButton.Clicked += ExitButton_Clicked;
+
+            ButtonList.Add(ExitButton);
+        }
+
+        private void ExitButton_Clicked()
+        {
+            Environment.Exit(0);
         }
 
         public override void Draw(GameTime gameTime)
@@ -25,7 +33,7 @@ namespace Minecraft2D.Screens
 
             MainGame.GlobalGraphicsDevice.Clear(Color.CornflowerBlue);
 
-            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
             
             for(int x = 0; x < tx; x++)
                 for(int y = 0; y < ty; y++)
