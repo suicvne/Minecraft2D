@@ -155,11 +155,18 @@ namespace Minecraft2D.Screens
         TimeSpan ElapsedTime = TimeSpan.Zero;
         #endregion
 
+        #region Drawing Code
         private void DrawWorldToTexture(GameTime gameTime)
         {
             MainGame.GlobalGraphicsDevice.SetRenderTarget(worldRenderTarget);
 
             MainGame.GlobalGraphicsDevice.Clear(world.SkyColor);
+
+            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Immediate,
+                BlendState.AlphaBlend,
+                SamplerState.PointClamp,
+                DepthStencilState.None,
+                RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
 
             world.Draw(gameTime);
 
@@ -169,17 +176,12 @@ namespace Minecraft2D.Screens
             if (world.GetTile((int)worldMousePosition.X, (int)worldMousePosition.Y) != null)
             {
                 Tile t = world.GetTile((int)worldMousePosition.X, (int)worldMousePosition.Y);
-
-                //Special
-                MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
-                BlendState.AlphaBlend,
-                SamplerState.PointClamp,
-                DepthStencilState.None,
-                RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
+                
                 if (t.Type != TileType.Air)
                     DrawRectangle(new Rectangle((int)t.Position.X, (int)t.Position.Y, 32, 32), Color.White);
-                MainGame.GlobalSpriteBatch.End();
             }
+
+            MainGame.GlobalSpriteBatch.End();
 
             MainGame.GlobalGraphicsDevice.SetRenderTarget(null);
         }
@@ -187,27 +189,25 @@ namespace Minecraft2D.Screens
         private void DrawLightmapToTexture(GameTime gameTime)
         {
             MainGame.GlobalGraphicsDevice.SetRenderTarget(worldLightmapPass);
+
+            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
+                BlendState.Additive,
+                SamplerState.PointClamp,
+                DepthStencilState.None,
+                RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
+
             world.DrawLightmap(gameTime);
-            //for (int x = 0; x < world.Lightmap.GetLength(1); x++)
-            //{
-            //    for (int y = 0; y < world.Lightmap.GetLength(0); y++)
-            //    {
-            //        if(world.Lightmap[y, x] == 1f)
-            //            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
-            //                new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
-            //    }
-            //}
-            ////MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
-            ////    new Rectangle(0, 0, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height),
-            ////    Color.White);
+
+            MainGame.GlobalSpriteBatch.End();
+
             MainGame.GlobalGraphicsDevice.SetRenderTarget(null);
         }
-
-
+        
         public override void Draw(GameTime gameTime)
         {
             framecounter++;
-            
+
+            #region Misc. Variable Initialization, done once on game startup
             if (MainGame.GameCamera == null)
             {
                 MainGame.GameCamera = new Camera2D();
@@ -221,20 +221,41 @@ namespace Minecraft2D.Screens
             }
             if(skinTest == null)
                 skinTest = new Skin(MainGame.CustomContentManager.GetTexture("default"));
+            #endregion
 
+            #region Individual Target2D Rendering
             DrawWorldToTexture(gameTime);
             DrawLightmapToTexture(gameTime);
+            #endregion
 
+            #region 2 pass system for lighting. Begin and end are kind of needed here to account for the modified blend state we have
             MainGame.GlobalGraphicsDevice.Clear(Color.White);
             MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture, MainGame.Multiply, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
             MainGame.GlobalSpriteBatch.Draw(worldRenderTarget, new Rectangle(0, 0, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height), Color.White);
             MainGame.GlobalSpriteBatch.Draw(worldLightmapPass, new Rectangle(0, 0, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height), Color.White);
             MainGame.GlobalSpriteBatch.End();
+            #endregion
 
-
-            MainGame.GlobalSpriteBatch.Begin();
-
+            #region Text drawing, crosshair drawing
+            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
             MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Minecraft 2D", new Vector2(0, 2), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+
+            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(mouseState.X, mouseState.Y, 32, 32), Color.White);
+            /**
+            These lines really need to stay together
+            */
+            DrawDebugText();
+            if (!MainGame.GameOptions.ShowDebugInformation)
+                MainGame.GlobalSpriteBatch.End();
+            /**
+            */
+            #endregion
+
+            elapsedMs++;
+        }
+
+        private void DrawDebugText()
+        {
             if (MainGame.GameOptions.ShowDebugInformation)
             {
                 MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Cam X: " + MainGame.GameCamera.Pos.X, new Vector2(0, 18), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
@@ -254,24 +275,12 @@ namespace Minecraft2D.Screens
                     SamplerState.PointClamp,
                     DepthStencilState.None,
                     RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
-                DrawRectangle(new Rectangle((int)world.player.Position.X, 
-                    (int)world.player.Position.Y, 
-                    world.player.Hitbox.Width, 
+                DrawRectangle(new Rectangle((int)world.player.Position.X,
+                    (int)world.player.Position.Y,
+                    world.player.Hitbox.Width,
                     world.player.Hitbox.Height), Color.Green);
                 MainGame.GlobalSpriteBatch.End();
             }
-            
-            if(!MainGame.GameOptions.ShowDebugInformation)
-                MainGame.GlobalSpriteBatch.End();
-
-            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
-            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(mouseState.X, mouseState.Y, 32, 32), Color.White);
-            MainGame.GlobalSpriteBatch.End();
-
-            
-
-
-            elapsedMs++;
         }
 
         private void DrawRectangle(Rectangle coords, Color color)
@@ -280,5 +289,6 @@ namespace Minecraft2D.Screens
             rect.SetData(new[] { color });
             MainGame.GlobalSpriteBatch.Draw(rect, coords, color * .5f);
         }
+        #endregion
     }
 }

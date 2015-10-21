@@ -122,13 +122,6 @@ namespace Minecraft2D
             GlobalSpriteBatch = spriteBatch;
             GlobalContentManager = Content;
             GlobalGraphicsDevice = GraphicsDevice;
-            ///LOAD ALL CONTENT HERE 
-            /// MAKE SURE YOU LOAD A L L CONTENT 
-            /// B E F O R E
-            /// T H E G A M E 
-            /// S T A R T S
-            //Content.Load<Texture2D>("default");
-            ///
 
             manager = new ScreenManager();
             manager.LoadContent();

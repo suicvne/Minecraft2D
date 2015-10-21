@@ -33,11 +33,12 @@ namespace Minecraft2D.Map
 
         public void Draw(GameTime gameTime)
         {
-            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Immediate,
+            
+            /*MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Immediate,
                 BlendState.AlphaBlend,
                 SamplerState.PointClamp,
                 DepthStencilState.None,
-                RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
+                RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));*/
             if (Direction == 0)
             {
                 MainGame.GlobalSpriteBatch.Draw(skin.FullSkin, new Rectangle(
@@ -53,7 +54,7 @@ namespace Minecraft2D.Map
                     new Rectangle((int)Position.X + 8, (int)Position.Y + 60, 4 * 2, 12 * 2),
                     new Rectangle(skin.OutsideLeg.X, skin.OutsideLeg.Y, 4, 12), Color.White);
             }
-            MainGame.GlobalSpriteBatch.End();
+            //MainGame.GlobalSpriteBatch.End();
 
         }
     }

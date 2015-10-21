@@ -227,11 +227,7 @@ namespace Minecraft2D.Map
                     (int)MainGame.GameCamera.Pos.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2),
                     MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
             MainGame.GlobalGraphicsDevice.Clear(Color.Black);
-            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
-                BlendState.Additive,
-                SamplerState.PointClamp,
-                DepthStencilState.None,
-                RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
+            
             for (int x = 0; x < Lightmap.GetLength(1); x++)
             {
                 for(int y = 0; y < Lightmap.GetLength(0); y++)
@@ -243,7 +239,6 @@ namespace Minecraft2D.Map
                         {
                             if (y < 35) //ensures the underground is dark
                             {
-
                                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"), new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
                                 RenderedLights++;
                             }
@@ -251,7 +246,6 @@ namespace Minecraft2D.Map
                     }
                 }
             }
-            MainGame.GlobalSpriteBatch.End();
         }
         
         private Vector2 LightSize = new Vector2(32 * 5, 32 * 5);
@@ -260,11 +254,11 @@ namespace Minecraft2D.Map
             if (player == null)
                 player = new Player();
 
-            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
+            /*MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
                 BlendState.AlphaBlend,
                 SamplerState.PointClamp,
                 DepthStencilState.None,
-                RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
+                RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));*/
             List<Tile> tilesToBeRendered = new List<Tile>();
 
             viewportRect = new Rectangle((int)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2),
@@ -315,7 +309,7 @@ namespace Minecraft2D.Map
                             0f);
                     }
             }
-            MainGame.GlobalSpriteBatch.End();
+            //MainGame.GlobalSpriteBatch.End();
 
             player.Draw(gameTime);
         }

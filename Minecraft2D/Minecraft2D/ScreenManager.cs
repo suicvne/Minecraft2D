@@ -50,7 +50,6 @@ namespace Minecraft2D
             CurrentScreen = screen;
         }
 
-
         public void Dispose()
         {
             mainGameScreen = null;
