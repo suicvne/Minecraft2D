@@ -80,6 +80,7 @@
     <Compile Include="Graphics\ContentManager.cs" />
     <Compile Include="Graphics\Skin.cs" />
     <Compile Include="Graphics\SkinRegion.cs" />
+    <Compile Include="Graphics\Vector2i.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Map\Entity.cs" />
     <Compile Include="Map\Player.cs" />

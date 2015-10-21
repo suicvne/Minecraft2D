@@ -43,19 +43,19 @@ namespace Minecraft2D.Screens
 
             if (MainGame.GameCamera.Pos.X > maxX)
             {
-                MainGame.GameCamera.Pos = new Vector2(maxX, MainGame.GameCamera.Pos.Y);
+                MainGame.GameCamera.Pos = new Vector2i(maxX, MainGame.GameCamera.Pos.Y);
             }
             if (MainGame.GameCamera.Pos.Y > maxY)
             {
-                MainGame.GameCamera.Pos = new Vector2(MainGame.GameCamera.Pos.X, maxY);
+                MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, maxY);
             }
             if (MainGame.GameCamera.Pos.X < minX)
             {
-                MainGame.GameCamera.Pos = new Vector2(minX, MainGame.GameCamera.Pos.Y);
+                MainGame.GameCamera.Pos = new Vector2i(minX, MainGame.GameCamera.Pos.Y);
             }
             if (MainGame.GameCamera.Pos.Y < minY)
             {
-                MainGame.GameCamera.Pos = new Vector2(MainGame.GameCamera.Pos.X, minY);
+                MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, minY);
             }
             worldRenderTarget = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
             worldLightmapPass = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
@@ -121,27 +121,27 @@ namespace Minecraft2D.Screens
                 }
                 else if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(MainGame.GameOptions.MoveUp))
                 {
-                    MainGame.GameCamera.Move(new Vector2(0, -5));
+                    MainGame.GameCamera.Move(new Vector2i(0, -5));
                     if (MainGame.GameCamera.Pos.Y < minY)
-                        MainGame.GameCamera.Pos = new Vector2(MainGame.GameCamera.Pos.X, minY);
+                        MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, minY);
                 }
                 else if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(MainGame.GameOptions.MoveRight))
                 {
-                    MainGame.GameCamera.Move(new Vector2(5, 0));
+                    MainGame.GameCamera.Move(new Vector2i(5, 0));
                     if (MainGame.GameCamera.Pos.X > maxX)
-                        MainGame.GameCamera.Pos = new Vector2(maxX, MainGame.GameCamera.Pos.Y);
+                        MainGame.GameCamera.Pos = new Vector2i(maxX, MainGame.GameCamera.Pos.Y);
                 }
                 else if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(MainGame.GameOptions.MoveLeft))
                 {
-                    MainGame.GameCamera.Move(new Vector2(-5, 0));
+                    MainGame.GameCamera.Move(new Vector2i(-5, 0));
                     if (MainGame.GameCamera.Pos.X < minX)
-                        MainGame.GameCamera.Pos = new Vector2(minX, MainGame.GameCamera.Pos.Y);
+                        MainGame.GameCamera.Pos = new Vector2i(minX, MainGame.GameCamera.Pos.Y);
                 }
                 else if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(MainGame.GameOptions.MoveDown))
                 {
-                    MainGame.GameCamera.Move(new Vector2(0, 5));
+                    MainGame.GameCamera.Move(new Vector2i(0, 5));
                     if (MainGame.GameCamera.Pos.Y > maxY)
-                        MainGame.GameCamera.Pos = new Vector2(MainGame.GameCamera.Pos.X, maxY);
+                        MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, maxY);
                 }
             }
             world.Update(gameTime);
@@ -171,7 +171,7 @@ namespace Minecraft2D.Screens
             world.Draw(gameTime);
 
             Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
-            Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
+            Vector2i worldMousePosition = new Vector2i(Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix));
 
             if (world.GetTile((int)worldMousePosition.X, (int)worldMousePosition.Y) != null)
             {
@@ -217,7 +217,7 @@ namespace Minecraft2D.Screens
                 minY = y;
                 maxX = (int)world.WorldSize.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2);
                 maxY = (int)world.WorldSize.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2);
-                MainGame.GameCamera.Pos = new Vector2(x + (32 * 32), y + (25 * 32));
+                MainGame.GameCamera.Pos = new Vector2i(x + (32 * 32), y + (25 * 32));
             }
             if(skinTest == null)
                 skinTest = new Skin(MainGame.CustomContentManager.GetTexture("default"));

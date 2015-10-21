@@ -11,14 +11,14 @@ namespace Minecraft2D.Graphics
     {
         protected float _zoom;
         public Matrix _transform;
-        public Vector2 _pos;
+        public Vector2i _pos;
         protected float _rotation;
 
         public Camera2D()
         {
             _zoom = 1.0f;
             _rotation = 0.0f;
-            _pos = Vector2.Zero;
+            _pos = Vector2i.Zero;
         }
 
         public float Zoom
@@ -31,11 +31,11 @@ namespace Minecraft2D.Graphics
             get { return _rotation; }
             set { _rotation = value; }
         }
-        public void Move(Vector2 amount)
+        public void Move(Vector2i amount)
         {
             _pos += amount;
         }
-        public Vector2 Pos
+        public Vector2i Pos
         {
             get { return _pos; }
             set { _pos = value; }
