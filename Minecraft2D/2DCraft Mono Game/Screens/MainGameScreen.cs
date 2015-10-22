@@ -1,12 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.BitmapFonts;
 using Minecraft2D.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Minecraft2D.Map;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Minecraft2D.Screens
 {
@@ -83,13 +84,16 @@ namespace Minecraft2D.Screens
             {
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
-                    Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
-                    Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
+                    if(MainGame.GameCamera != null)
+                    {
+                        Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
+                        Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
 
-                    Tile airP = PresetBlocks.Air.AsTile();
-                    airP.Position = new Vector2((float)Math.Floor(worldMousePosition.X / 32),
-                        (float)Math.Floor(worldMousePosition.Y / 32));
-                    world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, airP);
+                        Tile airP = PresetBlocks.Air.AsTile();
+                        airP.Position = new Vector2((float)Math.Floor(worldMousePosition.X / 32),
+                            (float)Math.Floor(worldMousePosition.Y / 32));
+                        world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, airP);
+                    }
                 }
                 else if(MainGame.GlobalInputHelper.CurrentMouseState.RightButton == ButtonState.Pressed)
                 {
@@ -216,7 +220,7 @@ namespace Minecraft2D.Screens
             #region Misc. Variable Initialization, done once on game startup
             if (MainGame.GameCamera == null)
             {
-                MainGame.GameCamera = new Camera2D();
+                MainGame.GameCamera = new Graphics.Camera2D();
                 int x = MainGame.GlobalGraphicsDevice.Viewport.Width / 2;
                 int y = MainGame.GlobalGraphicsDevice.Viewport.Height / 2;
                 minX = x;
@@ -244,7 +248,7 @@ namespace Minecraft2D.Screens
 
             #region Text drawing, crosshair drawing
             MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Minecraft 2D", new Vector2(0, 2), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "Minecraft 2D", new Vector2(0, 2), Color.White);
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(mouseState.X, mouseState.Y, 32, 32), Color.White);
             /**
@@ -264,16 +268,16 @@ namespace Minecraft2D.Screens
         {
             if (MainGame.GameOptions.ShowDebugInformation)
             {
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Cam X: " + MainGame.GameCamera.Pos.X, new Vector2(0, 18), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Cam Y: " + MainGame.GameCamera.Pos.Y, new Vector2(0, 18 * 2), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "FPS: " + framerate, new Vector2(0, 18 * 3), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "World Time: " + world.WorldTime, new Vector2(0, 18 * 4), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "World Size: " + world.WorldSize.X + " x " + world.WorldSize.Y, new Vector2(0, 18 * 5), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "Cam X: " + MainGame.GameCamera.Pos.X, new Vector2(0, 18), Color.White);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "Cam Y: " + MainGame.GameCamera.Pos.Y, new Vector2(0, 18 * 2), Color.White);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "FPS: " + framerate, new Vector2(0, 18 * 3), Color.White);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "World Time: " + world.WorldTime, new Vector2(0, 18 * 4), Color.White);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "World Size: " + world.WorldSize.X + " x " + world.WorldSize.Y, new Vector2(0, 18 * 5), Color.White);
 
                 string WorldArea = string.Format("{0} x {1}", world.viewportRect.Width, world.viewportRect.Height);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Rendered Area: " + WorldArea, new Vector2(0, 18 * 6), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "Rendered Lights: " + world.RenderedLights, new Vector2(0, 18 * 7), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), "VSync Enabled: " + MainGame.GameOptions.Vsync, new Vector2(0, 18 * 8), Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 1f);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "Rendered Area: " + WorldArea, new Vector2(0, 18 * 6), Color.White);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "Rendered Lights: " + world.RenderedLights, new Vector2(0, 18 * 7), Color.White);
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "VSync Enabled: " + MainGame.GameOptions.Vsync, new Vector2(0, 18 * 8), Color.White);
 
                 MainGame.GlobalSpriteBatch.End();
 

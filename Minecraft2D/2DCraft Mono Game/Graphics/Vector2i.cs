@@ -20,6 +20,8 @@ namespace Minecraft2D.Graphics
             Y = y;
         }
 
+        public Vector2 ToVector2() => new Vector2(X, Y);
+
         public Vector2i(Vector2 floatVector)
         {
             X = (int)floatVector.X;

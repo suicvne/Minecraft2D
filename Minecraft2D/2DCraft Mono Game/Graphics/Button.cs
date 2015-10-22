@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended.BitmapFonts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,14 +52,14 @@ namespace Minecraft2D.Graphics
 
         public void Draw(GameTime gameTime)
         {
-            int textX = (int)(Size.Center.X - MainGame.CustomContentManager.GetFont("minecraft").MeasureString(ButtonText).X / 2);
-
+            int textX = (int)(Size.Center.X - MainGame.CustomContentManager.GetFont("main-font").GetStringRectangle(ButtonText, Position.ToVector2()).Width / 2);
+            
             if (Selected)
             {
                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("widgets"),
                     new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
                     new Rectangle(WidgetsMap.HighlightedButton.X, WidgetsMap.HighlightedButton.Y, WidgetsMap.HighlightedButton.RegionWidth, WidgetsMap.HighlightedButton.RegionHeight), Color.White);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), this.ButtonText, 
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText, 
                     new Vector2(textX, Size.Y + 13), 
                     Color.White);
             }
@@ -67,7 +68,7 @@ namespace Minecraft2D.Graphics
                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("widgets"),
                     new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
                     new Rectangle(WidgetsMap.EnabledButton.X, WidgetsMap.EnabledButton.Y, WidgetsMap.EnabledButton.RegionWidth, WidgetsMap.EnabledButton.RegionHeight), Color.White);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"), this.ButtonText,
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText,
                     new Vector2(textX, Size.Y + 13),
                     Color.White);
             }

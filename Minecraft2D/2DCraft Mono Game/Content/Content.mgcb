@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\..\..\packages\MonoGame.Extended.0.3.44-alpha\lib\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -123,4 +124,20 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:sounds/click.ogg.wav
+
+#begin mainfont.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:mainfont.fnt
+
+#begin mainfont_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:mainfont_0.png
 

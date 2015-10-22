@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Minecraft2D.Screens;
+using MonoGame.Extended.BitmapFonts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,8 @@ namespace Minecraft2D.Screens
             if (MainGame.GlobalContentManager != null)
             {
                 MainGame.CustomContentManager.AddTexture("default", MainGame.GlobalContentManager.Load<Texture2D>("default"));
-                MainGame.CustomContentManager.AddSpriteFont("minecraft", MainGame.GlobalContentManager.Load<SpriteFont>("minecraft-fnt"));
+                //MainGame.CustomContentManager.AddSpriteFont("minecraft", MainGame.GlobalContentManager.Load<SpriteFont>("minecraft-fnt"));
+                MainGame.CustomContentManager.AddSpriteFont("main-font", MainGame.GlobalContentManager.Load<BitmapFont>("mainfont"));
                 MainGame.CustomContentManager.AddTexture("terrain", MainGame.GlobalContentManager.Load<Texture2D>("terrain"));
                 MainGame.CustomContentManager.AddTexture("crosshair", MainGame.GlobalContentManager.Load<Texture2D>("crosshair"));
                 MainGame.CustomContentManager.AddTexture("smoothlight", MainGame.GlobalContentManager.Load<Texture2D>("smoothlight"));

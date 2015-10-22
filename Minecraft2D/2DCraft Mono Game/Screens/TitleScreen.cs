@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Minecraft2D.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
+using MonoGame.Extended.BitmapFonts;
 
 namespace Minecraft2D.Screens
 {
@@ -59,7 +60,7 @@ namespace Minecraft2D.Screens
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32), Color.White);
 
-            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("minecraft"),
+            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"),
                 "Minecraft 2D Alpha", new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
 
             MainGame.GlobalSpriteBatch.End();
