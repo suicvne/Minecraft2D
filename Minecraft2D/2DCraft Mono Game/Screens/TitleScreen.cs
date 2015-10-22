@@ -5,21 +5,25 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Minecraft2D.Graphics;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Minecraft2D.Screens
 {
     public class TitleScreen : Screen
     {
         List<Button> ButtonList = new List<Button>();
+        SoundEffectInstance sei;
 
         public TitleScreen()
         {
             Button ExitButton = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDevice.Viewport.Height - 120), new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Exit");
             Button PlayButton = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDevice.Viewport.Height - 260), new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Load Test World");
+            
 
             ExitButton.Clicked += ExitButton_Clicked;
             PlayButton.Clicked += () => 
             {
+                
                 MainGame.manager.PushScreen(GameScreens.GAME);
             };
 
@@ -63,6 +67,7 @@ namespace Minecraft2D.Screens
 
         public override void Update(GameTime gameTime)
         {
+
             foreach (var button in ButtonList)
                 button.Update(gameTime);
         }

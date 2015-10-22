@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Minecraft2D.Screens;
@@ -41,6 +42,8 @@ namespace Minecraft2D.Screens
                 MainGame.CustomContentManager.AddTexture("minecraft-logo", MainGame.GlobalContentManager.Load<Texture2D>("minecraft"));
                 MainGame.CustomContentManager.AddTexture("mojang-logo", MainGame.GlobalContentManager.Load<Texture2D>("mojang"));
                 MainGame.CustomContentManager.AddTexture("widgets", MainGame.GlobalContentManager.Load<Texture2D>("widgets"));
+
+                MainGame.CustomContentManager.AddSoundEffect("click", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/click.ogg"));
             }
         }
 

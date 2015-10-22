@@ -41,9 +41,12 @@ namespace Minecraft2D.Graphics
             else
                 Selected = false;
 
-            if (Selected && MainGame.GlobalInputHelper.CurrentMouseState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+            if (Selected && MainGame.GlobalInputHelper.IsNewPress(MouseButtons.LeftButton))
+            {
+                MainGame.CustomContentManager.GetSoundEffect("click").Play();
                 if (Clicked != null)
                     Clicked();
+            }
         }
 
         public void Draw(GameTime gameTime)
