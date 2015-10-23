@@ -213,7 +213,50 @@ namespace Minecraft2D.Map
                 return;
             else
             {
-                tiles[tY, tX] = toReplace;
+                if(toReplace.Type == TileType.Air)
+                {
+                    if (tiles[tY, tX].PlaceSoundName != null)
+                    {
+                        if (placeSoundSEI == null)
+                        {
+                            int soundIndex = ran.Next(1, 5);
+                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                            placeSoundSEI.Play();
+                        }
+                        else
+                        {
+                            if (placeSoundSEI.State == SoundState.Stopped)
+                            {
+                                int soundIndex = ran.Next(1, 5);
+                                placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                                placeSoundSEI.Play();
+                            }
+                        }
+                    }
+                    tiles[tY, tX] = toReplace;
+                }
+                else
+                {
+                    tiles[tY, tX] = toReplace;
+                    if (tiles[tY, tX].PlaceSoundName != null)
+                    {
+                        if (placeSoundSEI == null)
+                        {
+                            int soundIndex = ran.Next(1, 5);
+                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                            placeSoundSEI.Play();
+                        }
+                        else
+                        {
+                            if (placeSoundSEI.State == SoundState.Stopped)
+                            {
+                                int soundIndex = ran.Next(1, 5);
+                                placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                                placeSoundSEI.Play();
+                            }
+                        }
+                    }
+                }
                 tiles[tY, tX].Position = new Vector2(tX * 32, tY * 32);
 
                 if (tiles[tY, tX].Type == TileType.Air || tiles[tY, tX].IsBackground)
@@ -221,24 +264,7 @@ namespace Minecraft2D.Map
                 else
                     Lightmap[tY, tX] = 0;
 
-                if(tiles[tY, tX].PlaceSoundName != null)
-                {
-                    if (placeSoundSEI == null)
-                    {
-                        int soundIndex = ran.Next(1, 5);
-                        placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
-                        placeSoundSEI.Play();
-                    }
-                    else
-                    {
-                        if (placeSoundSEI.State == SoundState.Stopped)
-                        {
-                            int soundIndex = ran.Next(1, 5);
-                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
-                            placeSoundSEI.Play();
-                        }
-                    }
-                }
+                
             }
         }
 
