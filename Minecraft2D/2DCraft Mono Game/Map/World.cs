@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using System.IO;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Minecraft2D.Map
 {
@@ -198,6 +199,8 @@ namespace Minecraft2D.Map
                 return tiles[tY, tX];
         }
 
+        private bool SoundPlaying = false;
+
         /// <summary>
         /// Absolute x and y values are used here.
         /// Also sets the tile position.
@@ -213,12 +216,33 @@ namespace Minecraft2D.Map
                 tiles[tY, tX] = toReplace;
                 tiles[tY, tX].Position = new Vector2(tX * 32, tY * 32);
 
-                if (tiles[tY, tX].Type == TileType.Air)
+                if (tiles[tY, tX].Type == TileType.Air || tiles[tY, tX].IsBackground)
                     Lightmap[tY, tX] = 1;
                 else
                     Lightmap[tY, tX] = 0;
+
+                if(tiles[tY, tX].PlaceSoundName != null)
+                {
+                    if (placeSoundSEI == null)
+                    {
+                        int soundIndex = ran.Next(1, 5);
+                        placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                        placeSoundSEI.Play();
+                    }
+                    else
+                    {
+                        if (placeSoundSEI.State == SoundState.Stopped)
+                        {
+                            int soundIndex = ran.Next(1, 5);
+                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                            placeSoundSEI.Play();
+                        }
+                    }
+                }
             }
         }
+
+        private SoundEffectInstance placeSoundSEI;
 
         public void DrawLightmap(GameTime gameTime)
         {

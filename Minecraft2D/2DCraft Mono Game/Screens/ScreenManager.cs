@@ -46,6 +46,21 @@ namespace Minecraft2D.Screens
                 MainGame.CustomContentManager.AddTexture("widgets", MainGame.GlobalContentManager.Load<Texture2D>("widgets"));
 
                 MainGame.CustomContentManager.AddSoundEffect("click", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/click.ogg"));
+
+                MainGame.CustomContentManager.AddSoundEffect("stone1", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/stone1.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("stone2", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/stone2.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("stone3", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/stone3.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("stone4", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/stone4.ogg"));
+
+                MainGame.CustomContentManager.AddSoundEffect("gravel1", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/gravel1.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("gravel2", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/gravel2.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("gravel3", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/gravel3.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("gravel4", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/gravel4.ogg"));
+
+                MainGame.CustomContentManager.AddSoundEffect("grass1", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/grass1.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("grass2", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/grass2.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("grass3", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/grass3.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("grass4", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/grass4.ogg"));
             }
         }
 

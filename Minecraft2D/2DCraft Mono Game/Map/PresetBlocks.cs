@@ -14,6 +14,7 @@ namespace Minecraft2D.Map
         public TileTransparency TransparencyOfTile { get; set; }
         public float Hardness { get; set; }
         public SkinRegion TextureRegion { get; set; }
+        public string PlaceSoundName { get; set; }
 
         public int Light { get; set; }
         public int Absorb { get; set; }
@@ -26,6 +27,7 @@ namespace Minecraft2D.Map
             Drops = null;
             Light = 1;
             Absorb = 15;
+            PlaceSoundName = null;
         }
         public Tile AsTile()
         {
@@ -38,6 +40,7 @@ namespace Minecraft2D.Map
             returnTile.Position = Vector2.Zero;
             returnTile.Light = this.Light;
             returnTile.Absorb = this.Absorb;
+            returnTile.PlaceSoundName = this.PlaceSoundName;
             return returnTile;
         }
     }
@@ -56,7 +59,8 @@ namespace Minecraft2D.Map
             Drops = Self,
             TextureRegion = new SkinRegion(16 * 1, 16 * 0, 16, 16),
             Light = 0,
-            Absorb = 6
+            Absorb = 6,
+            PlaceSoundName = "stone{0}"
         };
 
         public static BlockTemplate Air = new BlockTemplate
@@ -67,7 +71,8 @@ namespace Minecraft2D.Map
             Drops = null,
             TextureRegion = null,
             Light = 1,
-            Absorb = 15
+            Absorb = 15,
+            PlaceSoundName = null
         };
 
         public static BlockTemplate Dirt = new BlockTemplate
@@ -78,7 +83,8 @@ namespace Minecraft2D.Map
             Drops = Self,
             TextureRegion = new SkinRegion(16 * 2, 16 * 0, 16, 16),
             Light = 0,
-            Absorb = 6
+            Absorb = 6,
+            PlaceSoundName = "gravel{0}"
         };
 
         public static BlockTemplate Grass = new BlockTemplate
@@ -89,7 +95,18 @@ namespace Minecraft2D.Map
             Drops = Dirt.AsTile(),
             TextureRegion = new SkinRegion(16 * 3, 16 * 0, 16, 16),
             Light = 0,
-            Absorb = 6
+            Absorb = 6,
+            PlaceSoundName = "grass{0}"
         };
+
+        public static BlockTemplate[] BlocksAsArray()
+        {
+            List<BlockTemplate> tilesList = new List<BlockTemplate>();
+            tilesList.Add(PresetBlocks.Dirt);
+            tilesList.Add(Grass);
+            tilesList.Add(Stone);
+
+            return tilesList.ToArray<BlockTemplate>();
+        }
     }
 }

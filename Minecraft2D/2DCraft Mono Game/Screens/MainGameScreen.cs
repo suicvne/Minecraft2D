@@ -22,6 +22,10 @@ namespace Minecraft2D.Screens
         private RenderTarget2D worldLightmapPass;
         private RenderTarget2D allTogether;
 
+        int currentTileIndex = 0;
+        private BlockTemplate PlacingTile { get; set; }
+        private BlockTemplate[] TilesList { get; set; }
+
         public MainGameScreen()
         {
             world = new World();
@@ -35,6 +39,9 @@ namespace Minecraft2D.Screens
             worldRenderTarget = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
             worldLightmapPass = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
             allTogether = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+
+            TilesList = PresetBlocks.BlocksAsArray();
+            PlacingTile = TilesList[currentTileIndex];
         }
 
         private int minX, minY, maxX, maxY;
@@ -82,6 +89,21 @@ namespace Minecraft2D.Screens
             }
             if (!MainGame.GameOptions.UseController)
             {
+                if (MainGame.GlobalInputHelper.CurrentMouseState.ScrollWheelValue > MainGame.GlobalInputHelper.LastMouseState.ScrollWheelValue)
+                {
+                    currentTileIndex++;
+                    if (currentTileIndex >= TilesList.Length)
+                        currentTileIndex = 0;
+                    PlacingTile = TilesList[currentTileIndex];
+                }
+                if (MainGame.GlobalInputHelper.CurrentMouseState.ScrollWheelValue < MainGame.GlobalInputHelper.LastMouseState.ScrollWheelValue)
+                {
+                    currentTileIndex--;
+                    if (currentTileIndex < 0)
+                        currentTileIndex = TilesList.Length - 1;
+                    PlacingTile = TilesList[currentTileIndex];
+                }
+
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
                     if(MainGame.GameCamera != null)
@@ -95,12 +117,13 @@ namespace Minecraft2D.Screens
                         world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, airP);
                     }
                 }
-                else if(MainGame.GlobalInputHelper.CurrentMouseState.RightButton == ButtonState.Pressed)
+                else if(MainGame.GlobalInputHelper.IsNewPress(MouseButtons.RightButton))
                 {
                     Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
                     Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
 
-                    Tile toPlace = PresetBlocks.Stone.AsTile();
+                    Tile toPlace = PlacingTile.AsTile();
+                    toPlace.Position = new Vector2((int)worldMousePosition.X, (int)worldMousePosition.Y);
                     world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, toPlace);
                 }
                 else if(MainGame.GlobalInputHelper.CurrentMouseState.MiddleButton == ButtonState.Pressed)
@@ -108,46 +131,47 @@ namespace Minecraft2D.Screens
                     Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
                     Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
 
-                    Tile toPlace = PresetBlocks.Stone.AsTile();
+                    Tile toPlace = PlacingTile.AsTile();
                     toPlace.IsBackground = true;
+                    toPlace.Position = new Vector2((int)worldMousePosition.X, (int)worldMousePosition.Y);
                     world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, toPlace);
                 }
-                else if (MainGame.GlobalInputHelper.IsNewPress(Keys.F3))
+                if (MainGame.GlobalInputHelper.IsNewPress(Keys.F3))
                 {
                     MainGame.GameOptions.ShowDebugInformation = !MainGame.GameOptions.ShowDebugInformation;
                 }
-                else if(MainGame.GlobalInputHelper.IsNewPress(Keys.Escape))
+                if(MainGame.GlobalInputHelper.IsNewPress(Keys.Escape))
                 {
                     world.SaveWorld("World1.wld");
                     MainGame.manager.PushScreen(GameScreens.MAIN);
                 }
-                else if(MainGame.GlobalInputHelper.IsCurPress(Keys.Left))
+                if(MainGame.GlobalInputHelper.IsCurPress(Keys.Left))
                 {
                     world.player.Move(new Vector2(-2, 0));
                 }
-                else if (MainGame.GlobalInputHelper.IsCurPress(Keys.Right))
+                if (MainGame.GlobalInputHelper.IsCurPress(Keys.Right))
                 {
                     world.player.Move(new Vector2(2, 0));
                 }
-                else if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveUp))
+                if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveUp))
                 {
                     MainGame.GameCamera.Move(new Vector2i(0, -5));
                     if (MainGame.GameCamera.Pos.Y < minY)
                         MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, minY);
                 }
-                else if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveRight))
+                if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveRight))
                 {
                     MainGame.GameCamera.Move(new Vector2i(5, 0));
                     if (MainGame.GameCamera.Pos.X > maxX)
                         MainGame.GameCamera.Pos = new Vector2i(maxX, MainGame.GameCamera.Pos.Y);
                 }
-                else if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveLeft))
+                if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveLeft))
                 {
                     MainGame.GameCamera.Move(new Vector2i(-5, 0));
                     if (MainGame.GameCamera.Pos.X < minX)
                         MainGame.GameCamera.Pos = new Vector2i(minX, MainGame.GameCamera.Pos.Y);
                 }
-                else if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveDown))
+                if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveDown))
                 {
                     MainGame.GameCamera.Move(new Vector2i(0, 5));
                     if (MainGame.GameCamera.Pos.Y > maxY)
@@ -251,6 +275,28 @@ namespace Minecraft2D.Screens
             MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "Minecraft 2D", new Vector2(0, 2), Color.White);
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(mouseState.X, mouseState.Y, 32, 32), Color.White);
+
+            MainGame.GlobalSpriteBatch.Draw
+                (
+                    MainGame.CustomContentManager.GetTexture("widgets"), 
+                    new Rectangle(2,
+                        MainGame.GlobalGraphicsDevice.Viewport.Height - WidgetsMap.SingleInventory.RegionHeight * 2 - 2, 
+                        24 * 2, 
+                        23 * 2),
+                    WidgetsMap.SingleInventory.ToRectangle(), Color.White
+                );
+
+            MainGame.GlobalSpriteBatch.Draw
+                (
+                    MainGame.CustomContentManager.GetTexture("terrain"),
+                    new Rectangle(8,
+                    (MainGame.GlobalGraphicsDevice.Viewport.Height - WidgetsMap.SingleInventory.RegionHeight * 2 - 2) + 6, 
+                    32, 
+                    32),
+                    PlacingTile.TextureRegion.ToRectangle(),
+                    Color.White
+                );
+
             /**
             These lines really need to stay together
             */

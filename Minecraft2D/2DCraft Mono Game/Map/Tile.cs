@@ -25,6 +25,7 @@ namespace Minecraft2D.Map
         public TileType Type { get; set; }
         public Entity Drops { get; set; }
         public Vector2 Position { get; set; }
+        public string PlaceSoundName { get; set; }
 
         /// <summary>
         /// If this is true, the player will pass through the blocks like water.
@@ -54,6 +55,7 @@ namespace Minecraft2D.Map
             Drops = null;
             IsSelfPlaceholder = false;
             IsBackground = false;
+            PlaceSoundName = null;
         }
         public Tile Copy()
         {

@@ -141,3 +141,171 @@
 /processorParam:TextureFormat=Color
 /build:mainfont_0.png
 
+#begin sounds/step/cloth1.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/cloth1.ogg.wav
+
+#begin sounds/step/cloth2.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/cloth2.ogg.wav
+
+#begin sounds/step/cloth3.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/cloth3.ogg.wav
+
+#begin sounds/step/cloth4.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/cloth4.ogg.wav
+
+#begin sounds/step/grass1.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/grass1.ogg.wav
+
+#begin sounds/step/grass2.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/grass2.ogg.wav
+
+#begin sounds/step/grass3.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/grass3.ogg.wav
+
+#begin sounds/step/grass4.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/grass4.ogg.wav
+
+#begin sounds/step/gravel1.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/gravel1.ogg.wav
+
+#begin sounds/step/gravel2.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/gravel2.ogg.wav
+
+#begin sounds/step/gravel3.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/gravel3.ogg.wav
+
+#begin sounds/step/gravel4.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/gravel4.ogg.wav
+
+#begin sounds/step/sand1.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/sand1.ogg.wav
+
+#begin sounds/step/sand2.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/sand2.ogg.wav
+
+#begin sounds/step/sand3.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/sand3.ogg.wav
+
+#begin sounds/step/sand4.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/sand4.ogg.wav
+
+#begin sounds/step/snow1.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/snow1.ogg.wav
+
+#begin sounds/step/snow2.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/snow2.ogg.wav
+
+#begin sounds/step/snow3.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/snow3.ogg.wav
+
+#begin sounds/step/snow4.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/snow4.ogg.wav
+
+#begin sounds/step/stone1.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/stone1.ogg.wav
+
+#begin sounds/step/stone2.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/stone2.ogg.wav
+
+#begin sounds/step/stone3.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/stone3.ogg.wav
+
+#begin sounds/step/stone4.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/stone4.ogg.wav
+
+#begin sounds/step/wood1.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/wood1.ogg.wav
+
+#begin sounds/step/wood2.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/wood2.ogg.wav
+
+#begin sounds/step/wood3.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/wood3.ogg.wav
+
+#begin sounds/step/wood4.ogg.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/step/wood4.ogg.wav
+
