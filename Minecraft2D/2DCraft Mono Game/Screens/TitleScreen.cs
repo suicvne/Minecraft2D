@@ -91,10 +91,14 @@ namespace Minecraft2D.Screens
 
             DrawText("Minecraft 2D Alpha", new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
 
-            int splashX = 480 - (int)((MainGame.CustomContentManager.SplashFont.MeasureString(splashMessages[splashIndex]).X) / 4.5f);
+            int splashX = 480 - (int)((MainGame.CustomContentManager.SplashFont.MeasureString(splashMessages[splashIndex]).X) / 16f);
+
+
+            Vector2 expansionCenter = MainGame.CustomContentManager.SplashFont.MeasureString(splashMessages[splashIndex]);
+            expansionCenter.X = expansionCenter.X / 4;
 
             MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, splashMessages[splashIndex], 
-                new Vector2(splashX, 100), Color.Yellow, rotation: -.25f, origin: Vector2.Zero, scale: textScale, effects: SpriteEffects.None, layerDepth: 0f
+                new Vector2(splashX, 120), Color.Yellow, rotation: -.25f, origin: expansionCenter, scale: textScale, effects: SpriteEffects.None, layerDepth: 0f
                     );
             //DrawText(splashMessages[splashIndex], new Vector2(200, 200), Color.Yellow);
 
@@ -102,9 +106,9 @@ namespace Minecraft2D.Screens
             //    "Minecraft 2D Alpha", new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
 
             if (reverseTextScale)
-                textScale = textScale - .001f;
+                textScale = (float)(textScale - .003f * gameTime.ElapsedGameTime.TotalMilliseconds);
             else
-                textScale = textScale + .001f;
+                textScale = (float)(textScale + .003f * gameTime.ElapsedGameTime.TotalMilliseconds);
 
             if (textScale > 2.0f)
                 reverseTextScale = true;
