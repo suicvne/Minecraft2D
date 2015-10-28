@@ -13,6 +13,7 @@ namespace Minecraft2D.Graphics
         private List<KeyValuePair<string, Texture2D>> content = new List<KeyValuePair<string, Texture2D>>();
         private List<KeyValuePair<string, BitmapFont>> fonts = new List<KeyValuePair<string, BitmapFont>>();
         private List<KeyValuePair<string, SoundEffect>> sounds = new List<KeyValuePair<string, SoundEffect>>();
+        public SpriteFont SplashFont = MainGame.GlobalContentManager.Load<SpriteFont>("minecraft-fnt");
 
         public ContentManager() { }
 

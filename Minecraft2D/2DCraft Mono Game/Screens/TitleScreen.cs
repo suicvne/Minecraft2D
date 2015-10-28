@@ -12,8 +12,28 @@ namespace Minecraft2D.Screens
 {
     public class TitleScreen : Screen
     {
+        private string[] splashMessages = new string []
+        {
+            "Terraria!",
+            "This is a long message btw",
+            "20 GOTO 10!",
+            "10% bug free!",
+            "Follow the train, CJ!",
+            "Not Terraria!",
+            "Jaclyn is qt!",
+            "3.14159",
+            "All assets belong to Mojang!"
+        };
         List<Button> ButtonList = new List<Button>();
-        float scale = 1.0f;
+        float scale = 1.3f;
+        Random ran = new Random(DateTime.Now.Millisecond);
+        int splashIndex = 0;
+
+        public void AdvanceSplash()
+        {
+            ran.Next(0, splashMessages.Length);
+            splashIndex = ran.Next(0, splashMessages.Length);
+        }
 
         public TitleScreen()
         {
@@ -29,6 +49,10 @@ namespace Minecraft2D.Screens
 
             ButtonList.Add(ExitButton);
             ButtonList.Add(PlayButton);
+
+            ran.Next(0, splashMessages.Length);
+            ran.Next(0, splashMessages.Length);
+            splashIndex = ran.Next(0, splashMessages.Length);
         }
 
         private void ExitButton_Clicked()
@@ -37,6 +61,7 @@ namespace Minecraft2D.Screens
             MainGame.GameExiting = true;
         }
 
+        float textScale = 1f;
         public override void Draw(GameTime gameTime)
         {
             int tx, ty;
@@ -55,7 +80,7 @@ namespace Minecraft2D.Screens
             //MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("minecraft-logo"), new Rectangle((MainGame.GlobalGraphicsDevice.Viewport.Width / 2), 31, 119, 44), WidgetsMap.raft.ToRectangle(), Color.White);
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("minecraft-logo"), 
-                new Rectangle((int)((MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - MainGame.CustomContentManager.GetTexture("minecraft-logo").Width / 2) * scale), 25, 
+                new Rectangle((int)((MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - ((MainGame.CustomContentManager.GetTexture("minecraft-logo").Width * scale) / 2))), 40, 
                 (int)(MainGame.CustomContentManager.GetTexture("minecraft-logo").Width * scale), 
                 (int)(MainGame.CustomContentManager.GetTexture("minecraft-logo").Height * scale)), Color.White);
 
@@ -66,11 +91,30 @@ namespace Minecraft2D.Screens
 
             DrawText("Minecraft 2D Alpha", new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
 
+            int splashX = 480 - (int)((MainGame.CustomContentManager.SplashFont.MeasureString(splashMessages[splashIndex]).X) / 4.5f);
+
+            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, splashMessages[splashIndex], 
+                new Vector2(splashX, 100), Color.Yellow, rotation: -.25f, origin: Vector2.Zero, scale: textScale, effects: SpriteEffects.None, layerDepth: 0f
+                    );
+            //DrawText(splashMessages[splashIndex], new Vector2(200, 200), Color.Yellow);
+
             //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"),
             //    "Minecraft 2D Alpha", new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
 
+            if (reverseTextScale)
+                textScale = textScale - .001f;
+            else
+                textScale = textScale + .001f;
+
+            if (textScale > 2.0f)
+                reverseTextScale = true;
+            if (textScale < 1f)
+                reverseTextScale = false;
+            
+
             MainGame.GlobalSpriteBatch.End();
         }
+        bool reverseTextScale = false;
 
         public static void DrawText(string text, Vector2 position, Color tint)
         {
