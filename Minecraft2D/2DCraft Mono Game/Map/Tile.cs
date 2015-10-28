@@ -11,7 +11,7 @@ namespace Minecraft2D.Map
 {
     public enum TileType
     {
-        Air, Grass, Dirt, Stone, Torch
+        Air, Grass, Dirt, Stone, Torch, Jack
     }
 
     public enum TileTransparency

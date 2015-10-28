@@ -104,6 +104,17 @@ namespace Minecraft2D.Map
             PlaceSoundName = "wood{0}"
         };
 
+        public static BlockTemplate JackOLantern = new BlockTemplate
+        {
+            Type = TileType.Jack,
+            Hardness = .2f,
+            TransparencyOfTile = TileTransparency.FullyOpague,
+            Drops = Self,
+            TextureRegion = new SkinRegion(16 * 8, 16 * 7, 16, 16),
+            Light = 3,
+            PlaceSoundName = "wood{0}"
+        };
+
         public static BlockTemplate[] BlocksAsArray()
         {
             List<BlockTemplate> tilesList = new List<BlockTemplate>();
@@ -111,6 +122,7 @@ namespace Minecraft2D.Map
             tilesList.Add(Grass);
             tilesList.Add(Stone);
             tilesList.Add(Torch);
+            tilesList.Add(JackOLantern);
 
             return tilesList.ToArray<BlockTemplate>();
         }

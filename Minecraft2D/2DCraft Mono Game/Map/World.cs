@@ -153,6 +153,10 @@ namespace Minecraft2D.Map
                                 t = PresetBlocks.Torch.AsTile();
                                 t.Position = new Vector2(x * 32, y * 32);
                                 break;
+                            case TileType.Jack:
+                                t = PresetBlocks.JackOLantern.AsTile();
+                                t.Position = new Vector2(x * 32, y * 32);
+                                break;
                         }
                         tiles[y, x] = t;
                     }
@@ -265,13 +269,13 @@ namespace Minecraft2D.Map
                 }
                 tiles[tY, tX].Position = new Vector2(tX * 32, tY * 32);
 
-                if (tiles[tY, tX].Type == TileType.Air || tiles[tY, tX].IsBackground)
-                    Lightmap[tY, tX] = 5;
-                else if (tiles[tY, tX].Type == TileType.Torch)
-                    Lightmap[tY, tX] = 12;
-                else
-                    Lightmap[tY, tX] = 0;
-
+                //if (tiles[tY, tX].Type == TileType.Air || tiles[tY, tX].IsBackground)
+                //    Lightmap[tY, tX] = 5;
+                //else if (tiles[tY, tX].Light == TileType.Torch)
+                //    Lightmap[tY, tX] = 12;
+                //else
+                //    Lightmap[tY, tX] = 0;
+                Lightmap[tY, tX] = tiles[tY, tX].Light;
                 
             }
         }
@@ -301,7 +305,7 @@ namespace Minecraft2D.Map
                                     new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
                                 RenderedLights++;
                             }
-                            if(tiles[y, x].Type == TileType.Torch)
+                            if(tiles[y, x].Light > 0 && tiles[y, x].Type != TileType.Air)
                             {
                                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"), 
                                     new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
