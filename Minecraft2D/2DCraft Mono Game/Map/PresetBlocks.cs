@@ -17,7 +17,6 @@ namespace Minecraft2D.Map
         public string PlaceSoundName { get; set; }
 
         public int Light { get; set; }
-        public int Absorb { get; set; }
 
         public BlockTemplate()
         {
@@ -25,8 +24,7 @@ namespace Minecraft2D.Map
             TransparencyOfTile = TileTransparency.FullyTransparent;
             Type = TileType.Air;
             Drops = null;
-            Light = 1;
-            Absorb = 15;
+            Light = 5;
             PlaceSoundName = null;
         }
         public Tile AsTile()
@@ -39,8 +37,8 @@ namespace Minecraft2D.Map
             returnTile.TransparencyOfTile = TransparencyOfTile;
             returnTile.Position = Vector2.Zero;
             returnTile.Light = this.Light;
-            returnTile.Absorb = this.Absorb;
             returnTile.PlaceSoundName = this.PlaceSoundName;
+            returnTile.LightOffset = (int)(Math.Floor((float)Light / 2) * 32);
             return returnTile;
         }
     }
@@ -59,7 +57,6 @@ namespace Minecraft2D.Map
             Drops = Self,
             TextureRegion = new SkinRegion(16 * 1, 16 * 0, 16, 16),
             Light = 0,
-            Absorb = 6,
             PlaceSoundName = "stone{0}"
         };
 
@@ -70,8 +67,7 @@ namespace Minecraft2D.Map
             TransparencyOfTile = TileTransparency.FullyTransparent,
             Drops = null,
             TextureRegion = null,
-            Light = 1,
-            Absorb = 15,
+            Light = 5,
             PlaceSoundName = null
         };
 
@@ -83,7 +79,6 @@ namespace Minecraft2D.Map
             Drops = Self,
             TextureRegion = new SkinRegion(16 * 2, 16 * 0, 16, 16),
             Light = 0,
-            Absorb = 6,
             PlaceSoundName = "gravel{0}"
         };
 
@@ -95,8 +90,18 @@ namespace Minecraft2D.Map
             Drops = Dirt.AsTile(),
             TextureRegion = new SkinRegion(16 * 3, 16 * 0, 16, 16),
             Light = 0,
-            Absorb = 6,
             PlaceSoundName = "grass{0}"
+        };
+
+        public static BlockTemplate Torch = new BlockTemplate
+        {
+            Type = TileType.Torch,
+            Hardness = .2f,
+            TransparencyOfTile = TileTransparency.PassThroughBreakable,
+            Drops = Self,
+            TextureRegion = new SkinRegion(16 * 0, 16 * 5, 16, 16),
+            Light = 12,
+            PlaceSoundName = "wood{0}"
         };
 
         public static BlockTemplate[] BlocksAsArray()
@@ -105,6 +110,7 @@ namespace Minecraft2D.Map
             tilesList.Add(PresetBlocks.Dirt);
             tilesList.Add(Grass);
             tilesList.Add(Stone);
+            tilesList.Add(Torch);
 
             return tilesList.ToArray<BlockTemplate>();
         }

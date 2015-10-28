@@ -13,7 +13,7 @@ namespace Minecraft2D.Screens
     public class TitleScreen : Screen
     {
         List<Button> ButtonList = new List<Button>();
-        SoundEffectInstance sei;
+        float scale = 1.0f;
 
         public TitleScreen()
         {
@@ -24,7 +24,6 @@ namespace Minecraft2D.Screens
             ExitButton.Clicked += ExitButton_Clicked;
             PlayButton.Clicked += () => 
             {
-                
                 MainGame.manager.PushScreen(GameScreens.GAME);
             };
 
@@ -52,18 +51,37 @@ namespace Minecraft2D.Screens
                 for(int y = 0; y < ty; y++)
                     MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"), new Rectangle(x * 32, y * 32, 32, 32), new Rectangle(16 * 2, 0, 16, 16), Color.Gray);
 
-            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("minecraft-logo"), new Rectangle((MainGame.GlobalGraphicsDevice.Viewport.Width / 2) - WidgetsMap.Minec.RegionWidth, 32, 155 , 44), WidgetsMap.Minec.ToRectangle(), Color.White);
-            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("minecraft-logo"), new Rectangle((MainGame.GlobalGraphicsDevice.Viewport.Width / 2), 31, 119, 44), WidgetsMap.raft.ToRectangle(), Color.White);
+            //MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("minecraft-logo"), new Rectangle((MainGame.GlobalGraphicsDevice.Viewport.Width / 2) - WidgetsMap.Minec.RegionWidth, 32, 155 , 44), WidgetsMap.Minec.ToRectangle(), Color.White);
+            //MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("minecraft-logo"), new Rectangle((MainGame.GlobalGraphicsDevice.Viewport.Width / 2), 31, 119, 44), WidgetsMap.raft.ToRectangle(), Color.White);
+
+            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("minecraft-logo"), 
+                new Rectangle((int)((MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - MainGame.CustomContentManager.GetTexture("minecraft-logo").Width / 2) * scale), 25, 
+                (int)(MainGame.CustomContentManager.GetTexture("minecraft-logo").Width * scale), 
+                (int)(MainGame.CustomContentManager.GetTexture("minecraft-logo").Height * scale)), Color.White);
 
             foreach (var button in ButtonList)
                 button.Draw(gameTime);
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32), Color.White);
 
-            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"),
-                "Minecraft 2D Alpha", new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
+            DrawText("Minecraft 2D Alpha", new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
+
+            //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"),
+            //    "Minecraft 2D Alpha", new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
 
             MainGame.GlobalSpriteBatch.End();
+        }
+
+        public static void DrawText(string text, Vector2 position, Color tint)
+        {
+            if (tint == null)
+                tint = Color.White;
+
+            Vector2 offsetPos = new Vector2(position.X + 2, position.Y + 2);
+            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), text, offsetPos, Color.Black
+                    );
+            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), text, position, tint
+                    );
         }
 
         public override void Update(GameTime gameTime)

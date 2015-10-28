@@ -41,7 +41,7 @@ namespace Minecraft2D.Screens
                 MainGame.CustomContentManager.AddTexture("terrain", MainGame.GlobalContentManager.Load<Texture2D>("terrain"));
                 MainGame.CustomContentManager.AddTexture("crosshair", MainGame.GlobalContentManager.Load<Texture2D>("crosshair"));
                 MainGame.CustomContentManager.AddTexture("smoothlight", MainGame.GlobalContentManager.Load<Texture2D>("smoothlight"));
-                MainGame.CustomContentManager.AddTexture("minecraft-logo", MainGame.GlobalContentManager.Load<Texture2D>("minecraft"));
+                MainGame.CustomContentManager.AddTexture("minecraft-logo", MainGame.GlobalContentManager.Load<Texture2D>("logo"));
                 MainGame.CustomContentManager.AddTexture("mojang-logo", MainGame.GlobalContentManager.Load<Texture2D>("mojang"));
                 MainGame.CustomContentManager.AddTexture("widgets", MainGame.GlobalContentManager.Load<Texture2D>("widgets"));
 
@@ -61,6 +61,11 @@ namespace Minecraft2D.Screens
                 MainGame.CustomContentManager.AddSoundEffect("grass2", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/grass2.ogg"));
                 MainGame.CustomContentManager.AddSoundEffect("grass3", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/grass3.ogg"));
                 MainGame.CustomContentManager.AddSoundEffect("grass4", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/grass4.ogg"));
+
+                MainGame.CustomContentManager.AddSoundEffect("wood1", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/wood1.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("wood2", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/wood2.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("wood3", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/wood3.ogg"));
+                MainGame.CustomContentManager.AddSoundEffect("wood4", MainGame.GlobalContentManager.Load<SoundEffect>("sounds/step/wood4.ogg"));
             }
         }
 

@@ -91,7 +91,9 @@ namespace Minecraft2D.Map
                 for (int y = 0; y < tiles.GetLength(0); y++)
                 {
                     if (tiles[y, x].Type == TileType.Air)
-                        Lightmap[y, x] = 1;
+                        Lightmap[y, x] = 5;
+                    else if (tiles[y, x].Type == TileType.Torch)
+                        Lightmap[y, x] = 12;
                 }
             }
         }
@@ -145,6 +147,10 @@ namespace Minecraft2D.Map
                                 break;
                             case TileType.Dirt:
                                 t = PresetBlocks.Dirt.AsTile();
+                                t.Position = new Vector2(x * 32, y * 32);
+                                break;
+                            case TileType.Torch:
+                                t = PresetBlocks.Torch.AsTile();
                                 t.Position = new Vector2(x * 32, y * 32);
                                 break;
                         }
@@ -225,12 +231,12 @@ namespace Minecraft2D.Map
                         }
                         else
                         {
-                            if (placeSoundSEI.State == SoundState.Stopped)
-                            {
+                            //if (placeSoundSEI.State == SoundState.Paused)
+                            //{
                                 int soundIndex = ran.Next(1, 5);
                                 placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
                                 placeSoundSEI.Play();
-                            }
+                            //}
                         }
                     }
                     tiles[tY, tX] = toReplace;
@@ -248,19 +254,21 @@ namespace Minecraft2D.Map
                         }
                         else
                         {
-                            if (placeSoundSEI.State == SoundState.Stopped)
-                            {
+                            //if (placeSoundSEI.State == SoundState.Stopped)
+                            //{
                                 int soundIndex = ran.Next(1, 5);
                                 placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
                                 placeSoundSEI.Play();
-                            }
+                            //}
                         }
                     }
                 }
                 tiles[tY, tX].Position = new Vector2(tX * 32, tY * 32);
 
                 if (tiles[tY, tX].Type == TileType.Air || tiles[tY, tX].IsBackground)
-                    Lightmap[tY, tX] = 1;
+                    Lightmap[tY, tX] = 5;
+                else if (tiles[tY, tX].Type == TileType.Torch)
+                    Lightmap[tY, tX] = 12;
                 else
                     Lightmap[tY, tX] = 0;
 
@@ -285,11 +293,18 @@ namespace Minecraft2D.Map
                     Rectangle objectBounds = new Rectangle(x * 32, y * 32, 32 * 5, 32 * 5); //radius of the lightmap
                     if(viewportRect.Intersects(objectBounds))
                     {
-                        if (Lightmap[y, x] == 1f)
+                        if (Lightmap[y, x] > 0f)
                         {
                             if (y < 35) //ensures the underground is dark
                             {
-                                MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"), new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
+                                MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"), 
+                                    new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
+                                RenderedLights++;
+                            }
+                            if(tiles[y, x].Type == TileType.Torch)
+                            {
+                                MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"), 
+                                    new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
                                 RenderedLights++;
                             }
                         }

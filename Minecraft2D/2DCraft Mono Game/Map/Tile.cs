@@ -11,7 +11,7 @@ namespace Minecraft2D.Map
 {
     public enum TileType
     {
-        Air, Grass, Dirt, Stone
+        Air, Grass, Dirt, Stone, Torch
     }
 
     public enum TileTransparency
@@ -45,7 +45,9 @@ namespace Minecraft2D.Map
         public bool IsBackground { get; set; }
 
         public int Light { get; set; }
-        public int Absorb { get; set; }
+
+        public int LightOffset { get; set; }
+
 
         public Tile() 
         {

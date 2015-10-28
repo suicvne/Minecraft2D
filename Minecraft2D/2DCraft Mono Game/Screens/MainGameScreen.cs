@@ -272,7 +272,7 @@ namespace Minecraft2D.Screens
 
             #region Text drawing, crosshair drawing
             MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "Minecraft 2D", new Vector2(0, 2), Color.White);
+            TitleScreen.DrawText("Minecraft 2D", new Vector2(0, 2), Color.White);
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(mouseState.X, mouseState.Y, 32, 32), Color.White);
 
@@ -314,16 +314,17 @@ namespace Minecraft2D.Screens
         {
             if (MainGame.GameOptions.ShowDebugInformation)
             {
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "Cam X: " + MainGame.GameCamera.Pos.X, new Vector2(0, 18), Color.White);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "Cam Y: " + MainGame.GameCamera.Pos.Y, new Vector2(0, 18 * 2), Color.White);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "FPS: " + framerate, new Vector2(0, 18 * 3), Color.White);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "World Time: " + world.WorldTime, new Vector2(0, 18 * 4), Color.White);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "World Size: " + world.WorldSize.X + " x " + world.WorldSize.Y, new Vector2(0, 18 * 5), Color.White);
+
+                TitleScreen.DrawText("Cam X: " + MainGame.GameCamera.Pos.X, new Vector2(0, 18), Color.White);
+                TitleScreen.DrawText("Cam Y: " + MainGame.GameCamera.Pos.Y, new Vector2(0, 18 * 2), Color.White);
+                TitleScreen.DrawText("FPS: " + framerate, new Vector2(0, 18 * 3), Color.White);
+                TitleScreen.DrawText("World Time: " + world.WorldTime, new Vector2(0, 18 * 4), Color.White);
+                TitleScreen.DrawText("World Size: " + world.WorldSize.X + " x " + world.WorldSize.Y, new Vector2(0, 18 * 5), Color.White);
 
                 string WorldArea = string.Format("{0} x {1}", world.viewportRect.Width, world.viewportRect.Height);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "Rendered Area: " + WorldArea, new Vector2(0, 18 * 6), Color.White);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "Rendered Lights: " + world.RenderedLights, new Vector2(0, 18 * 7), Color.White);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), "VSync Enabled: " + MainGame.GameOptions.Vsync, new Vector2(0, 18 * 8), Color.White);
+                TitleScreen.DrawText("Rendered Area: " + WorldArea, new Vector2(0, 18 * 6), Color.White);
+                TitleScreen.DrawText("Rendered Lights: " + world.RenderedLights, new Vector2(0, 18 * 7), Color.White);
+                TitleScreen.DrawText("VSync Enabled: " + MainGame.GameOptions.Vsync, new Vector2(0, 18 * 8), Color.White);
 
                 MainGame.GlobalSpriteBatch.End();
 

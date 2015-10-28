@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Minecraft2D.Screens;
 using MonoGame.Extended.BitmapFonts;
 using System;
 using System.Collections.Generic;
@@ -59,18 +60,22 @@ namespace Minecraft2D.Graphics
                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("widgets"),
                     new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
                     new Rectangle(WidgetsMap.HighlightedButton.X, WidgetsMap.HighlightedButton.Y, WidgetsMap.HighlightedButton.RegionWidth, WidgetsMap.HighlightedButton.RegionHeight), Color.White);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText, 
-                    new Vector2(textX, Size.Y + 13), 
-                    Color.White);
+
+                TitleScreen.DrawText(ButtonText, new Vector2(textX, Size.Y + 13), Color.White);
+                //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText, 
+                //    new Vector2(textX, Size.Y + 13), 
+                //    Color.White);
             }
             else
             {
                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("widgets"),
                     new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
                     new Rectangle(WidgetsMap.EnabledButton.X, WidgetsMap.EnabledButton.Y, WidgetsMap.EnabledButton.RegionWidth, WidgetsMap.EnabledButton.RegionHeight), Color.White);
-                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText,
-                    new Vector2(textX, Size.Y + 13),
-                    Color.White);
+
+                TitleScreen.DrawText(ButtonText, new Vector2(textX, Size.Y + 13), Color.White);
+                //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText,
+                //    new Vector2(textX, Size.Y + 13),
+                //    Color.White);
             }
         }
     }
