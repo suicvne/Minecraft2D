@@ -134,7 +134,6 @@ namespace Minecraft2D.Screens
 
         public override void Update(GameTime gameTime)
         {
-
             foreach (var button in ButtonList)
                 button.Update(gameTime);
         }
