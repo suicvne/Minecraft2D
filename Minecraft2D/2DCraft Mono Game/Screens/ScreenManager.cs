@@ -13,7 +13,8 @@ namespace Minecraft2D.Screens
 {
     public enum GameScreens
     {
-        MAIN, SPLASH, CREDITS, GAME
+        MAIN, SPLASH, CREDITS, GAME,
+        OPTIONS
     }
 
     public class ScreenManager
@@ -22,11 +23,13 @@ namespace Minecraft2D.Screens
 
         private Minecraft2D.Screens.MainGameScreen mainGameScreen;
         private TitleScreen titleScreen;
+        private OptionsScreen options;
 
         public ScreenManager()
         {
             mainGameScreen = new MainGameScreen();
             titleScreen = new TitleScreen();
+            options = new OptionsScreen();
             MainGame.CustomContentManager = new Graphics.ContentManager();
             CurrentScreen = GameScreens.MAIN;
             LoadContent();
@@ -95,6 +98,9 @@ namespace Minecraft2D.Screens
                 case (GameScreens.MAIN):
                     titleScreen.Update(gameTime);
                     break;
+                case (GameScreens.OPTIONS):
+                    options.Update(gameTime);
+                    break;
             }
         }
 
@@ -107,6 +113,9 @@ namespace Minecraft2D.Screens
                     break;
                 case (GameScreens.MAIN):
                     titleScreen.Draw(gameTime);
+                    break;
+                case (GameScreens.OPTIONS):
+                    options.Draw(gameTime);
                     break;
             }
         }

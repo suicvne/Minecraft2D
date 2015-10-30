@@ -28,54 +28,77 @@ namespace Minecraft2D.Graphics
         }
         public Button(Vector2i pos, Rectangle size, string text)
         {
+            Enabled = true;
+            Position = pos;
+            Size = new Rectangle(pos.X, pos.Y, size.Width, size.Height);
+            ButtonText = text;
+        }
+        public Button(Vector2i pos, Rectangle size, string text, bool enabled)
+        {
+            Enabled = enabled;
             Position = pos;
             Size = new Rectangle(pos.X, pos.Y, size.Width, size.Height);
             ButtonText = text;
         }
 
+
         public void Update(GameTime gameTime)
         {
-            Rectangle mouseBounds = new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X + 8, 
-                MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32);
-
-            if (mouseBounds.Intersects(Size))
-                Selected = true;
-            else
-                Selected = false;
-
-            if (Selected && MainGame.GlobalInputHelper.IsNewPress(MouseButtons.LeftButton))
+            if (Enabled == true)
             {
-                MainGame.CustomContentManager.GetSoundEffect("click").Play();
-                if (Clicked != null)
-                    Clicked();
+                Rectangle mouseBounds = new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X + 8,
+                    MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32);
+
+                if (mouseBounds.Intersects(Size))
+                    Selected = true;
+                else
+                    Selected = false;
+
+                if (Selected && MainGame.GlobalInputHelper.IsNewPress(MouseButtons.LeftButton))
+                {
+                    MainGame.CustomContentManager.GetSoundEffect("click").Play();
+                    if (Clicked != null)
+                        Clicked();
+                }
             }
         }
 
         public void Draw(GameTime gameTime)
         {
             int textX = (int)(Size.Center.X - MainGame.CustomContentManager.GetFont("main-font").GetStringRectangle(ButtonText, Position.ToVector2()).Width / 2);
-            
-            if (Selected)
-            {
-                MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("widgets"),
-                    new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
-                    new Rectangle(WidgetsMap.HighlightedButton.X, WidgetsMap.HighlightedButton.Y, WidgetsMap.HighlightedButton.RegionWidth, WidgetsMap.HighlightedButton.RegionHeight), Color.White);
 
-                TitleScreen.DrawText(ButtonText, new Vector2(textX, Size.Y + 13), Color.White);
-                //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText, 
-                //    new Vector2(textX, Size.Y + 13), 
-                //    Color.White);
+            if (Enabled == true)
+            {
+                if (Selected)
+                {
+                    MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("widgets"),
+                        new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
+                        new Rectangle(WidgetsMap.HighlightedButton.X, WidgetsMap.HighlightedButton.Y, WidgetsMap.HighlightedButton.RegionWidth, WidgetsMap.HighlightedButton.RegionHeight), Color.White);
+
+                    TitleScreen.DrawText(ButtonText, new Vector2(textX, Size.Y + 13), Color.White);
+                    //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText, 
+                    //    new Vector2(textX, Size.Y + 13), 
+                    //    Color.White);
+                }
+                else
+                {
+                    MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("widgets"),
+                        new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
+                        new Rectangle(WidgetsMap.EnabledButton.X, WidgetsMap.EnabledButton.Y, WidgetsMap.EnabledButton.RegionWidth, WidgetsMap.EnabledButton.RegionHeight), Color.White);
+
+                    TitleScreen.DrawText(ButtonText, new Vector2(textX, Size.Y + 13), Color.White);
+                    //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText,
+                    //    new Vector2(textX, Size.Y + 13),
+                    //    Color.White);
+                }
             }
             else
             {
                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("widgets"),
-                    new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
-                    new Rectangle(WidgetsMap.EnabledButton.X, WidgetsMap.EnabledButton.Y, WidgetsMap.EnabledButton.RegionWidth, WidgetsMap.EnabledButton.RegionHeight), Color.White);
+                        new Rectangle(Position.X, Position.Y, Size.Width, Size.Height),
+                        new Rectangle(WidgetsMap.DisabledButton.X, WidgetsMap.DisabledButton.Y, WidgetsMap.DisabledButton.RegionWidth, WidgetsMap.DisabledButton.RegionHeight), Color.White);
 
-                TitleScreen.DrawText(ButtonText, new Vector2(textX, Size.Y + 13), Color.White);
-                //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText,
-                //    new Vector2(textX, Size.Y + 13),
-                //    Color.White);
+                TitleScreen.DrawText(ButtonText, new Vector2(textX, Size.Y + 13), Color.Gray);
             }
         }
     }

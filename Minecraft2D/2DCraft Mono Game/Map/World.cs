@@ -90,7 +90,7 @@ namespace Minecraft2D.Map
             {
                 for (int y = 0; y < tiles.GetLength(0); y++)
                 {
-                    if (tiles[y, x].Type == TileType.Air)
+                    if (tiles[y, x].Type == TileType.Air || tiles[y, x].IsBackground)
                         Lightmap[y, x] = 5;
                     else if (tiles[y, x].Type == TileType.Torch)
                         Lightmap[y, x] = 12;
@@ -106,7 +106,7 @@ namespace Minecraft2D.Map
                 {
                     for (int y = 0; y < tiles.GetLength(0); y++)
                     {
-                        string format = string.Format("{0}:{1}:{2}", (int)tiles[y, x].Type, tiles[y, x].Position.X, tiles[y, x].Position.Y);
+                        string format = string.Format("{0}:{1}:{2}:{3}", (int)tiles[y, x].Type, tiles[y, x].Position.X, tiles[y, x].Position.Y, tiles[y, x].IsBackground);
                         sw.WriteLine(format);
                     }
                 }
@@ -124,8 +124,9 @@ namespace Minecraft2D.Map
                     input = sr.ReadLine();
                     if (input.Trim() != String.Empty)
                     {
-                        string[] split = input.Split(new char[] { ':' }, 3);
+                        string[] split = input.Split(new char[] { ':' }, 4);
                         int x, y, typeEnumIndex;
+                        bool isBg = bool.Parse(split[3]);
                         x = (int)Math.Floor((double)Int32.Parse(split[1]) / 32);
                         y = (int)Math.Floor((double)Int32.Parse(split[2]) / 32);
                         typeEnumIndex = Int32.Parse(split[0]);
@@ -158,6 +159,7 @@ namespace Minecraft2D.Map
                                 t.Position = new Vector2(x * 32, y * 32);
                                 break;
                         }
+                        t.IsBackground = isBg;
                         tiles[y, x] = t;
                     }
                 }
@@ -276,6 +278,8 @@ namespace Minecraft2D.Map
                 //else
                 //    Lightmap[tY, tX] = 0;
                 Lightmap[tY, tX] = tiles[tY, tX].Light;
+                if (tiles[tY, tX].IsBackground)
+                    Lightmap[tY, tX] = 5;
                 
             }
         }
@@ -299,11 +303,20 @@ namespace Minecraft2D.Map
                     {
                         if (Lightmap[y, x] > 0f)
                         {
-                            if (y < 35) //ensures the underground is dark
+                            if (y < 42) //ensures the underground is dark
                             {
-                                MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"), 
-                                    new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
-                                RenderedLights++;
+                                if (tiles[y, x].IsBackground)
+                                {
+                                    MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
+                                            new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
+                                    RenderedLights++;
+                                }
+                                else
+                                {
+                                    MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
+                                        new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
+                                    RenderedLights++;
+                                }
                             }
                             if(tiles[y, x].Light > 0 && tiles[y, x].Type != TileType.Air)
                             {
@@ -312,6 +325,7 @@ namespace Minecraft2D.Map
                                 RenderedLights++;
                             }
                         }
+                        
                     }
                 }
             }

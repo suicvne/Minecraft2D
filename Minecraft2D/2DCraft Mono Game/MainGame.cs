@@ -53,6 +53,7 @@ namespace Minecraft2D
         internal const uint MF_BYCOMMAND = 0x00000000;
         #endregion
 
+        private bool GameStarting = true;
         public MainGame()
         {
             GameExiting = false;
@@ -67,6 +68,15 @@ namespace Minecraft2D
                     manager.RecalculateMinMax();
             };
 
+            FormReference.Resize += (sender, e) =>
+            {
+                if (!GameStarting)
+                {
+                    GameOptions.WindowState = FormReference.WindowState;
+                    GameOptions.WindowSize = FormReference.Size;
+                    GameOptions.WindowLocation = FormReference.Location;
+                }
+            };
             FormReference.FormClosing += (sender, e) => 
             {
                 if (WindowClosing != null)
@@ -132,10 +142,18 @@ namespace Minecraft2D
             y = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - FormReference.Height / 2;// - this.Window.ClientBounds.Height;
             FormReference.Location = new System.Drawing.Point(x, y);
 
+            FormReference.WindowState = GameOptions.WindowState;
+            if(GameOptions.WindowLocation != null)
+                FormReference.Location = GameOptions.WindowLocation;
+            if(GameOptions.WindowSize != null)
+                FormReference.Size = GameOptions.WindowSize;
+
             graphics.SynchronizeWithVerticalRetrace = GameOptions.Vsync;
             this.IsFixedTimeStep = GameOptions.Vsync;
             graphics.IsFullScreen = GameOptions.Fullscreen;
             graphics.ApplyChanges();
+
+            GameStarting = false;
         }
 
         protected override void LoadContent()

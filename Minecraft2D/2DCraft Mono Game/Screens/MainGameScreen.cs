@@ -117,14 +117,16 @@ namespace Minecraft2D.Screens
                         world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, airP);
                     }
                 }
-                else if(MainGame.GlobalInputHelper.IsNewPress(MouseButtons.RightButton))
+                else if(MainGame.GlobalInputHelper.CurrentMouseState.RightButton == ButtonState.Pressed)
                 {
                     Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
                     Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
 
                     Tile toPlace = PlacingTile.AsTile();
                     toPlace.Position = new Vector2((int)worldMousePosition.X, (int)worldMousePosition.Y);
-                    world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, toPlace);
+
+                    if (world.GetTile((int)worldMousePosition.X, (int)worldMousePosition.Y).Type != toPlace.Type)
+                        world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, toPlace);
                 }
                 else if(MainGame.GlobalInputHelper.CurrentMouseState.MiddleButton == ButtonState.Pressed)
                 {
@@ -134,7 +136,9 @@ namespace Minecraft2D.Screens
                     Tile toPlace = PlacingTile.AsTile();
                     toPlace.IsBackground = true;
                     toPlace.Position = new Vector2((int)worldMousePosition.X, (int)worldMousePosition.Y);
-                    world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, toPlace);
+
+                    if(world.GetTile((int)worldMousePosition.X, (int)worldMousePosition.Y).Type != toPlace.Type)
+                        world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, toPlace);
                 }
                 if (MainGame.GlobalInputHelper.IsNewPress(Keys.F3))
                 {
