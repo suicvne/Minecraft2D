@@ -23,6 +23,8 @@ namespace Minecraft2D.Options
         public Keys MoveUp { get; set; }
         public Keys MoveDown { get; set; }
 
+        public string Username { get; set; }
+
         public Options()
         {
             UseController = false;
@@ -35,6 +37,8 @@ namespace Minecraft2D.Options
             MoveDown = Keys.S;
             Vsync = true;
             Fullscreen = false;
+
+            Username = "Player" + MainGame.RandomGenerator.Next(0, 9000);
         }
     }
 }

@@ -41,6 +41,7 @@
     <Compile Include="Graphics\Button.cs" />
     <Compile Include="Graphics\Camera2D.cs" />
     <Compile Include="Graphics\ContentManager.cs" />
+    <Compile Include="Graphics\TextBox.cs" />
     <Compile Include="Graphics\WidgetsMap.cs" />
     <Compile Include="Map\Entity.cs" />
     <Compile Include="Input.cs" />

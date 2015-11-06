@@ -11,6 +11,7 @@ namespace Minecraft2D.Screens
     public class OptionsScreen : Screen
     {
         List<Button> ButtonList = new List<Button>();
+        List<TextBox> TextBoxList = new List<TextBox>();
 
         public OptionsScreen()
         {
@@ -20,13 +21,36 @@ namespace Minecraft2D.Screens
 
             donebutton.Clicked += () => MainGame.manager.PushScreen(GameScreens.MAIN);
 
+            TextBox testBox = new TextBox(new Rectangle(20, 300, 32 * 7, 32), true);
+            testBox.Content = MainGame.GameOptions.Username;
+            testBox.MouseClicked += () => 
+            {
+                foreach (var tb in TextBoxList)
+                    if (tb != testBox)
+                        tb.HasFocus = false;
+            };
+
+            TextBox testBox2 = new TextBox(new Rectangle(20, 200, 32 * 7, 32), true);
+            testBox2.Content = MainGame.GameOptions.WindowState.ToString();
+            testBox2.MouseClicked += () =>
+            {
+                foreach (var tb in TextBoxList)
+                    if (tb != testBox2)
+                        tb.HasFocus = false;
+            };
+
             ButtonList.Add(donebutton);
+            TextBoxList.Add(testBox);
+            TextBoxList.Add(testBox2);
         }
 
         public override void Update(GameTime gameTime)
         {
             foreach (var button in ButtonList)
                 button.Update(gameTime);
+
+            foreach (var textb in TextBoxList)
+                textb.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -45,6 +69,8 @@ namespace Minecraft2D.Screens
 
             foreach (var button in ButtonList)
                 button.Draw(gameTime);
+            foreach (var textb in TextBoxList)
+                textb.Draw(gameTime);
 
             TitleScreen.DrawText("Work in progress!", new Vector2(MainGame.GlobalGraphicsDevice.Viewport.Width - (("Work in progress!".Length * 14) * 2), 90), Color.Gray);
 

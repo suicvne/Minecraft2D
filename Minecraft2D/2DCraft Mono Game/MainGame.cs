@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Minecraft2D
 {
     public delegate void GameWindowClosing();
+    public delegate void TextInputReceived(TextInputEventArgs e);
     public class MainGame : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
@@ -37,7 +38,10 @@ namespace Minecraft2D
         public static Rectangle ClientBounds { get; internal set; }
         public static bool GameExiting { get; set; }
 
+        public static Random RandomGenerator = new Random(DateTime.Now.Millisecond);
+
         public static event GameWindowClosing WindowClosing;
+        public static event TextInputReceived TextInputReceived;
 
         private System.Windows.Forms.Form FormReference;
 
@@ -81,6 +85,11 @@ namespace Minecraft2D
             {
                 if (WindowClosing != null)
                     WindowClosing();
+            };
+            this.Window.TextInput += (sender, e) =>
+            {
+                if (TextInputReceived != null)
+                    TextInputReceived(e);
             };
 
             GameOptions = new Options.Options();
@@ -127,7 +136,6 @@ namespace Minecraft2D
                     js.Serialize(jsw, GameOptions);
                 }
             }
-
         }
 
 
