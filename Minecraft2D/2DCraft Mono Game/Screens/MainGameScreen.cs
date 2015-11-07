@@ -8,6 +8,7 @@ using System.Text;
 using Minecraft2D.Map;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Minecraft2D.Controls;
 
 namespace Minecraft2D.Screens
 {

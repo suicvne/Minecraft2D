@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Minecraft2D.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Minecraft2D.Graphics
+namespace Minecraft2D.Controls
 {
     public static class WidgetsMap
     {

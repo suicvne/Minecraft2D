@@ -20,6 +20,7 @@ namespace Minecraft2D
         public static Camera2D GameCamera { get; set; }
         public static Camera2D HudCam { get; set; }
         public static GraphicsDevice GlobalGraphicsDevice { get; set; }
+        public static GraphicsDeviceManager GlobalGraphicsDeviceManager { get; set; }
         public static SpriteBatch GlobalSpriteBatch { get; set; }
         public static Microsoft.Xna.Framework.Content.ContentManager GlobalContentManager { get; set; }
         public static Graphics.ContentManager CustomContentManager { get; set; }
@@ -58,12 +59,18 @@ namespace Minecraft2D
         #endregion
 
         private bool GameStarting = true;
+
+        public static Version GameVersion = new Version(0, 2, 0, 0);
+
         public MainGame()
         {
             GameExiting = false;
             FormReference = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
-
+            
             graphics = new GraphicsDeviceManager(this);
+            GlobalGraphicsDeviceManager = graphics;
+
+
             Content.RootDirectory = "Content";
             this.Window.AllowUserResizing = true;
             this.Window.ClientSizeChanged += (sender, e) =>
@@ -156,12 +163,14 @@ namespace Minecraft2D
             if(GameOptions.WindowSize != null)
                 FormReference.Size = GameOptions.WindowSize;
 
-            graphics.SynchronizeWithVerticalRetrace = GameOptions.Vsync;
+            GlobalGraphicsDeviceManager.SynchronizeWithVerticalRetrace = GameOptions.Vsync;
             this.IsFixedTimeStep = GameOptions.Vsync;
-            graphics.IsFullScreen = GameOptions.Fullscreen;
-            graphics.ApplyChanges();
+            GlobalGraphicsDeviceManager.IsFullScreen = GameOptions.Fullscreen;
+            GlobalGraphicsDeviceManager.ApplyChanges();
 
             GameStarting = false;
+
+            
         }
 
         protected override void LoadContent()
@@ -194,17 +203,19 @@ namespace Minecraft2D
 
             if(GlobalInputHelper.IsNewPress(Keys.F11))
             {
-                graphics.IsFullScreen = !graphics.IsFullScreen;
-                graphics.ApplyChanges();
-                GameOptions.Fullscreen = graphics.IsFullScreen;
+                GlobalGraphicsDeviceManager.IsFullScreen = !GlobalGraphicsDeviceManager.IsFullScreen;
+                this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+                GlobalGraphicsDeviceManager.ApplyChanges();
+                GameOptions.Fullscreen = GlobalGraphicsDeviceManager.IsFullScreen;
+                
             }
 
             if(GlobalInputHelper.IsNewPress(Keys.F12))
             {
                 GameOptions.Vsync = !GameOptions.Vsync;
-                graphics.SynchronizeWithVerticalRetrace = !graphics.SynchronizeWithVerticalRetrace;
+                GlobalGraphicsDeviceManager.SynchronizeWithVerticalRetrace = !GlobalGraphicsDeviceManager.SynchronizeWithVerticalRetrace;
                 this.IsFixedTimeStep = !IsFixedTimeStep;
-                graphics.ApplyChanges();
+                GlobalGraphicsDeviceManager.ApplyChanges();
             }
 
             manager.Update(gameTime);

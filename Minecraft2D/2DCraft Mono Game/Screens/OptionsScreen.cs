@@ -5,52 +5,166 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Minecraft2D.Graphics;
 using Microsoft.Xna.Framework.Graphics;
+using Minecraft2D.Controls;
+using System.Threading;
 
 namespace Minecraft2D.Screens
 {
     public class OptionsScreen : Screen
     {
-        List<Button> ButtonList = new List<Button>();
-        List<TextBox> TextBoxList = new List<TextBox>();
-
         public OptionsScreen()
         {
             Button donebutton = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth),
-                    MainGame.GlobalGraphicsDevice.Viewport.Height - 80),
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 50),
                 new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Done");
 
-            donebutton.Clicked += () => MainGame.manager.PushScreen(GameScreens.MAIN);
-
-            TextBox testBox = new TextBox(new Rectangle(20, 300, 32 * 7, 32), true);
-            testBox.Content = MainGame.GameOptions.Username;
-            testBox.MouseClicked += () => 
+            donebutton.Clicked += () =>
             {
-                foreach (var tb in TextBoxList)
-                    if (tb != testBox)
-                        tb.HasFocus = false;
+                Control f = ControlsList.Find(x => x.Name == "usrnametb");
+                if(f != null)
+                {
+                    MainGame.GameOptions.Username = ((TextBox)f).Content;
+                }
+                MainGame.manager.PushScreen(GameScreens.MAIN);
             };
 
-            TextBox testBox2 = new TextBox(new Rectangle(20, 200, 32 * 7, 32), true);
-            testBox2.Content = MainGame.GameOptions.WindowState.ToString();
-            testBox2.MouseClicked += () =>
+            #region Key mapping
+            Button MoveLeftMod = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 580,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 440),
+                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveLeft.ToString());
+            MoveLeftMod.Clicked += () =>
             {
-                foreach (var tb in TextBoxList)
-                    if (tb != testBox2)
-                        tb.HasFocus = false;
+                new Thread(()=>
+                {
+                    while (MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys().Length == 0)
+                    {
+                        MoveLeftMod.ButtonText = "<waiting>";
+                    }
+                    if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+                        MainGame.GameOptions.MoveLeft = Microsoft.Xna.Framework.Input.Keys.None;
+                    else
+                    {
+                        MainGame.GameOptions.MoveLeft = MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys()[0];
+                    }
+                    MoveLeftMod.ButtonText = MainGame.GameOptions.MoveLeft.ToString();
+                }).Start();
             };
 
-            ButtonList.Add(donebutton);
-            TextBoxList.Add(testBox);
-            TextBoxList.Add(testBox2);
+            Button MoveRightMod = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 380,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 440),
+                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveRight.ToString());
+            MoveRightMod.Clicked += () =>
+            {
+                new Thread(() =>
+                {
+                    while (MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys().Length == 0)
+                    {
+                        MoveRightMod.ButtonText = "<waiting>";
+                    }
+                    if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+                        MainGame.GameOptions.MoveRight = Microsoft.Xna.Framework.Input.Keys.None;
+                    else
+                    {
+                        MainGame.GameOptions.MoveRight = MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys()[0];
+                    }
+                    MoveRightMod.ButtonText = MainGame.GameOptions.MoveRight.ToString();
+                }).Start();
+            };
+
+            Button MoveDownMod = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 580,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 370),
+                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveDown.ToString());
+            MoveDownMod.Clicked += () =>
+            {
+                new Thread(() =>
+                {
+                    while (MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys().Length == 0)
+                    {
+                        MoveDownMod.ButtonText = "<waiting>";
+                    }
+                    if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+                        MainGame.GameOptions.MoveDown = Microsoft.Xna.Framework.Input.Keys.None;
+                    else
+                    {
+                        MainGame.GameOptions.MoveDown = MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys()[0];
+                    }
+                    MoveDownMod.ButtonText = MainGame.GameOptions.MoveDown.ToString();
+                }).Start();
+            };
+
+            Button MoveUpMod = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 380,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 370),
+                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveUp.ToString());
+            MoveUpMod.Clicked += () =>
+            {
+                new Thread(() =>
+                {
+                    while (MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys().Length == 0)
+                    {
+                        MoveUpMod.ButtonText = "<waiting>";
+                    }
+                    if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+                        MainGame.GameOptions.MoveUp = Microsoft.Xna.Framework.Input.Keys.None;
+                    else
+                    {
+                        MainGame.GameOptions.MoveUp = MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys()[0];
+                    }
+                    MoveUpMod.ButtonText = MainGame.GameOptions.MoveUp.ToString();
+                }).Start();
+            };
+
+            Button JumpMod = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 470,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 300),
+                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.JumpKey.ToString());
+            JumpMod.Clicked += () =>
+            {
+                new Thread(() =>
+                {
+                    while (MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys().Length == 0)
+                    {
+                        JumpMod.ButtonText = "<waiting>";
+                    }
+                    if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+                        MainGame.GameOptions.JumpKey = Microsoft.Xna.Framework.Input.Keys.None;
+                    else
+                    {
+                        MainGame.GameOptions.JumpKey = MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys()[0];
+                    }
+                    JumpMod.ButtonText = MainGame.GameOptions.JumpKey.ToString();
+                }).Start();
+            };
+            #endregion
+
+            TextBox usernameTextBox = new TextBox(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width - 580, MainGame.GlobalGraphicsDevice.Viewport.Height - 230, 32 * 11, 32), true);
+            usernameTextBox.Content = MainGame.GameOptions.Username;
+            usernameTextBox.Name = "usrnametb";
+
+            Button FullscreenButton = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 470,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - (230 - 70)),
+                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.Fullscreen.ToString());
+            FullscreenButton.Clicked += () =>
+            {
+                MainGame.GlobalGraphicsDeviceManager.IsFullScreen = !MainGame.GlobalGraphicsDeviceManager.IsFullScreen;
+                MainGame.GlobalGraphicsDeviceManager.ApplyChanges();
+                MainGame.GameOptions.Fullscreen = MainGame.GlobalGraphicsDeviceManager.IsFullScreen;
+
+                FullscreenButton.ButtonText = MainGame.GameOptions.Fullscreen.ToString();
+            };
+
+            AddControl(donebutton);
+            AddButtonWithLabel(MoveLeftMod, new Label(name: "lbl", text: "Move Left", pos: Vector2.Zero, tnt: Color.Gray));
+            AddButtonWithLabel(MoveRightMod, new Label(name: "lbl", text: "Move Right", pos: Vector2.Zero, tnt: Color.Gray));
+            AddButtonWithLabel(MoveUpMod, new Label(name: "lbl", text: "Move Up", pos: Vector2.Zero, tnt: Color.Gray));
+            AddButtonWithLabel(MoveDownMod, new Label(name: "lbl", text: "Move Down", pos: Vector2.Zero, tnt: Color.Gray));
+            AddButtonWithLabel(JumpMod, new Label(name: "lbl", text: "Jump", pos: Vector2.Zero, tnt: Color.Gray));
+            AddButtonWithLabel(FullscreenButton, new Label(name: "lbl", text: "Fullscreen", pos: Vector2.Zero, tnt: Color.Gray));
+            AddTextBoxWithLabel(usernameTextBox, new Label(name: "lbl", text: "Username", pos: Vector2.Zero, tnt: Color.Gray));
         }
 
         public override void Update(GameTime gameTime)
         {
-            foreach (var button in ButtonList)
-                button.Update(gameTime);
-
-            foreach (var textb in TextBoxList)
-                textb.Update(gameTime);
+            foreach (var control in ControlsList)
+                control.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -67,12 +181,10 @@ namespace Minecraft2D.Screens
                 for (int y = 0; y < ty; y++)
                     MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"), new Rectangle(x * 32, y * 32, 32, 32), new Rectangle(16 * 2, 0, 16, 16), Color.Gray);
 
-            foreach (var button in ButtonList)
-                button.Draw(gameTime);
-            foreach (var textb in TextBoxList)
-                textb.Draw(gameTime);
+            foreach (var control in ControlsList)
+                control.Draw(gameTime);
 
-            TitleScreen.DrawText("Work in progress!", new Vector2(MainGame.GlobalGraphicsDevice.Viewport.Width - (("Work in progress!".Length * 14) * 2), 90), Color.Gray);
+            //TitleScreen.DrawText("Work in progress!", new Vector2(MainGame.GlobalGraphicsDevice.Viewport.Width - (("Work in progress!".Length * 14) * 2), 90), Color.Gray);
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32), Color.White);
 

@@ -1,22 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.BitmapFonts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Minecraft2D.Graphics
+namespace Minecraft2D.Controls
 {
     public delegate void TextBoxClicked();
-    public class TextBox
+    public class TextBox : Control
     {
         public string Content { get; set; }
-        public bool HasFocus { get; set; }
-        public bool Enabled { get; set; }
+        public bool AllowPasting { get; set; }
         
         public Rectangle Position { get; set; }
         private Rectangle BackgroundRectangle;
+
+        private Language_Learning_Application.clsClipBoard clipboard = new Language_Learning_Application.clsClipBoard();
 
         public event TextBoxClicked MouseClicked;
 
@@ -25,6 +27,7 @@ namespace Minecraft2D.Graphics
             Content = "";
             HasFocus = false;
             Enabled = true;
+            AllowPasting = true;
 
             Position = new Rectangle(0, 0, 32 * 5, 32);
             BackgroundRectangle = new Rectangle(Position.X - 2, Position.Y - 2, Position.Width + 16, Position.Height + 16);
@@ -51,6 +54,7 @@ namespace Minecraft2D.Graphics
             Content = "";
             HasFocus = false;
             Enabled = enabl;
+            AllowPasting = true;
 
             Position = pos;
             BackgroundRectangle = new Rectangle(pos.X - 2, pos.Y - 2, pos.Width + 4, pos.Height + 4);
@@ -72,14 +76,18 @@ namespace Minecraft2D.Graphics
             };
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
-            if(HasFocus && Enabled)
+            if (HasFocus && Enabled)
             {
-                //if(MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys() != null)
-                //{
-                //    Content += MainGame.GlobalInputHelper.CurrentKeyboardState.GetPressedKeys().ToString();
-                //}
+                if (MainGame.GlobalInputHelper.IsCurPress(Keys.LeftControl) && MainGame.GlobalInputHelper.IsCurPress(Keys.V))
+                {
+                    Content += clipboard.GetClipboardText();
+                }
+                if (MainGame.GlobalInputHelper.IsCurPress(Keys.LeftControl) && MainGame.GlobalInputHelper.IsCurPress(Keys.Back))
+                {
+                    Content = "";
+                }
             }
             if (Enabled)
             {
@@ -100,7 +108,7 @@ namespace Minecraft2D.Graphics
             }
         }
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             if(Enabled)
             {
@@ -124,9 +132,17 @@ namespace Minecraft2D.Graphics
                 if (HasFocus)
                 {
                     if (Content.Length < (Position.Width / 8))
-                        MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), 
-                        "_", 
-                        new Vector2(Position.X + (Content.Length * 8) + 8, Position.Y + 14), Color.White);
+                        if(Content.Length - 1 > 0)
+                            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), 
+                            "_", 
+                            new 
+                            Vector2(Position.X + (Content.Length * 8) + 8, 
+                            Position.Y + 14), Color.White);
+                        else
+                            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"),
+                            "_",
+                            new Vector2(Position.X + (Content.Length * 8),
+                            Position.Y + 14), Color.White);
                 }
             }
             else

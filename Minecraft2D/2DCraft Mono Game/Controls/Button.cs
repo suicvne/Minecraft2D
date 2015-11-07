@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Minecraft2D.Graphics;
 using Minecraft2D.Screens;
 using MonoGame.Extended.BitmapFonts;
 using System;
@@ -6,15 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Minecraft2D.Graphics
+namespace Minecraft2D.Controls
 {
     public delegate void MouseClicked();
-    public class Button
+    public class Button : Control
     {
         public Vector2i Position { get; set; }
         public Rectangle Size { get; set; }
         public bool Selected { get; set; }
-        public bool Enabled { get; set; }
         public string ButtonText { get; set; }
         public event MouseClicked Clicked;
 
@@ -40,9 +40,8 @@ namespace Minecraft2D.Graphics
             Size = new Rectangle(pos.X, pos.Y, size.Width, size.Height);
             ButtonText = text;
         }
-
-
-        public void Update(GameTime gameTime)
+        
+        public override void Update(GameTime gameTime)
         {
             if (Enabled == true)
             {
@@ -63,7 +62,7 @@ namespace Minecraft2D.Graphics
             }
         }
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             int textX = (int)(Size.Center.X - MainGame.CustomContentManager.GetFont("main-font").GetStringRectangle(ButtonText, Position.ToVector2()).Width / 2);
 

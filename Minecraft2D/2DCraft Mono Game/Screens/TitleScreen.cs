@@ -7,6 +7,7 @@ using Minecraft2D.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using MonoGame.Extended.BitmapFonts;
+using Minecraft2D.Controls;
 
 namespace Minecraft2D.Screens
 {
@@ -22,9 +23,13 @@ namespace Minecraft2D.Screens
             "Not Terraria!",
             "Jaclyn is qt!",
             "3.14159",
-            "All assets belong to Mojang!"
+            "All assets belong to Mojang!",
+            "Windows 10 is eh!",
+            "Tune lower!",
+            "00-00-001~",
+            "!!",
         };
-        List<Button> ButtonList = new List<Button>();
+        
         float scale = 1.3f;
         Random ran = new Random(DateTime.Now.Millisecond);
         int splashIndex = 0;
@@ -57,9 +62,9 @@ namespace Minecraft2D.Screens
             };
             KekButton.Clicked += () => MainGame.manager.PushScreen(GameScreens.OPTIONS);
 
-            ButtonList.Add(ExitButton);
-            ButtonList.Add(KekButton);
-            ButtonList.Add(PlayButton);
+            AddControl(ExitButton);
+            AddControl(KekButton);
+            AddControl(PlayButton);
 
             ran.Next(0, splashMessages.Length);
             ran.Next(0, splashMessages.Length);
@@ -95,12 +100,12 @@ namespace Minecraft2D.Screens
                 (int)(MainGame.CustomContentManager.GetTexture("minecraft-logo").Width * scale), 
                 (int)(MainGame.CustomContentManager.GetTexture("minecraft-logo").Height * scale)), Color.White);
 
-            foreach (var button in ButtonList)
-                button.Draw(gameTime);
+            foreach (var c in ControlsList)
+                c.Draw(gameTime);
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32), Color.White);
 
-            DrawText("Minecraft 2D Alpha", new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
+            DrawText("Minecraft 2D Alpha " + MainGame.GameVersion.ToString(), new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
 
             int splashX = 480 - (int)((MainGame.CustomContentManager.SplashFont.MeasureString(splashMessages[splashIndex]).X) / 16f);
 
@@ -145,8 +150,8 @@ namespace Minecraft2D.Screens
 
         public override void Update(GameTime gameTime)
         {
-            foreach (var button in ButtonList)
-                button.Update(gameTime);
+            foreach (var c in ControlsList)
+                c.Update(gameTime);
         }
     }
 }
