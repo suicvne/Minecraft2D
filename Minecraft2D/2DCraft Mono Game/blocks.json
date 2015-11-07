@@ -83,5 +83,20 @@
     },
     "PlaceSoundName": "wood{0}",
     "Light": 3
+  },
+  {
+    "Name": "minecraft:woodplank",
+    "Type": 5,
+    "Drops": "minecraft:woodplank",
+    "TransparencyOfTile": 0,
+    "Hardness": 0.2,
+    "TextureRegion": {
+      "X": 64,
+      "Y": 0,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PlaceSoundName": "wood{0}",
+    "Light": 0
   }
 ]

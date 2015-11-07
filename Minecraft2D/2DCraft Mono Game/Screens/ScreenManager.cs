@@ -82,8 +82,6 @@ namespace Minecraft2D.Screens
         {
             if (screen == GameScreens.MAIN)
                 titleScreen.AdvanceSplash();
-            if (screen == GameScreens.GAME)
-                mainGameScreen = new MainGameScreen();
             if(screen == GameScreens.OPTIONS)
                 options = new OptionsScreen();
 
