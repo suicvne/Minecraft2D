@@ -18,12 +18,15 @@ namespace Minecraft2D.Map
 
         private Random ran = new Random((int)DateTime.Now.Millisecond * 69);
         private PresetBlocks presets = new PresetBlocks();
-        private long worldTime = 6000;
+        private long worldTime = 0;
         public Color BlockTint = Color.White; //Full daytime
         public Color SkyColor = Color.CornflowerBlue;
 
+        Color shading = Color.White;
+        int Lighting = 0;
+
         public Vector2 WorldSize { get; set; }
-        public long WorldTime { get { return worldTime; } set{ worldTime = value; } }
+        public long WorldTime { get { return worldTime; } set { worldTime = value; } }
 
         public int RenderedLights { get; internal set; }
 
@@ -37,23 +40,23 @@ namespace Minecraft2D.Map
             {
                 for (int y = 0; y < 256; y++)
                 {
-                    if(y > 32)
+                    if (y > 32)
                     {
-                        if(y == 33)
+                        if (y == 33)
                         {
                             Tile t = PresetBlocks.Grass.AsTile();
                             t.Position = new Vector2(x * 32, y * 32);
                             tiles[y, x] = t;
                             t = null;
                         }
-                        else if(y <= 37)
+                        else if (y <= 37)
                         {
                             Tile t = PresetBlocks.Dirt.AsTile();
                             t.Position = new Vector2(x * 32, y * 32);
                             tiles[y, x] = t;
                             t = null;
                         }
-                        else if(y == 255)
+                        else if (y == 255)
                         {
                             //TODO: bedrock
                             Tile t = PresetBlocks.Dirt.AsTile();
@@ -169,33 +172,44 @@ namespace Minecraft2D.Map
 
         public void Update(GameTime gameTime)
         {
-            WorldTime++;
+            worldTime++;
+
             if (WorldTime > 24000)
                 WorldTime = 0;
 
-            if(WorldTime > 6000 && WorldTime < 12000)
+            if (WorldTime < 12000)
             {
                 BlockTint = Color.White;
-                SkyColor = Color.CornflowerBlue;
             }
-            else if(WorldTime > 12000 && WorldTime < 18000)
+            else
             {
-                BlockTint = Color.DarkGray;
-                SkyColor = Color.DimGray;
+                BlockTint = Color.DimGray;
             }
-            else if(WorldTime > 18000 && WorldTime < 24000)
+
+            //Adjust lighting levels at a square root curve.
+            SkyColor = new Color(0, (float)Math.Sqrt(shading.G / 255f * Lighting * 0.00001), (float)Math.Sqrt(shading.B / 255f * Lighting * 0.001));
+
+            //Slowly illuminate and darken terrain.
+            if (Lighting != WorldTime && WorldTime <= 12000)
             {
-                BlockTint = Color.DarkGray;
-                SkyColor = Color.Black;
+                Lighting = (int)worldTime;
+
             }
-            else if(WorldTime > 0 && WorldTime < 6000)
+            else
             {
-                BlockTint = Color.DarkOrange;
-                SkyColor = Color.Orange;
+                if (worldTime < 17250) //17250 or whenever night should begin.
+                {
+                    Lighting = (int)(worldTime * -1) + 24000;
+                }
+                else
+                {
+                    Lighting = (int)(worldTime * -1) + 18000;
+                }
+
             }
-            
+
         }
-        
+
         public Rectangle viewportRect { get; set; }
 
         /// <summary>
@@ -225,7 +239,7 @@ namespace Minecraft2D.Map
                 return;
             else
             {
-                if(toReplace.Type == TileType.Air)
+                if (toReplace.Type == TileType.Air)
                 {
                     if (tiles[tY, tX].PlaceSoundName != null)
                     {
@@ -239,9 +253,9 @@ namespace Minecraft2D.Map
                         {
                             //if (placeSoundSEI.State == SoundState.Paused)
                             //{
-                                int soundIndex = ran.Next(1, 5);
-                                placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
-                                placeSoundSEI.Play();
+                            int soundIndex = ran.Next(1, 5);
+                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                            placeSoundSEI.Play();
                             //}
                         }
                     }
@@ -262,9 +276,9 @@ namespace Minecraft2D.Map
                         {
                             //if (placeSoundSEI.State == SoundState.Stopped)
                             //{
-                                int soundIndex = ran.Next(1, 5);
-                                placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
-                                placeSoundSEI.Play();
+                            int soundIndex = ran.Next(1, 5);
+                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                            placeSoundSEI.Play();
                             //}
                         }
                     }
@@ -280,7 +294,7 @@ namespace Minecraft2D.Map
                 Lightmap[tY, tX] = tiles[tY, tX].Light;
                 if (tiles[tY, tX].IsBackground)
                     Lightmap[tY, tX] = 5;
-                
+
             }
         }
 
@@ -293,13 +307,32 @@ namespace Minecraft2D.Map
                     (int)MainGame.GameCamera.Pos.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2),
                     MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
             MainGame.GlobalGraphicsDevice.Clear(Color.Black);
-            
+
+
+
             for (int x = 0; x < Lightmap.GetLength(1); x++)
             {
-                for(int y = 0; y < Lightmap.GetLength(0); y++)
+                for (int y = 0; y < Lightmap.GetLength(0); y++)
                 {
+
+                    //Adjust shadow during "sun" movement.
+                    switch (worldTime)
+                    {
+                        case 0:
+                            tiles[y, x].LightOffset -= 1;
+                            break;
+                        case 6000:
+                            tiles[y, x].LightOffset -= 1;
+                            break;
+                        case 12000:
+                            tiles[y, x].LightOffset += 1;
+                            break;
+                        case 18000:
+                            tiles[y, x].LightOffset += 1;
+                            break;
+                    }
                     Rectangle objectBounds = new Rectangle(x * 32, y * 32, 32 * 5, 32 * 5); //radius of the lightmap
-                    if(viewportRect.Intersects(objectBounds))
+                    if (viewportRect.Intersects(objectBounds))
                     {
                         if (Lightmap[y, x] > 0f)
                         {
@@ -318,19 +351,19 @@ namespace Minecraft2D.Map
                                     RenderedLights++;
                                 }
                             }
-                            if(tiles[y, x].Light > 0 && tiles[y, x].Type != TileType.Air)
+                            if (tiles[y, x].Light > 0 && tiles[y, x].Type != TileType.Air)
                             {
-                                MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"), 
+                                MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
                                     new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
                                 RenderedLights++;
                             }
                         }
-                        
+
                     }
                 }
             }
         }
-        
+
         private Vector2 LightSize = new Vector2(32 * 5, 32 * 5);
         public void Draw(GameTime gameTime)
         {
@@ -360,7 +393,7 @@ namespace Minecraft2D.Map
                     //    Lightmap[y, x] = 1; //it'll either be 1f or 0f i guess
                 }
             }
-            
+
             foreach (Tile block in tilesToBeRendered)
             {
                 //if (block.Type == TileType.Air)
@@ -370,7 +403,7 @@ namespace Minecraft2D.Map
                     {
                         int x = (int)Math.Floor(block.Position.X / 32);
                         int y = (int)Math.Floor(block.Position.Y / 32);
-                        
+
                         MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"),
                             new Rectangle(Convert.ToInt32(block.Position.X), Convert.ToInt32(block.Position.Y), 32, 32), //scaling to 32
                             new Rectangle(block.TextureRegion.X, block.TextureRegion.Y, 16, 16),
