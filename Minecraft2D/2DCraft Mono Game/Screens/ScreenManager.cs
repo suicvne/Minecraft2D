@@ -80,6 +80,13 @@ namespace Minecraft2D.Screens
 
         public void PushScreen(GameScreens screen)
         {
+            if (screen == GameScreens.MAIN)
+                titleScreen.AdvanceSplash();
+            if (screen == GameScreens.GAME)
+                mainGameScreen = new MainGameScreen();
+            if(screen == GameScreens.OPTIONS)
+                options = new OptionsScreen();
+
             CurrentScreen = screen;
         }
 

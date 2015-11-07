@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minecraft2D (MonoGame)", "Minecraft2D\2DCraft Mono Game\Minecraft2D (MonoGame).csproj", "{DB7D2BB7-13D5-4280-8F31-A20D96CA56B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinuxTest", "LinuxTest\LinuxTest.csproj", "{EF465AB4-0973-449D-AA39-AE686B13398F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +17,10 @@ Global
 		{DB7D2BB7-13D5-4280-8F31-A20D96CA56B6}.Debug|x86.Build.0 = Debug|x86
 		{DB7D2BB7-13D5-4280-8F31-A20D96CA56B6}.Release|x86.ActiveCfg = Release|x86
 		{DB7D2BB7-13D5-4280-8F31-A20D96CA56B6}.Release|x86.Build.0 = Release|x86
+		{EF465AB4-0973-449D-AA39-AE686B13398F}.Debug|x86.ActiveCfg = Debug|x86
+		{EF465AB4-0973-449D-AA39-AE686B13398F}.Debug|x86.Build.0 = Debug|x86
+		{EF465AB4-0973-449D-AA39-AE686B13398F}.Release|x86.ActiveCfg = Release|x86
+		{EF465AB4-0973-449D-AA39-AE686B13398F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -64,13 +64,12 @@ namespace Minecraft2D
 
         public MainGame()
         {
-            GameExiting = false;
-            FormReference = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
-            
             graphics = new GraphicsDeviceManager(this);
             GlobalGraphicsDeviceManager = graphics;
 
-
+            GameExiting = false;
+            FormReference = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
+            
             Content.RootDirectory = "Content";
             this.Window.AllowUserResizing = true;
             this.Window.ClientSizeChanged += (sender, e) =>

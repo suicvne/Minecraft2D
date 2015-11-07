@@ -179,7 +179,7 @@ namespace Minecraft2D.Screens
 
             for (int x = 0; x < tx; x++)
                 for (int y = 0; y < ty; y++)
-                    MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"), new Rectangle(x * 32, y * 32, 32, 32), new Rectangle(16 * 2, 0, 16, 16), Color.Gray);
+                    MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"), new Rectangle(x * 32, y * 32, 32, 32), new Rectangle(16 * 2, 0, 16, 16), new Color(100, 100, 100));
 
             foreach (var control in ControlsList)
                 control.Draw(gameTime);
