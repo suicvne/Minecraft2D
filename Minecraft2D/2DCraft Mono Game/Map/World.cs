@@ -44,14 +44,14 @@ namespace Minecraft2D.Map
                     {
                         if (y == 33)
                         {
-                            Tile t = PresetBlocks.Grass.AsTile();
+                            Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:grass").AsTile();
                             t.Position = new Vector2(x * 32, y * 32);
                             tiles[y, x] = t;
                             t = null;
                         }
                         else if (y <= 37)
                         {
-                            Tile t = PresetBlocks.Dirt.AsTile();
+                            Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:dirt").AsTile();
                             t.Position = new Vector2(x * 32, y * 32);
                             tiles[y, x] = t;
                             t = null;
@@ -59,14 +59,14 @@ namespace Minecraft2D.Map
                         else if (y == 255)
                         {
                             //TODO: bedrock
-                            Tile t = PresetBlocks.Dirt.AsTile();
+                            Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:dirt").AsTile();
                             t.Position = new Vector2(x * 32, y * 32);
                             tiles[y, x] = t;
                             t = null;
                         }
                         else
                         {
-                            Tile t = PresetBlocks.Stone.AsTile();
+                            Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:stone").AsTile();
                             t.Position = new Vector2(x * 32, y * 32);
                             tiles[y, x] = t;
                             t = null;
@@ -74,7 +74,7 @@ namespace Minecraft2D.Map
                     }
                     else
                     {
-                        Tile t = PresetBlocks.Air.AsTile();
+                        Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:air").AsTile();
                         t.Position = new Vector2(x * 32, y * 32);
                         tiles[y, x] = t;
                         t = null;
@@ -109,7 +109,8 @@ namespace Minecraft2D.Map
                 {
                     for (int y = 0; y < tiles.GetLength(0); y++)
                     {
-                        string format = string.Format("{0}:{1}:{2}:{3}", (int)tiles[y, x].Type, tiles[y, x].Position.X, tiles[y, x].Position.Y, tiles[y, x].IsBackground);
+                        string format = 
+                            string.Format("{0};{1};{2};{3}", tiles[y, x].Name, tiles[y, x].Position.X, tiles[y, x].Position.Y, tiles[y, x].IsBackground);
                         sw.WriteLine(format);
                     }
                 }
@@ -127,41 +128,15 @@ namespace Minecraft2D.Map
                     input = sr.ReadLine();
                     if (input.Trim() != String.Empty)
                     {
-                        string[] split = input.Split(new char[] { ':' }, 4);
-                        int x, y, typeEnumIndex;
+                        string[] split = input.Split(new char[] { ';' }, 4);
+                        int x, y;
                         bool isBg = bool.Parse(split[3]);
                         x = (int)Math.Floor((double)Int32.Parse(split[1]) / 32);
                         y = (int)Math.Floor((double)Int32.Parse(split[2]) / 32);
-                        typeEnumIndex = Int32.Parse(split[0]);
-                        Tile t = PresetBlocks.Air.AsTile();
+                        string tileDataName = split[0];
+                        Tile t = new Tile();
                         t.Position = new Vector2(x * 32, y * 32);
-                        switch ((TileType)typeEnumIndex)
-                        {
-                            case TileType.Air:
-                                t = PresetBlocks.Air.AsTile();
-                                t.Position = new Vector2(x * 32, y * 32);
-                                break;
-                            case TileType.Stone:
-                                t = PresetBlocks.Stone.AsTile();
-                                t.Position = new Vector2(x * 32, y * 32);
-                                break;
-                            case TileType.Grass:
-                                t = PresetBlocks.Grass.AsTile();
-                                t.Position = new Vector2(x * 32, y * 32);
-                                break;
-                            case TileType.Dirt:
-                                t = PresetBlocks.Dirt.AsTile();
-                                t.Position = new Vector2(x * 32, y * 32);
-                                break;
-                            case TileType.Torch:
-                                t = PresetBlocks.Torch.AsTile();
-                                t.Position = new Vector2(x * 32, y * 32);
-                                break;
-                            case TileType.Jack:
-                                t = PresetBlocks.JackOLantern.AsTile();
-                                t.Position = new Vector2(x * 32, y * 32);
-                                break;
-                        }
+                        t = PresetBlocks.TilesList.Find(srch => srch.Name == tileDataName.Trim()).AsTile();
                         t.IsBackground = isBg;
                         tiles[y, x] = t;
                     }

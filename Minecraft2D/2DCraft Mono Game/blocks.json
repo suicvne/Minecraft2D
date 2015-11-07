@@ -1,0 +1,87 @@
+[
+  {
+    "Name": "minecraft:stone",
+    "Type": 3,
+    "Drops": "minecraft:stone",
+    "TransparencyOfTile": 0,
+    "Hardness": 1.5,
+    "TextureRegion": {
+      "X": 16,
+      "Y": 0,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PlaceSoundName": "stone{0}",
+    "Light": 0
+  },
+  {
+    "Name": "minecraft:air",
+    "Type": 0,
+    "Drops": null,
+    "TransparencyOfTile": 1,
+    "Hardness": 0.0,
+    "TextureRegion": null,
+    "PlaceSoundName": null,
+    "Light": 5
+  },
+  {
+    "Name": "minecraft:grass",
+    "Type": 1,
+    "Drops": "minecraft:dirt",
+    "TransparencyOfTile": 0,
+    "Hardness": 0.6,
+    "TextureRegion": {
+      "X": 48,
+      "Y": 0,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PlaceSoundName": "grass{0}",
+    "Light": 0
+  },
+  {
+    "Name": "minecraft:dirt",
+    "Type": 2,
+    "Drops": "minecraft:dirt",
+    "TransparencyOfTile": 0,
+    "Hardness": 0.5,
+    "TextureRegion": {
+      "X": 32,
+      "Y": 0,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PlaceSoundName": "gravel{0}",
+    "Light": 0
+  },
+  {
+    "Name": "minecraft:torch",
+    "Type": 4,
+    "Drops": "minecraft:torch",
+    "TransparencyOfTile": 2,
+    "Hardness": 0.2,
+    "TextureRegion": {
+      "X": 0,
+      "Y": 80,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PlaceSoundName": "wood{0}",
+    "Light": 12
+  },
+  {
+    "Name": "minecraft:jackolantern",
+    "Type": 5,
+    "Drops": "minecraft:jackolantern",
+    "TransparencyOfTile": 0,
+    "Hardness": 0.2,
+    "TextureRegion": {
+      "X": 128,
+      "Y": 112,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PlaceSoundName": "wood{0}",
+    "Light": 3
+  }
+]

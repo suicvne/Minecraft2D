@@ -41,7 +41,10 @@ namespace Minecraft2D.Screens
             worldLightmapPass = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
             allTogether = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
 
-            TilesList = PresetBlocks.BlocksAsArray();
+            List<BlockTemplate> __tilesList = PresetBlocks.TilesList.Copy();
+            __tilesList.Remove(__tilesList.Find(x => x.Name == "minecraft:air"));
+            TilesList = __tilesList.ToArray<BlockTemplate>();
+
             PlacingTile = TilesList[currentTileIndex];
         }
 
@@ -112,7 +115,7 @@ namespace Minecraft2D.Screens
                         Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
                         Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
 
-                        Tile airP = PresetBlocks.Air.AsTile();
+                        Tile airP = PresetBlocks.TilesList.Find(x => x.Name == "minecraft:air").AsTile();
                         airP.Position = new Vector2((float)Math.Floor(worldMousePosition.X / 32),
                             (float)Math.Floor(worldMousePosition.Y / 32));
                         world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, airP);

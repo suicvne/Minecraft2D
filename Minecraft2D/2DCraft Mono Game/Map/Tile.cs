@@ -22,8 +22,9 @@ namespace Minecraft2D.Map
     [Serializable]
     public class Tile : Entity
     {
+        public string Name { get; set; }
         public TileType Type { get; set; }
-        public Entity Drops { get; set; }
+        public string Drops { get; set; }
         public Vector2 Position { get; set; }
         public string PlaceSoundName { get; set; }
 
@@ -51,6 +52,7 @@ namespace Minecraft2D.Map
 
         public Tile() 
         {
+            Name = "minecraft:air";
             Hardness = 0; //instant break
             TransparencyOfTile = TileTransparency.FullyTransparent;
             Type = TileType.Air;

@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Minecraft2D.Screens;
 using Microsoft.Xna.Framework.Input;
+using Minecraft2D.Map;
 
 namespace Minecraft2D
 {
@@ -64,6 +65,16 @@ namespace Minecraft2D
 
         public MainGame()
         {
+            try
+            {
+                PresetBlocks.LoadBlocksList();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("CRITICAL ERROR OCCURRED\n" + ex.Message, "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                Environment.Exit(-1);
+            }
+
             graphics = new GraphicsDeviceManager(this);
             GlobalGraphicsDeviceManager = graphics;
 
@@ -148,6 +159,7 @@ namespace Minecraft2D
         protected override void Initialize()
         {
             base.Initialize();
+
             GlobalInputHelper = new InputHelper();
             //EnableOrDisableCloseButton(false);
 
@@ -169,7 +181,18 @@ namespace Minecraft2D
 
             GameStarting = false;
 
-            
+//#if DEBUG
+//            JsonSerializer js = new JsonSerializer();
+//            js.Formatting = Formatting.Indented;
+
+//            using (StreamWriter sw = new StreamWriter(Environment.CurrentDirectory + Path.DirectorySeparatorChar + "blocks.json"))
+//            {
+//                using (JsonWriter jsw = new JsonTextWriter(sw))
+//                {
+//                    js.Serialize(jsw, PresetBlocks.BlocksAsArray());
+//                }
+//            }
+//#endif
         }
 
         protected override void LoadContent()

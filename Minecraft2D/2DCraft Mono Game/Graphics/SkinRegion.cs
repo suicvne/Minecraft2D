@@ -14,6 +14,14 @@ namespace Minecraft2D.Graphics
         public int RegionWidth { get; set; }
         public int RegionHeight { get; set; }
 
+        public SkinRegion()
+        {
+            X = 0;
+            Y = 0;
+            RegionHeight = 0;
+            RegionWidth = 0;
+        }
+
         public SkinRegion(int x, int y)
         {
             X = x;
