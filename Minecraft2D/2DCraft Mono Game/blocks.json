@@ -118,5 +118,20 @@
     },
     "PlaceSoundName": "stone{0}",
     "Light": 0
+  },
+  {
+    "Name": "minecraft:cobble",
+    "Type": 5,
+    "Drops": "minecraft:cobble",
+    "TransparencyOfTile": 0,
+    "Hardness": 2,
+    "TextureRegion": {
+      "X": 0,
+      "Y": 16,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PlaceSoundName": "stone{0}",
+    "Light": 0
   }
 ]
