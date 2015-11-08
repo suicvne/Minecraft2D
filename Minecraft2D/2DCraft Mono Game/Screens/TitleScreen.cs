@@ -128,6 +128,7 @@ namespace Minecraft2D.Screens
             //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"),
             //    "Minecraft 2D Alpha", new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
 
+            
             if (reverseTextScale)
                 textScale = (float)(textScale - .003f * gameTime.ElapsedGameTime.TotalMilliseconds);
             else

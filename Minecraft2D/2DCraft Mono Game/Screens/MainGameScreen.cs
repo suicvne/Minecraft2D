@@ -41,15 +41,7 @@ namespace Minecraft2D.Screens
             worldLightmapPass = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
             allTogether = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
 
-            List<BlockTemplate> __tilesList = new List<BlockTemplate>();
-            foreach(var bltmp in PresetBlocks.TilesList)
-            {
-                if (bltmp.Name == "minecraft:air")
-                    continue;
-                __tilesList.Add(bltmp);
-            }
-            TilesList = __tilesList.ToArray<BlockTemplate>();
-
+            TilesList = PresetBlocks.TilesListAsArray();
             PlacingTile = TilesList[currentTileIndex];
         }
 

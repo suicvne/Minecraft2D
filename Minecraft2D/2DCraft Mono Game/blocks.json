@@ -20,7 +20,12 @@
     "Drops": null,
     "TransparencyOfTile": 1,
     "Hardness": 0.0,
-    "TextureRegion": null,
+    "TextureRegion": {
+		    "X": 0,
+        "Y": 0,
+        "RegionHeight": 0,
+        "RegionWidth": 0
+	  },
     "PlaceSoundName": null,
     "Light": 5
   },
@@ -89,7 +94,7 @@
     "Type": 5,
     "Drops": "minecraft:woodplank",
     "TransparencyOfTile": 0,
-    "Hardness": 0.2,
+    "Hardness": 2,
     "TextureRegion": {
       "X": 64,
       "Y": 0,
@@ -97,6 +102,21 @@
       "RegionHeight": 16
     },
     "PlaceSoundName": "wood{0}",
+    "Light": 0
+  },
+  {
+    "Name": "minecraft:bedrock",
+    "Type": 5,
+    "Drops": "minecraft:bedrock",
+    "TransparencyOfTile": 0,
+    "Hardness": -1,
+    "TextureRegion": {
+      "X": 16,
+      "Y": 16,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PlaceSoundName": "stone{0}",
     "Light": 0
   }
 ]

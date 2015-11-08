@@ -59,7 +59,7 @@ namespace Minecraft2D.Map
                         else if (y == 255)
                         {
                             //TODO: bedrock
-                            Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:dirt").AsTile();
+                            Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:bedrock").AsTile();
                             t.Position = new Vector2(x * 32, y * 32);
                             tiles[y, x] = t;
                             t = null;
@@ -134,9 +134,8 @@ namespace Minecraft2D.Map
                         x = (int)Math.Floor((double)Int32.Parse(split[1]) / 32);
                         y = (int)Math.Floor((double)Int32.Parse(split[2]) / 32);
                         string tileDataName = split[0];
-                        Tile t = new Tile();
+                        Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == tileDataName.Trim()).AsTile();
                         t.Position = new Vector2(x * 32, y * 32);
-                        t = PresetBlocks.TilesList.Find(srch => srch.Name == tileDataName.Trim()).AsTile();
                         t.IsBackground = isBg;
                         tiles[y, x] = t;
                     }
@@ -212,6 +211,9 @@ namespace Minecraft2D.Map
             int tY = (int)Math.Floor((double)(y + 16) / 32);
             if (tX > tiles.GetLength(1) || tX < 0 || tY > tiles.GetLength(0) || tY < 0)
                 return;
+            if (tiles[tY, tX].Hardness == -1)
+                return;
+
             else
             {
                 if (toReplace.Type == TileType.Air)

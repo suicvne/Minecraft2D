@@ -164,6 +164,17 @@ namespace Minecraft2D.Map
             }
         }
 
+        public static BlockTemplate[] TilesListAsArray()
+        {
+            List<BlockTemplate> tempList = new List<BlockTemplate>();
+            foreach (var bltmp in TilesList)
+                if (!bltmp.Name.Contains("air"))
+                    if(!bltmp.Name.Contains("bedrock"))
+                        tempList.Add(bltmp);
+
+            return tempList.ToArray<BlockTemplate>();
+        }
+
         public static List<BlockTemplate> TilesList
         {
             get; set;

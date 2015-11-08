@@ -18,8 +18,8 @@ namespace Minecraft2D.Graphics
         {
             X = 0;
             Y = 0;
-            RegionHeight = 0;
-            RegionWidth = 0;
+            RegionHeight = 16;
+            RegionWidth = 16;
         }
 
         public SkinRegion(int x, int y)
