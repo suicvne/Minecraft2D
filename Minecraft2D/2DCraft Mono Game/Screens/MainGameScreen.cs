@@ -33,7 +33,7 @@ namespace Minecraft2D.Screens
 
             MainGame.WindowClosing += () =>
             {
-                world.SaveWorld("World1.wld");
+                world.SaveWorld("World1.mc2dwld");
                 MainGame.WriteSettings();
             };
 
@@ -147,7 +147,7 @@ namespace Minecraft2D.Screens
                 }
                 if(MainGame.GlobalInputHelper.IsNewPress(Keys.Escape))
                 {
-                    world.SaveWorld("World1.wld");
+                    world.SaveWorld("World1.mc2dwld");
                     MainGame.manager.PushScreen(GameScreens.MAIN);
                 }
                 if(MainGame.GlobalInputHelper.IsCurPress(Keys.Left))

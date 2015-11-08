@@ -81,8 +81,8 @@ namespace Minecraft2D.Map
                     }
                 }
             }
-            if (File.Exists("World1.wld"))
-                LoadWorld("World1.wld");
+            if (File.Exists("World1.mc2dwld"))
+                LoadWorld("World1.mc2dwld");
             GenerateLightmap();
 
         }
@@ -134,7 +134,7 @@ namespace Minecraft2D.Map
                         x = (int)Math.Floor((double)Int32.Parse(split[1]) / 32);
                         y = (int)Math.Floor((double)Int32.Parse(split[2]) / 32);
                         string tileDataName = split[0];
-                        Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == tileDataName.Trim()).AsTile();
+                        Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == tileDataName.Trim()) != null ? PresetBlocks.TilesList.Find(srch => srch.Name == tileDataName.Trim()).AsTile() : new Tile();
                         t.Position = new Vector2(x * 32, y * 32);
                         t.IsBackground = isBg;
                         tiles[y, x] = t;
