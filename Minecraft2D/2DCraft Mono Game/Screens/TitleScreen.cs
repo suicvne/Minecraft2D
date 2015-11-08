@@ -44,27 +44,33 @@ namespace Minecraft2D.Screens
         public TitleScreen()
         {
             Button ExitButton = new Button
-                (
-                    new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth), 
-                    MainGame.GlobalGraphicsDevice.Viewport.Height - 120), 
-                    new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), 
+                ( 
+                    new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth),
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 120, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), 
                     "Exit"
                 );
 
-            Button KekButton = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDevice.Viewport.Height - 190), new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Options");
-            Button PlayButton = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDevice.Viewport.Height - 260), new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Load Test World");
+            Button OptionsButton = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDevice.Viewport.Height - 190, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Options");
+            Button PlayButton = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDevice.Viewport.Height - 260, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Load Test World");
 
-            KekButton.Enabled = true;
+            OptionsButton.Enabled = true;
 
             ExitButton.Clicked += ExitButton_Clicked;
             PlayButton.Clicked += () => 
             {
                 MainGame.manager.PushScreen(GameScreens.GAME);
             };
-            KekButton.Clicked += () => MainGame.manager.PushScreen(GameScreens.OPTIONS);
+            OptionsButton.Name = "OptionsButton";
+            OptionsButton.Clicked += () =>
+            {
+                if (OptionsButton.ButtonText == "Options")
+                    MainGame.manager.PushScreen(GameScreens.OPTIONS);
+                else
+                    MainGame.manager.PushScreen(GameScreens.DEBUGINFO);
+            };
 
             AddControl(ExitButton);
-            AddControl(KekButton);
+            AddControl(OptionsButton);
             AddControl(PlayButton);
 
             ran.Next(0, splashMessages.Length);
@@ -151,6 +157,16 @@ namespace Minecraft2D.Screens
 
         public override void Update(GameTime gameTime)
         {
+            if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt))
+            {
+                Button optionsButton = (Button)ControlsList.Find(x => x.Name == "OptionsButton");
+                optionsButton.ButtonText = "Debug Info";
+            }
+            else
+            {
+                Button optionsButton = (Button)ControlsList.Find(x => x.Name == "OptionsButton");
+                optionsButton.ButtonText = "Options";
+            }
             foreach (var c in ControlsList)
                 c.Update(gameTime);
         }

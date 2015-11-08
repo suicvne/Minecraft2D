@@ -49,6 +49,7 @@
     <Compile Include="Map\Entity.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="MainGame.cs" />
+    <Compile Include="Screens\DebugInfo.cs" />
     <Compile Include="Screens\MainGameScreen.cs" />
     <Compile Include="ObjectCopier.cs" />
     <Compile Include="ObjectExtensions.cs" />

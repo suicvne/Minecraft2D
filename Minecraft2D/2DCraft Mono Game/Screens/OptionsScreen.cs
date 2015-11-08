@@ -14,11 +14,10 @@ namespace Minecraft2D.Screens
     {
         public OptionsScreen()
         {
-            Button donebutton = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth),
-                    MainGame.GlobalGraphicsDevice.Viewport.Height - 50),
-                new Rectangle(0, 0, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Done");
+            Button doneButton = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth),
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 50, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Done", true);
 
-            donebutton.Clicked += () =>
+            doneButton.Clicked += () =>
             {
                 Control f = ControlsList.Find(x => x.Name == "usrnametb");
                 if(f != null)
@@ -29,9 +28,8 @@ namespace Minecraft2D.Screens
             };
 
             #region Key mapping
-            Button MoveLeftMod = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 580,
-                    MainGame.GlobalGraphicsDevice.Viewport.Height - 440),
-                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveLeft.ToString());
+            Button MoveLeftMod = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width - 580,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 440, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveLeft.ToString());
             MoveLeftMod.Clicked += () =>
             {
                 new Thread(()=>
@@ -50,9 +48,8 @@ namespace Minecraft2D.Screens
                 }).Start();
             };
 
-            Button MoveRightMod = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 380,
-                    MainGame.GlobalGraphicsDevice.Viewport.Height - 440),
-                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveRight.ToString());
+            Button MoveRightMod = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width - 380,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 440, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveRight.ToString());
             MoveRightMod.Clicked += () =>
             {
                 new Thread(() =>
@@ -71,9 +68,8 @@ namespace Minecraft2D.Screens
                 }).Start();
             };
 
-            Button MoveDownMod = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 580,
-                    MainGame.GlobalGraphicsDevice.Viewport.Height - 370),
-                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveDown.ToString());
+            Button MoveDownMod = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width - 580,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 370, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveDown.ToString());
             MoveDownMod.Clicked += () =>
             {
                 new Thread(() =>
@@ -92,9 +88,8 @@ namespace Minecraft2D.Screens
                 }).Start();
             };
 
-            Button MoveUpMod = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 380,
-                    MainGame.GlobalGraphicsDevice.Viewport.Height - 370),
-                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveUp.ToString());
+            Button MoveUpMod = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width - 380,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 370, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.MoveUp.ToString());
             MoveUpMod.Clicked += () =>
             {
                 new Thread(() =>
@@ -113,9 +108,8 @@ namespace Minecraft2D.Screens
                 }).Start();
             };
 
-            Button JumpMod = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 470,
-                    MainGame.GlobalGraphicsDevice.Viewport.Height - 300),
-                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.JumpKey.ToString());
+            Button JumpMod = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width - 470,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - 300, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.JumpKey.ToString());
             JumpMod.Clicked += () =>
             {
                 new Thread(() =>
@@ -139,9 +133,8 @@ namespace Minecraft2D.Screens
             usernameTextBox.Content = MainGame.GameOptions.Username;
             usernameTextBox.Name = "usrnametb";
 
-            Button FullscreenButton = new Button(new Vector2i(MainGame.GlobalGraphicsDevice.Viewport.Width - 470,
-                    MainGame.GlobalGraphicsDevice.Viewport.Height - (230 - 70)),
-                new Rectangle(0, 0, (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.Fullscreen.ToString());
+            Button FullscreenButton = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width - 470,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - (230 - 70), (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.Fullscreen.ToString());
             FullscreenButton.Clicked += () =>
             {
                 MainGame.GlobalGraphicsDeviceManager.IsFullScreen = !MainGame.GlobalGraphicsDeviceManager.IsFullScreen;
@@ -151,7 +144,7 @@ namespace Minecraft2D.Screens
                 FullscreenButton.ButtonText = MainGame.GameOptions.Fullscreen.ToString();
             };
 
-            AddControl(donebutton);
+            AddControl(doneButton);
             AddButtonWithLabel(MoveLeftMod, new Label(name: "lbl", text: "Move Left", pos: Vector2.Zero, tnt: Color.Gray));
             AddButtonWithLabel(MoveRightMod, new Label(name: "lbl", text: "Move Right", pos: Vector2.Zero, tnt: Color.Gray));
             AddButtonWithLabel(MoveUpMod, new Label(name: "lbl", text: "Move Up", pos: Vector2.Zero, tnt: Color.Gray));

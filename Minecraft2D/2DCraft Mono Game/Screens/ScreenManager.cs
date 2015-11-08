@@ -14,7 +14,7 @@ namespace Minecraft2D.Screens
     public enum GameScreens
     {
         MAIN, SPLASH, CREDITS, GAME,
-        OPTIONS
+        OPTIONS, DEBUGINFO
     }
 
     public class ScreenManager
@@ -24,12 +24,14 @@ namespace Minecraft2D.Screens
         private Minecraft2D.Screens.MainGameScreen mainGameScreen;
         private TitleScreen titleScreen;
         private OptionsScreen options;
+        private DebugInfo debugScreen;
 
         public ScreenManager()
         {
             mainGameScreen = new MainGameScreen();
             titleScreen = new TitleScreen();
             options = new OptionsScreen();
+            debugScreen = new DebugInfo();
             MainGame.CustomContentManager = new Graphics.ContentManager();
             CurrentScreen = GameScreens.MAIN;
             LoadContent();
@@ -106,6 +108,9 @@ namespace Minecraft2D.Screens
                 case (GameScreens.OPTIONS):
                     options.Update(gameTime);
                     break;
+                case (GameScreens.DEBUGINFO):
+                    debugScreen.Update(gameTime);
+                    break;
             }
         }
 
@@ -121,6 +126,9 @@ namespace Minecraft2D.Screens
                     break;
                 case (GameScreens.OPTIONS):
                     options.Draw(gameTime);
+                    break;
+                case (GameScreens.DEBUGINFO):
+                    debugScreen.Draw(gameTime);
                     break;
             }
         }
