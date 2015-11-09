@@ -49,32 +49,32 @@ namespace Minecraft2D.Screens
 
         public void RecalculateMinMax()
         {
-            int x = MainGame.GlobalGraphicsDevice.Viewport.Width / 2;
-            int y = MainGame.GlobalGraphicsDevice.Viewport.Height / 2;
-            minX = x;
-            minY = y;
-            maxX = (int)world.WorldSize.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2);
-            maxY = (int)world.WorldSize.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2);
+            //int x = MainGame.GlobalGraphicsDevice.Viewport.Width / 2;
+            //int y = MainGame.GlobalGraphicsDevice.Viewport.Height / 2;
+            //minX = x;
+            //minY = y;
+            //maxX = (int)world.WorldSize.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2);
+            //maxY = (int)world.WorldSize.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2);
 
-            if (MainGame.GameCamera.Pos.X > maxX)
-            {
-                MainGame.GameCamera.Pos = new Vector2i(maxX, MainGame.GameCamera.Pos.Y);
-            }
-            if (MainGame.GameCamera.Pos.Y > maxY)
-            {
-                MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, maxY);
-            }
-            if (MainGame.GameCamera.Pos.X < minX)
-            {
-                MainGame.GameCamera.Pos = new Vector2i(minX, MainGame.GameCamera.Pos.Y);
-            }
-            if (MainGame.GameCamera.Pos.Y < minY)
-            {
-                MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, minY);
-            }
-            worldRenderTarget = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
-            worldLightmapPass = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
-            allTogether = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+            //if (MainGame.GameCamera.Pos.X > maxX)
+            //{
+            //    MainGame.GameCamera.Pos = new Vector2i(maxX, MainGame.GameCamera.Pos.Y);
+            //}
+            //if (MainGame.GameCamera.Pos.Y > maxY)
+            //{
+            //    MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, maxY);
+            //}
+            //if (MainGame.GameCamera.Pos.X < minX)
+            //{
+            //    MainGame.GameCamera.Pos = new Vector2i(minX, MainGame.GameCamera.Pos.Y);
+            //}
+            //if (MainGame.GameCamera.Pos.Y < minY)
+            //{
+            //    MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, minY);
+            //}
+            //worldRenderTarget = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+            //worldLightmapPass = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+            //allTogether = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
         }
 
         public override void Update(GameTime gameTime)
