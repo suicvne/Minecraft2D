@@ -35,6 +35,8 @@ namespace Minecraft2D.Screens
         Random ran = new Random(DateTime.Now.Millisecond);
         int splashIndex = 0;
 
+        RenderTarget2D targetTest;
+
         public void AdvanceSplash()
         {
             ran.Next(0, splashMessages.Length);
@@ -76,6 +78,8 @@ namespace Minecraft2D.Screens
             ran.Next(0, splashMessages.Length);
             ran.Next(0, splashMessages.Length);
             splashIndex = ran.Next(0, splashMessages.Length);
+
+            targetTest = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
         }
 
         private void ExitButton_Clicked()
@@ -85,6 +89,9 @@ namespace Minecraft2D.Screens
         }
 
         float textScale = 1f;
+
+        
+
         public override void Draw(GameTime gameTime)
         {
             int tx, ty;

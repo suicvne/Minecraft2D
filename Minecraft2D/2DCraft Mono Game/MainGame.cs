@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Minecraft2D.Screens;
 using Microsoft.Xna.Framework.Input;
 using Minecraft2D.Map;
+using System.Reflection;
 
 namespace Minecraft2D
 {
@@ -61,10 +62,13 @@ namespace Minecraft2D
 
         private bool GameStarting = true;
 
-        public static Version GameVersion = new Version(0, 2, 0, 0);
+        public static Version GameVersion = Assembly.GetEntryAssembly().GetName().Version;
 
-        public MainGame()
+        public static bool LINUX = false;
+
+        public MainGame(bool Linux)
         {
+            LINUX = Linux;
             try
             {
                 PresetBlocks.LoadBlocksList();
@@ -79,30 +83,43 @@ namespace Minecraft2D
             GlobalGraphicsDeviceManager = graphics;
 
             GameExiting = false;
-            FormReference = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
+            if (!LINUX)
+                FormReference = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
+            else
+            {
+            }
             
             Content.RootDirectory = "Content";
             this.Window.AllowUserResizing = true;
+
             this.Window.ClientSizeChanged += (sender, e) =>
             {
                 if(manager != null)
                     manager.RecalculateMinMax();
             };
 
-            FormReference.Resize += (sender, e) =>
+            if (!LINUX)
             {
-                if (!GameStarting)
+                FormReference.Resize += (sender, e) =>
                 {
-                    GameOptions.WindowState = FormReference.WindowState;
-                    GameOptions.WindowSize = FormReference.Size;
-                    GameOptions.WindowLocation = FormReference.Location;
-                }
-            };
-            FormReference.FormClosing += (sender, e) => 
+                    if (!GameStarting)
+                    {
+                        GameOptions.WindowState = FormReference.WindowState;
+                        GameOptions.WindowSize = FormReference.Size;
+                        GameOptions.WindowLocation = FormReference.Location;
+                    }
+                };
+                FormReference.FormClosing += (sender, e) =>
+                {
+                    if (WindowClosing != null)
+                        WindowClosing();
+                };
+            }
+            else
             {
-                if (WindowClosing != null)
-                    WindowClosing();
-            };
+
+            }
+
             this.Window.TextInput += (sender, e) =>
             {
                 if (TextInputReceived != null)
@@ -164,16 +181,18 @@ namespace Minecraft2D
             //EnableOrDisableCloseButton(false);
 
             int x, y;
-            x = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - FormReference.Width / 2;//- this.Window.ClientBounds.Width;
-            y = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - FormReference.Height / 2;// - this.Window.ClientBounds.Height;
-            FormReference.Location = new System.Drawing.Point(x, y);
+            if (!LINUX)
+            {
+                x = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2) - FormReference.Width / 2;//- this.Window.ClientBounds.Width;
+                y = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2) - FormReference.Height / 2;// - this.Window.ClientBounds.Height;
+                FormReference.Location = new System.Drawing.Point(x, y);
 
-            FormReference.WindowState = GameOptions.WindowState;
-            if(GameOptions.WindowLocation != null)
-                FormReference.Location = GameOptions.WindowLocation;
-            if(GameOptions.WindowSize != null)
-                FormReference.Size = GameOptions.WindowSize;
-
+                FormReference.WindowState = GameOptions.WindowState;
+                if (GameOptions.WindowLocation != null)
+                    FormReference.Location = GameOptions.WindowLocation;
+                if (GameOptions.WindowSize != null)
+                    FormReference.Size = GameOptions.WindowSize;
+            }
             GlobalGraphicsDeviceManager.SynchronizeWithVerticalRetrace = GameOptions.Vsync;
             this.IsFixedTimeStep = GameOptions.Vsync;
             GlobalGraphicsDeviceManager.IsFullScreen = GameOptions.Fullscreen;

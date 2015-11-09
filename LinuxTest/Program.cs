@@ -14,7 +14,7 @@ namespace LinuxTest
         [STAThread]
         static void Main()
         {
-            using (var game = new Minecraft2D.MainGame())
+            using (var game = new Minecraft2D.MainGame(true))
                 game.Run();
         }
     }
