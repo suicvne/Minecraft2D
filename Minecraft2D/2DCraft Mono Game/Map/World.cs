@@ -413,6 +413,7 @@ namespace Minecraft2D.Map
                 //if (block.Type == TileType.Air)
                 //    AddLight(stationaryLightMap, (int)Math.Floor(block.Position.X / 32), (int)Math.Floor(block.Position.Y / 32));
                 if (block.Type != TileType.Air)
+                {
                     if (!block.IsBackground)
                     {
                         int x = (int)Math.Floor(block.Position.X / 32);
@@ -438,6 +439,7 @@ namespace Minecraft2D.Map
                             SpriteEffects.None,
                             0f);
                     }
+                }
             }
             //MainGame.GlobalSpriteBatch.End();
 

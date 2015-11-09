@@ -23,7 +23,7 @@ namespace Minecraft2D.Screens
             Label NETVer = new Label("NETVer", "* .NET Version: " + Assembly
                      .GetExecutingAssembly()
                      .GetReferencedAssemblies()
-                     .Where(x => x.Name == "System.Core").First().Version.ToString(2), new Vector2(20, 58), Color.Gray);
+                     .Where(x => x.Name == "System.Core").First().Version.ToString(3), new Vector2(20, 58), Color.Gray);
             Label BlockCount = new Label("BlockCount", "* Total Loaded Blocks: " + PresetBlocks.TilesList.Count, new Vector2(20, 72), Color.Gray);
             Label WorkingDirectory = new Label("WorkingDirectory", "* Current Directory: " + Environment.CurrentDirectory, new Vector2(20, 86), Color.Gray);
             Label OSInfo = new Label("OSINFO", $"* OS Info: {Environment.OSVersion.Platform} {Environment.OSVersion.VersionString} 64 Bit: {Environment.Is64BitOperatingSystem}", new Vector2(20, 86 + 14), Color.Gray);

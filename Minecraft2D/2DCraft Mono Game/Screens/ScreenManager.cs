@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Minecraft2D.Screens
 {
@@ -86,7 +87,8 @@ namespace Minecraft2D.Screens
                 titleScreen.AdvanceSplash();
             if(screen == GameScreens.OPTIONS)
                 options = new OptionsScreen();
-
+            if (screen == GameScreens.GAME)
+                Thread.Sleep(200);
             CurrentScreen = screen;
         }
 
