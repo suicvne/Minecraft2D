@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SaveConverter
+namespace Minecraft2D.Saves
 {
     public class BinarySaveReader
     {

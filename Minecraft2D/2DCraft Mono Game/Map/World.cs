@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.IO;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using Minecraft2D.Saves;
 
 namespace Minecraft2D.Map
 {
@@ -81,8 +82,14 @@ namespace Minecraft2D.Map
                     }
                 }
             }
-            if (File.Exists("World1.mc2dwld"))
+            if(File.Exists("World1.mc2dwld"))
+            {
                 LoadWorld("World1.mc2dwld");
+                File.Delete("World1.mc2dwld");
+                SaveWorldBinary("World1.mc2dbin");
+            }
+            else if (File.Exists("World1.mc2dbin"))
+                LoadWorldBinary("World1.mc2dbin");
             GenerateLightmap();
 
         }
@@ -97,6 +104,36 @@ namespace Minecraft2D.Map
                         Lightmap[y, x] = 5;
                     else if (tiles[y, x].Type == TileType.Torch)
                         Lightmap[y, x] = 12;
+                }
+            }
+        }
+
+        public void SaveWorldBinary(string path)
+        {
+            Minecraft2D.Saves.Tile[,] saveConverterTiles = new Saves.Tile[tiles.GetLength(0), tiles.GetLength(1)];
+            foreach(var t in tiles)
+            {
+                Saves.Tile saveTile = new Saves.Tile { BackgroundTile = t.IsBackground, Name = t.Name, X = (int)t.Position.X, Y = (int)t.Position.Y };
+                saveConverterTiles[(int)(Math.Floor(t.Position.Y / 32)), (int)(Math.Floor(t.Position.X / 32))] = saveTile;
+            }
+
+            BinarySaveWriter bsw = new BinarySaveWriter(path, saveConverterTiles);
+            bsw.WriteSave();
+        }
+
+        public void LoadWorldBinary(string path)
+        {
+            BinarySaveReader bsr = new BinarySaveReader(path);
+            bsr.ReadMap();
+            if (bsr.ReadTiles != null)
+            {
+                tiles = new Tile[bsr.ReadTiles.GetLength(0), bsr.ReadTiles.GetLength(1)];
+                foreach(var t in bsr.ReadTiles)
+                {
+                    Tile ingameTile = PresetBlocks.TilesList.Find(srch => srch.Name == t.Name.Trim()) != null ? PresetBlocks.TilesList.Find(srch => srch.Name == t.Name.Trim()).AsTile() : new Tile();
+                    ingameTile.IsBackground = t.BackgroundTile;
+                    ingameTile.Position = new Vector2(t.X, t.Y);
+                    tiles[(int)Math.Floor((float)t.Y / 32), (int)Math.Floor((float)t.X / 32)] = ingameTile;
                 }
             }
         }

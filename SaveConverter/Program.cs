@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SaveConverter
+namespace Minecraft2D.Saves
 {
-    class Program
+    class SaveConverter
     {
         [STAThread]
         static void Main(string[] args)
