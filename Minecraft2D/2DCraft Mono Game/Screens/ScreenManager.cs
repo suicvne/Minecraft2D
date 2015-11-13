@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Minecraft2D.Map;
 using Minecraft2D.Screens;
 using MonoGame.Extended.BitmapFonts;
 using System;
@@ -22,7 +23,7 @@ namespace Minecraft2D.Screens
     {
         public GameScreens CurrentScreen { get; set; }
 
-        private Minecraft2D.Screens.MainGameScreen mainGameScreen;
+        private static Minecraft2D.Screens.MainGameScreen mainGameScreen;
         private TitleScreen titleScreen;
         private OptionsScreen options;
         private DebugInfo debugScreen;
@@ -37,6 +38,7 @@ namespace Minecraft2D.Screens
             CurrentScreen = GameScreens.MAIN;
             LoadContent();
         }
+        
         public void LoadContent()
         {
             if (MainGame.GlobalContentManager != null)

@@ -218,7 +218,6 @@ namespace Minecraft2D.Map
                 }
 
             }
-
         }
 
         public Rectangle viewportRect { get; set; }
@@ -378,40 +377,53 @@ namespace Minecraft2D.Map
             }
         }
 
-        private Vector2 LightSize = new Vector2(32 * 5, 32 * 5);
-        public void Draw(GameTime gameTime)
+        public Rectangle GetViewport()
         {
-            if (player == null)
-                player = new Player();
-
-            /*MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
-                BlendState.AlphaBlend,
-                SamplerState.PointClamp,
-                DepthStencilState.None,
-                RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));*/
-            List<Tile> tilesToBeRendered = new List<Tile>();
-
-            viewportRect = new Rectangle((int)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2),
+            Rectangle viewportRect = new Rectangle((int)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2),
                     (int)MainGame.GameCamera.Pos.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2),
                     MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
+            return viewportRect;
+        }
+
+        public bool HasRoomForEntity(Rectangle toCheck)
+        {
+            foreach(var tile in CurrentRenderedTiles())
+            {
+                if (tile.TransparencyOfTile == TileTransparency.FullyOpague && tile.Bounds.Intersects(toCheck))
+                    return false;
+            }
+            return true;
+        }
+
+        private List<Tile> CurrentRenderedTiles()
+        {
+            List<Tile> tilesToBeRendered = new List<Tile>();
+
             foreach (var block in tiles)
             {
                 Rectangle objectBounds = new Rectangle((int)block.Position.X, (int)block.Position.Y, 34, 34);
                 int x, y;
                 x = (int)Math.Floor((double)block.Position.X / 32);
                 y = (int)Math.Floor((double)block.Position.Y / 32);
-                if (viewportRect.Intersects(objectBounds))
+                if (GetViewport().Intersects(objectBounds))
                 {
                     tilesToBeRendered.Add(block);
                     //if(block.Type == TileType.Air)
                     //    Lightmap[y, x] = 1; //it'll either be 1f or 0f i guess
                 }
             }
+            return tilesToBeRendered;
+        }
 
-            foreach (Tile block in tilesToBeRendered)
+        private Vector2 LightSize = new Vector2(32 * 5, 32 * 5);
+        public void Draw(GameTime gameTime)
+        {
+            if (player == null)
+                player = new Player();
+            
+
+            foreach (Tile block in CurrentRenderedTiles())
             {
-                //if (block.Type == TileType.Air)
-                //    AddLight(stationaryLightMap, (int)Math.Floor(block.Position.X / 32), (int)Math.Floor(block.Position.Y / 32));
                 if (block.Type != TileType.Air)
                 {
                     if (!block.IsBackground)
@@ -441,7 +453,6 @@ namespace Minecraft2D.Map
                     }
                 }
             }
-            //MainGame.GlobalSpriteBatch.End();
 
             player.Draw(gameTime);
         }

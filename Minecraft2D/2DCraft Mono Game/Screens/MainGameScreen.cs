@@ -16,7 +16,7 @@ namespace Minecraft2D.Screens
     {
         private Random ran = new Random(DateTime.Now.Millisecond);
         private Skin skinTest;
-        private World world;
+        public static World world;
         private MouseState mouseState = Mouse.GetState();
 
         private RenderTarget2D worldRenderTarget;
@@ -150,14 +150,6 @@ namespace Minecraft2D.Screens
                     world.SaveWorldBinary("World1.mc2dbin");
                     MainGame.manager.PushScreen(GameScreens.MAIN);
                 }
-                if(MainGame.GlobalInputHelper.IsCurPress(Keys.Left))
-                {
-                    world.player.Move(new Vector2(-2, 0));
-                }
-                if (MainGame.GlobalInputHelper.IsCurPress(Keys.Right))
-                {
-                    world.player.Move(new Vector2(2, 0));
-                }
                 if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveUp))
                 {
                     MainGame.GameCamera.Move(new Vector2i(0, -5));
@@ -183,6 +175,7 @@ namespace Minecraft2D.Screens
                         MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, maxY);
                 }
             }
+            world.player.Update(gameTime);
             world.Update(gameTime);
         }
 
@@ -327,11 +320,12 @@ namespace Minecraft2D.Screens
                 TitleScreen.DrawText("World Size: " + world.WorldSize.X + " x " + world.WorldSize.Y, new Vector2(0, 18 * 5), Color.White);
 
                 string WorldArea = string.Format("{0} x {1}", world.viewportRect.Width, world.viewportRect.Height);
-                TitleScreen.DrawText("Rendered Area: " + WorldArea, new Vector2(0, 18 * 6), Color.White);
+                TitleScreen.DrawText($"Rendered Area: {world.GetViewport().X} x {world.GetViewport().Y}", new Vector2(0, 18 * 6), Color.White);
                 TitleScreen.DrawText("Rendered Lights: " + world.RenderedLights, new Vector2(0, 18 * 7), Color.White);
                 TitleScreen.DrawText("VSync Enabled: " + MainGame.GameOptions.Vsync, new Vector2(0, 18 * 8), Color.White);
 
                 MainGame.GlobalSpriteBatch.End();
+
 
 
                 MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
@@ -343,6 +337,9 @@ namespace Minecraft2D.Screens
                     (int)world.player.Position.Y,
                     world.player.Hitbox.Width,
                     world.player.Hitbox.Height), Color.Green);
+
+                
+
                 MainGame.GlobalSpriteBatch.End();
             }
         }

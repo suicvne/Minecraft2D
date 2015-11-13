@@ -27,6 +27,11 @@ namespace Minecraft2D.Map
         public string Drops { get; set; }
         public Vector2 Position { get; set; }
         public string PlaceSoundName { get; set; }
+        public Rectangle Bounds
+        {
+            //TODO: proper things with things
+            get { return new Rectangle((int)Position.X, (int)Position.Y, 32, 32); }
+        }
 
         /// <summary>
         /// If this is true, the player will pass through the blocks like water.
