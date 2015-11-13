@@ -108,7 +108,7 @@ namespace XNBExporter
         {
             if(filesListView.Items.Count == 0)
             {
-                MessageBox.Show("There are no items to export!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("There are no items to export!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); .
                 return;
             }
 
