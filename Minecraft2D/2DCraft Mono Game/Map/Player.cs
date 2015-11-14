@@ -60,6 +60,13 @@ namespace Minecraft2D.Map
             }
         }
 
+        public bool IsOnFirmGround()
+        {
+            Rectangle onePixelLower = new Rectangle((int)Position.X, (int)Position.Y, Hitbox.Width, Hitbox.Height);
+            onePixelLower.Offset(0, 1);
+            return !MainGameScreen.world.HasRoomForEntity(onePixelLower, true);
+        }
+
         private void UpdatePositionBasedOnMovement(GameTime gameTime)
         {
             Position += Movement * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 15;
@@ -72,31 +79,51 @@ namespace Minecraft2D.Map
 
         private void CheckKeyboardMovement()
         {
-            if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
-            { Movement += new Vector2(-2, 0); }
-            if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
-            { Movement += new Vector2(1, 0); }
-            if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Z))
-            { Movement += new Vector2(0, -2); }
+            if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(MainGame.GameOptions.MoveLeft))
+            { Movement += new Vector2(-.2f, 0); }
+            if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(MainGame.GameOptions.MoveRight))
+            { Movement += new Vector2(.2f, 0); }
+            if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(MainGame.GameOptions.JumpKey) && IsOnFirmGround())
+            {
+                Movement = -Vector2.UnitY * 15;
+            }
         }
 
+        private int mod = 0;
         public void Draw(GameTime gameTime)
         {
+            Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
+            Vector2 worldMousePosition = Vector2.Transform(new Vector2(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y), inverseViewMatrix);
+
+            float distanceX = worldMousePosition.X - Position.X;
+            float distanceY = worldMousePosition.Y - Position.Y;
+            float angle = (float)Math.Atan2(distanceY, distanceX);
+
+            mod++;
+
             if (Direction == 0)
             {
                 MainGame.GlobalSpriteBatch.Draw(skin.FullSkin, new Rectangle(
-                    (int)Position.X, (int)Position.Y, 24, 24
-                    ), new Rectangle(skin.HeadLeft.X, skin.HeadLeft.Y, 8, 8), Color.White);
+                    (int)Position.X + 8, (int)Position.Y + 4, 16, 16
+                    ), new Rectangle(skin.HeadLeft.X, skin.HeadLeft.Y, 8, 8), Color.White/*, (Math.Abs(-angle)), new Vector2(4, 8), SpriteEffects.None, 0f*/);
+                //MainGame.GlobalSpriteBatch.Draw(skin.FullSkin, new Rectangle(
+                //    (int)Position.X + 16, (int)Position.Y + 16, 16, 16
+                //    ), new Rectangle(skin.HeadLeft.X, skin.HeadLeft.Y, 8, 8), Color.White/*, (Math.Abs(-angle)), new Vector2(4, 8), SpriteEffects.None, 0f*/);
                 MainGame.GlobalSpriteBatch.Draw(skin.FullSkin, 
-                    new Rectangle((int)Position.X + 4, (int)Position.Y + 24, 6 * 3,  12 * 3), 
+                    new Rectangle((int)Position.X + 12, (int)Position.Y + 16, 8, 24), 
                     new Rectangle(skin.LeftTorso.X, skin.LeftTorso.Y, 6, 12), Color.White);
                 MainGame.GlobalSpriteBatch.Draw(skin.FullSkin,
-                    new Rectangle((int)Position.X + 8, (int)Position.Y + 24, 4 * 2, 12 * 2),
-                    new Rectangle(skin.OutsideArm.X, skin.OutsideArm.Y, 4, 12), Color.White);
+                    new Rectangle((int)Position.X + 16, (int)Position.Y + 20, 8, 12 * 2),
+                    new Rectangle(skin.OutsideArm.X, skin.OutsideArm.Y, 4, 12), Color.White, (angle - MathHelper.ToRadians(90)), new Vector2(2, 0), SpriteEffects.None, 0f);
                 MainGame.GlobalSpriteBatch.Draw(skin.FullSkin,
-                    new Rectangle((int)Position.X + 8, (int)Position.Y + 60, 4 * 2, 12 * 2),
-                    new Rectangle(skin.OutsideLeg.X, skin.OutsideLeg.Y, 4, 12), Color.White);
+                    new Rectangle((int)Position.X + 12, (int)Position.Y + 40, 8, 24),
+                    new Rectangle(skin.OutsideLeg.X, skin.OutsideLeg.Y, 6, 12), Color.White);
+                MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"), 
+                    new Rectangle((int)Position.X + 20, (int)Position.Y + 40, 8, 8), MainGameScreen.PlacingTile.TextureRegion.ToRectangle(), Color.White, angle - MathHelper.ToRadians(90), new Vector2(2, 0), SpriteEffects.None, 0f);
             }
+
+            if (mod > 360)
+                mod = 0;
         }
     }
 }

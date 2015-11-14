@@ -24,7 +24,7 @@ namespace Minecraft2D.Screens
         private RenderTarget2D allTogether;
 
         int currentTileIndex = 0;
-        private BlockTemplate PlacingTile { get; set; }
+        public static BlockTemplate PlacingTile { get; set; }
         private BlockTemplate[] TilesList { get; set; }
 
         public MainGameScreen()
@@ -174,11 +174,14 @@ namespace Minecraft2D.Screens
                 //    if (MainGame.GameCamera.Pos.Y > maxY)
                 //        MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, maxY);
                 //}
-
-                MainGame.GameCamera.Pos.X = (int)Math.Min(Math.Max(world.player.Position.X, MainGame.GlobalGraphicsDevice.Viewport.Width / 2), world.WorldSize.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2));
-                MainGame.GameCamera.Pos.Y = (int)Math.Min(Math.Max(world.player.Position.Y, MainGame.GlobalGraphicsDevice.Viewport.Height / 2), world.WorldSize.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2));
+                if (world.player != null)
+                {
+                    MainGame.GameCamera.Pos.X = (int)Math.Min(Math.Max(world.player.Position.X, MainGame.GlobalGraphicsDevice.Viewport.Width / 2), world.WorldSize.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2));
+                    MainGame.GameCamera.Pos.Y = (int)Math.Min(Math.Max(world.player.Position.Y, MainGame.GlobalGraphicsDevice.Viewport.Height / 2), world.WorldSize.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2));
+                }
             }
-            world.player.Update(gameTime);
+            if(world.player != null)
+                world.player.Update(gameTime);
             world.Update(gameTime);
         }
 

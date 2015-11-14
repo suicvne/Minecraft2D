@@ -91,7 +91,7 @@ namespace Minecraft2D.Map
             else if (File.Exists("World1.mc2dbin"))
                 LoadWorldBinary("World1.mc2dbin");
             GenerateLightmap();
-
+            
         }
 
         private void GenerateLightmap()
@@ -132,6 +132,8 @@ namespace Minecraft2D.Map
                 {
                     Tile ingameTile = PresetBlocks.TilesList.Find(srch => srch.Name == t.Name.Trim()) != null ? PresetBlocks.TilesList.Find(srch => srch.Name == t.Name.Trim()).AsTile() : new Tile();
                     ingameTile.IsBackground = t.BackgroundTile;
+                    if (ingameTile.IsBackground)
+                        ingameTile.TransparencyOfTile = TileTransparency.FullyTransparent;
                     ingameTile.Position = new Vector2(t.X, t.Y);
                     tiles[(int)Math.Floor((float)t.Y / 32), (int)Math.Floor((float)t.X / 32)] = ingameTile;
                 }
@@ -304,8 +306,10 @@ namespace Minecraft2D.Map
                 //    Lightmap[tY, tX] = 0;
                 Lightmap[tY, tX] = tiles[tY, tX].Light;
                 if (tiles[tY, tX].IsBackground)
+                {
                     Lightmap[tY, tX] = 5;
-
+                    tiles[tY, tX].TransparencyOfTile = TileTransparency.FullyTransparent;
+                }
             }
             CurrentRenderedTiles = CalculateCurrentRenderedTiles();
         }
