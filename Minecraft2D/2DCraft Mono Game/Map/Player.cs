@@ -20,8 +20,15 @@ namespace Minecraft2D.Map
         public Player()
         {
             Hitbox = new Rectangle(0, 0, 32, Convert.ToInt32(32 * 2));
-            Position = new Vector2(22 * 32, 30 * 32);
-            skin = new Skin(MainGame.CustomContentManager.GetTexture("default"));
+            Position = new Vector2(22 * 32, 16 * 32);
+            if(MainGame.GameOptions != null)
+            {
+                MainGame.GameOptions.TryGetSkinFromServers();
+                if (MainGame.GameOptions.SkinOverride != null)
+                    skin = new Skin(MainGame.GameOptions.SkinOverride);
+                else
+                    skin = new Skin(MainGame.CustomContentManager.GetTexture("default"));
+            }
             Direction = 0; //left
             Movement = Vector2.Zero;
         }
@@ -56,7 +63,6 @@ namespace Minecraft2D.Map
                 //    Position = oldPosition;
                 //}
                 Position = MainGameScreen.world.WhereCanIGo(oldPosition, Position, Hitbox);
-                Console.WriteLine(Position);
             }
         }
 
@@ -103,27 +109,50 @@ namespace Minecraft2D.Map
 
             if (Direction == 0)
             {
-                MainGame.GlobalSpriteBatch.Draw(skin.FullSkin, new Rectangle(
-                    (int)Position.X + 8, (int)Position.Y + 4, 16, 16
-                    ), new Rectangle(skin.HeadLeft.X, skin.HeadLeft.Y, 8, 8), Color.White/*, (Math.Abs(-angle)), new Vector2(4, 8), SpriteEffects.None, 0f*/);
-                //MainGame.GlobalSpriteBatch.Draw(skin.FullSkin, new Rectangle(
-                //    (int)Position.X + 16, (int)Position.Y + 16, 16, 16
-                //    ), new Rectangle(skin.HeadLeft.X, skin.HeadLeft.Y, 8, 8), Color.White/*, (Math.Abs(-angle)), new Vector2(4, 8), SpriteEffects.None, 0f*/);
+                
+                //Body
                 MainGame.GlobalSpriteBatch.Draw(skin.FullSkin, 
                     new Rectangle((int)Position.X + 12, (int)Position.Y + 16, 8, 24), 
-                    new Rectangle(skin.LeftTorso.X, skin.LeftTorso.Y, 6, 12), Color.White);
-                MainGame.GlobalSpriteBatch.Draw(skin.FullSkin,
-                    new Rectangle((int)Position.X + 16, (int)Position.Y + 20, 8, 12 * 2),
-                    new Rectangle(skin.OutsideArm.X, skin.OutsideArm.Y, 4, 12), Color.White, (angle - MathHelper.ToRadians(90)), new Vector2(2, 0), SpriteEffects.None, 0f);
+                    new Rectangle(skin.LeftTorso.X - 4, skin.LeftTorso.Y, 6, 12), Color.White);
+
+                //Head
+                bool hFlip = worldMousePosition.X > Position.X ? true : false;
+                MainGame.GlobalSpriteBatch.Draw(skin.FullSkin, new Rectangle(
+                    (int)Position.X + 8, (int)Position.Y + 4, 16, 16
+                    ), new Rectangle(skin.HeadLeft.X - 4, skin.HeadLeft.Y, 8, 8), Color.White, 0, Vector2.Zero, hFlip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+
+                //Leg
                 MainGame.GlobalSpriteBatch.Draw(skin.FullSkin,
                     new Rectangle((int)Position.X + 12, (int)Position.Y + 40, 8, 24),
-                    new Rectangle(skin.OutsideLeg.X, skin.OutsideLeg.Y, 6, 12), Color.White);
-                MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"), 
-                    new Rectangle((int)Position.X + 20, (int)Position.Y + 40, 8, 8), MainGameScreen.PlacingTile.TextureRegion.ToRectangle(), Color.White, angle - MathHelper.ToRadians(90), new Vector2(2, 0), SpriteEffects.None, 0f);
+                    new Rectangle(skin.OutsideLeg.X - 4, skin.OutsideLeg.Y, 6, 12), Color.White);
+
+                //Arm
+                MainGame.GlobalSpriteBatch.Draw(skin.FullSkin,
+                    new Rectangle((int)Position.X + 16, (int)Position.Y + 24, 8, 12 * 2),
+                    new Rectangle(skin.OutsideArm.X, skin.OutsideArm.Y, 4, 12), Color.White, (angle - MathHelper.ToRadians(90)), new Vector2(2, 0), SpriteEffects.None, 0f);
+                //MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"),
+                //    new Rectangle((int)Position.X + 18, (int)Position.Y + 40, 12, 12),
+                //    (MainGameScreen.PlacingTile.TextureRegion.ToRectangle()), Color.White, (angle - MathHelper.ToRadians(90)), new Vector2(2, 0), SpriteEffects.None, 0f);
             }
 
             if (mod > 360)
                 mod = 0;
+        }
+
+        private static void RotatePoints(ref Vector2 origin, float radians,
+    ref Vector2[] Vectors)
+        {
+            Matrix myRotationMatrix = Matrix.CreateRotationZ(radians);
+
+            for (int i = 0; i < 9; i++)
+            {
+                // Rotate relative to origin.
+                Vector2 rotatedVector =
+                    Vector2.Transform(Vectors[i] - origin, myRotationMatrix);
+
+                // Add origin to get final location.
+                Vectors[i] = rotatedVector + origin;
+            }
         }
     }
 }

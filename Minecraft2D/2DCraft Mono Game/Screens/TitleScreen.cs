@@ -91,7 +91,6 @@ namespace Minecraft2D.Screens
         float textScale = 1f;
 
         
-
         public override void Draw(GameTime gameTime)
         {
             int tx, ty;
