@@ -51,10 +51,12 @@ namespace Minecraft2D.Map
             UpdatePositionBasedOnMovement(gameTime);
             if (MainGameScreen.world != null)
             {
-                if (!MainGameScreen.world.HasRoomForEntity(new Rectangle((int)Position.X, (int)Position.Y, Hitbox.Width, Hitbox.Height)))
-                {
-                    Position = oldPosition;
-                }
+                //if (!MainGameScreen.world.HasRoomForEntity(new Rectangle((int)Position.X, (int)Position.Y, Hitbox.Width, Hitbox.Height)))
+                //{
+                //    Position = oldPosition;
+                //}
+                Position = MainGameScreen.world.WhereCanIGo(oldPosition, Position, Hitbox);
+                Console.WriteLine(Position);
             }
         }
 
@@ -65,17 +67,17 @@ namespace Minecraft2D.Map
 
         private void SimulateFriction()
         {
-            Movement -= Movement * new Vector2(.2f, .2f);
+            Movement -= Movement * Vector2.One * .1f;
         }
 
         private void CheckKeyboardMovement()
         {
             if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
-            { Movement += new Vector2(-1, 0); }
+            { Movement += new Vector2(-2, 0); }
             if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
             { Movement += new Vector2(1, 0); }
             if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Z))
-            { Movement += new Vector2(0, -1); }
+            { Movement += new Vector2(0, -2); }
         }
 
         public void Draw(GameTime gameTime)

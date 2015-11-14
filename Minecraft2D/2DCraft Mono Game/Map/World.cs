@@ -220,8 +220,6 @@ namespace Minecraft2D.Map
             }
         }
 
-        public Rectangle viewportRect { get; set; }
-
         /// <summary>
         /// Absolute x and y values are used here
         /// </summary>
@@ -309,6 +307,7 @@ namespace Minecraft2D.Map
                     Lightmap[tY, tX] = 5;
 
             }
+            CurrentRenderedTiles = CalculateCurrentRenderedTiles();
         }
 
         private SoundEffectInstance placeSoundSEI;
@@ -316,9 +315,9 @@ namespace Minecraft2D.Map
         public void DrawLightmap(GameTime gameTime)
         {
             RenderedLights = 0;
-            viewportRect = new Rectangle((int)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2),
-                    (int)MainGame.GameCamera.Pos.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2),
-                    MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
+            //viewportRect = new Rectangle((int)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2),
+            //        (int)MainGame.GameCamera.Pos.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2),
+            //        MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
             MainGame.GlobalGraphicsDevice.Clear(Color.Black);
 
 
@@ -345,7 +344,7 @@ namespace Minecraft2D.Map
                             break;
                     }
                     Rectangle objectBounds = new Rectangle(x * 32, y * 32, 32 * 5, 32 * 5); //radius of the lightmap
-                    if (viewportRect.Intersects(objectBounds))
+                    if (CalculateViewport().Intersects(objectBounds))
                     {
                         if (Lightmap[y, x] > 0f)
                         {
@@ -377,7 +376,9 @@ namespace Minecraft2D.Map
             }
         }
 
-        public Rectangle GetViewport()
+        private Rectangle CurrentViewport;
+        private Rectangle OldViewport;
+        public Rectangle CalculateViewport()
         {
             Rectangle viewportRect = new Rectangle((int)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2),
                     (int)MainGame.GameCamera.Pos.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2),
@@ -385,17 +386,73 @@ namespace Minecraft2D.Map
             return viewportRect;
         }
 
-        public bool HasRoomForEntity(Rectangle toCheck)
+        public bool HasRoomForEntity(Rectangle toCheck, bool sim)
         {
-            foreach(var tile in CurrentRenderedTiles())
+            if (!sim)
             {
-                if (tile.TransparencyOfTile == TileTransparency.FullyOpague && tile.Bounds.Intersects(toCheck))
+                if (toCheck.X < 0)
+                    return false;
+                if (toCheck.Y < 0)
+                    return false;
+                if (toCheck.X > (WorldSize.X - 32))
+                    return false;
+                if (toCheck.Y > (WorldSize.Y - 32))
                     return false;
             }
-            return true;
+
+            if (CurrentRenderedTiles != null)
+            {
+                foreach (var tile in CurrentRenderedTiles)
+                {
+                    if (tile.TransparencyOfTile == TileTransparency.FullyOpague && tile.Bounds.Intersects(toCheck))
+                        return false;
+                }
+                return true;
+            }
+            else
+                return false;
+        }
+        public Vector2 WhereCanIGo(Vector2 originalPosition, Vector2 destination, Rectangle bounds)
+        {
+            Vector2 movementToTry = destination - originalPosition;
+            Vector2 furthestAvailable = originalPosition;
+            int numberOfStepsToBreakInto = (int)(movementToTry.Length() * 2) + 1;
+            Vector2 oneStep = movementToTry / numberOfStepsToBreakInto;
+
+            for (int i = 1; i <= numberOfStepsToBreakInto; i++)
+            {
+                Vector2 positionToTry = originalPosition + oneStep * i;
+                Rectangle newBoundary =
+                    CreateRectangleAtPosition(positionToTry, bounds.Width, bounds.Height);
+                if (HasRoomForEntity(newBoundary, true)) { furthestAvailable = positionToTry; }
+                else
+                {
+                    bool isDiagonalMove = movementToTry.X != 0 && movementToTry.Y != 0;
+                    if(isDiagonalMove)
+                    {
+                        int stepsLeft = numberOfStepsToBreakInto - (i - 1);
+                        Vector2 remainingHorizontalMovement = oneStep.X * Vector2.UnitX * stepsLeft;
+                        Vector2 finalPositionIfMovingHorizontally = furthestAvailable + remainingHorizontalMovement;
+                        furthestAvailable =
+                        WhereCanIGo(furthestAvailable, finalPositionIfMovingHorizontally, bounds);
+
+                        Vector2 remainingVerticalMovement = oneStep.Y * Vector2.UnitY * stepsLeft;
+                        Vector2 finalPositionIfMovingVertically = furthestAvailable + remainingVerticalMovement;
+                        furthestAvailable =
+                        WhereCanIGo(furthestAvailable, finalPositionIfMovingVertically, bounds);
+                    }
+                    break;
+                }
+            }
+            return furthestAvailable;
+        }
+        private Rectangle CreateRectangleAtPosition(Vector2 positionToTry, int width, int height)
+        {
+            return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
         }
 
-        private List<Tile> CurrentRenderedTiles()
+        private List<Tile> CurrentRenderedTiles;
+        private List<Tile> CalculateCurrentRenderedTiles()
         {
             List<Tile> tilesToBeRendered = new List<Tile>();
 
@@ -405,24 +462,31 @@ namespace Minecraft2D.Map
                 int x, y;
                 x = (int)Math.Floor((double)block.Position.X / 32);
                 y = (int)Math.Floor((double)block.Position.Y / 32);
-                if (GetViewport().Intersects(objectBounds))
+                if (CurrentViewport.Intersects(objectBounds))
                 {
                     tilesToBeRendered.Add(block);
-                    //if(block.Type == TileType.Air)
-                    //    Lightmap[y, x] = 1; //it'll either be 1f or 0f i guess
                 }
             }
             return tilesToBeRendered;
         }
 
+
         private Vector2 LightSize = new Vector2(32 * 5, 32 * 5);
         public void Draw(GameTime gameTime)
         {
+            if (CurrentViewport == null)
+                CurrentViewport = CalculateViewport();
+
+            OldViewport = CurrentViewport;
+            CurrentViewport = CalculateViewport();
+
+            if(CurrentViewport != OldViewport)
+                CurrentRenderedTiles = CalculateCurrentRenderedTiles();
+
             if (player == null)
                 player = new Player();
             
-
-            foreach (Tile block in CurrentRenderedTiles())
+            foreach (Tile block in CurrentRenderedTiles)
             {
                 if (block.Type != TileType.Air)
                 {

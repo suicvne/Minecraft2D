@@ -150,30 +150,33 @@ namespace Minecraft2D.Screens
                     world.SaveWorldBinary("World1.mc2dbin");
                     MainGame.manager.PushScreen(GameScreens.MAIN);
                 }
-                if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveUp))
-                {
-                    MainGame.GameCamera.Move(new Vector2i(0, -5));
-                    if (MainGame.GameCamera.Pos.Y < minY)
-                        MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, minY);
-                }
-                if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveRight))
-                {
-                    MainGame.GameCamera.Move(new Vector2i(5, 0));
-                    if (MainGame.GameCamera.Pos.X > maxX)
-                        MainGame.GameCamera.Pos = new Vector2i(maxX, MainGame.GameCamera.Pos.Y);
-                }
-                if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveLeft))
-                {
-                    MainGame.GameCamera.Move(new Vector2i(-5, 0));
-                    if (MainGame.GameCamera.Pos.X < minX)
-                        MainGame.GameCamera.Pos = new Vector2i(minX, MainGame.GameCamera.Pos.Y);
-                }
-                if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveDown))
-                {
-                    MainGame.GameCamera.Move(new Vector2i(0, 5));
-                    if (MainGame.GameCamera.Pos.Y > maxY)
-                        MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, maxY);
-                }
+                //if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveUp))
+                //{
+                //    MainGame.GameCamera.Move(new Vector2i(0, -5));
+                //    if (MainGame.GameCamera.Pos.Y < minY)
+                //        MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, minY);
+                //}
+                //if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveRight))
+                //{
+                //    MainGame.GameCamera.Move(new Vector2i(5, 0));
+                //    if (MainGame.GameCamera.Pos.X > maxX)
+                //        MainGame.GameCamera.Pos = new Vector2i(maxX, MainGame.GameCamera.Pos.Y);
+                //}
+                //if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveLeft))
+                //{
+                //    MainGame.GameCamera.Move(new Vector2i(-5, 0));
+                //    if (MainGame.GameCamera.Pos.X < minX)
+                //        MainGame.GameCamera.Pos = new Vector2i(minX, MainGame.GameCamera.Pos.Y);
+                //}
+                //if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveDown))
+                //{
+                //    MainGame.GameCamera.Move(new Vector2i(0, 5));
+                //    if (MainGame.GameCamera.Pos.Y > maxY)
+                //        MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, maxY);
+                //}
+
+                MainGame.GameCamera.Pos.X = (int)Math.Min(Math.Max(world.player.Position.X, MainGame.GlobalGraphicsDevice.Viewport.Width / 2), world.WorldSize.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2));
+                MainGame.GameCamera.Pos.Y = (int)Math.Min(Math.Max(world.player.Position.Y, MainGame.GlobalGraphicsDevice.Viewport.Height / 2), world.WorldSize.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2));
             }
             world.player.Update(gameTime);
             world.Update(gameTime);
@@ -312,15 +315,14 @@ namespace Minecraft2D.Screens
         {
             if (MainGame.GameOptions.ShowDebugInformation)
             {
-
                 TitleScreen.DrawText("Cam X: " + MainGame.GameCamera.Pos.X, new Vector2(0, 18), Color.White);
                 TitleScreen.DrawText("Cam Y: " + MainGame.GameCamera.Pos.Y, new Vector2(0, 18 * 2), Color.White);
                 TitleScreen.DrawText("FPS: " + framerate, new Vector2(0, 18 * 3), Color.White);
                 TitleScreen.DrawText("World Time: " + world.WorldTime, new Vector2(0, 18 * 4), Color.White);
                 TitleScreen.DrawText("World Size: " + world.WorldSize.X + " x " + world.WorldSize.Y, new Vector2(0, 18 * 5), Color.White);
 
-                string WorldArea = string.Format("{0} x {1}", world.viewportRect.Width, world.viewportRect.Height);
-                TitleScreen.DrawText($"Rendered Area: {world.GetViewport().X} x {world.GetViewport().Y}", new Vector2(0, 18 * 6), Color.White);
+                //string WorldArea = string.Format("{0} x {1}", world.CalculateViewport().Width, world.CalculateViewport().Height);
+                //TitleScreen.DrawText($"Rendered Area: {world.CalculateViewport().X} x {world.CalculateViewport().Y}", new Vector2(0, 18 * 6), Color.White);
                 TitleScreen.DrawText("Rendered Lights: " + world.RenderedLights, new Vector2(0, 18 * 7), Color.White);
                 TitleScreen.DrawText("VSync Enabled: " + MainGame.GameOptions.Vsync, new Vector2(0, 18 * 8), Color.White);
 
