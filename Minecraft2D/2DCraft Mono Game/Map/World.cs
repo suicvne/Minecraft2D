@@ -82,7 +82,7 @@ namespace Minecraft2D.Map
                     }
                 }
             }
-            if(File.Exists("World1.mc2dwld"))
+            if (File.Exists("World1.mc2dwld"))
             {
                 LoadWorld("World1.mc2dwld");
                 File.Delete("World1.mc2dwld");
@@ -91,7 +91,7 @@ namespace Minecraft2D.Map
             else if (File.Exists("World1.mc2dbin"))
                 LoadWorldBinary("World1.mc2dbin");
             GenerateLightmap();
-            
+
         }
 
         private void GenerateLightmap()
@@ -111,7 +111,7 @@ namespace Minecraft2D.Map
         public void SaveWorldBinary(string path)
         {
             Minecraft2D.Saves.Tile[,] saveConverterTiles = new Saves.Tile[tiles.GetLength(0), tiles.GetLength(1)];
-            foreach(var t in tiles)
+            foreach (var t in tiles)
             {
                 Saves.Tile saveTile = new Saves.Tile { BackgroundTile = t.IsBackground, Name = t.Name, X = (int)t.Position.X, Y = (int)t.Position.Y };
                 saveConverterTiles[(int)(Math.Floor(t.Position.Y / 32)), (int)(Math.Floor(t.Position.X / 32))] = saveTile;
@@ -128,7 +128,7 @@ namespace Minecraft2D.Map
             if (bsr.ReadTiles != null)
             {
                 tiles = new Tile[bsr.ReadTiles.GetLength(0), bsr.ReadTiles.GetLength(1)];
-                foreach(var t in bsr.ReadTiles)
+                foreach (var t in bsr.ReadTiles)
                 {
                     Tile ingameTile = PresetBlocks.TilesList.Find(srch => srch.Name == t.Name.Trim()) != null ? PresetBlocks.TilesList.Find(srch => srch.Name == t.Name.Trim()).AsTile() : new Tile();
                     ingameTile.IsBackground = t.BackgroundTile;
@@ -148,7 +148,7 @@ namespace Minecraft2D.Map
                 {
                     for (int y = 0; y < tiles.GetLength(0); y++)
                     {
-                        string format = 
+                        string format =
                             string.Format("{0};{1};{2};{3}", tiles[y, x].Name, tiles[y, x].Position.X, tiles[y, x].Position.Y, tiles[y, x].IsBackground);
                         sw.WriteLine(format);
                     }
@@ -324,59 +324,96 @@ namespace Minecraft2D.Map
             //        MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
             MainGame.GlobalGraphicsDevice.Clear(Color.Black);
 
+            float[] ranges = this.GetMaxRenderPoints();
 
-
-            for (int x = 0; x < Lightmap.GetLength(1); x++)
+            for (int y = (int)ranges[2]; y < ranges[3] + 2; y++)
             {
-                for (int y = 0; y < Lightmap.GetLength(0); y++)
+                for (int x = (int)ranges[0]; x < ranges[1] + 2; x++)
                 {
+                    //Console.WriteLine($"Length(0): {tiles.GetLength(0)}; Length(1): {tiles.GetLength(1)}");
+                    if (x > tiles.GetLength(1) - 1)
+                        continue;
+                    if (y > tiles.GetLength(0) - 1)
+                        continue;
 
-                    //Adjust shadow during "sun" movement.
-                    switch (worldTime)
+                    if (Lightmap[y, x] > 0f)
                     {
-                        case 0:
-                            tiles[y, x].LightOffset -= 1;
-                            break;
-                        case 6000:
-                            tiles[y, x].LightOffset -= 1;
-                            break;
-                        case 12000:
-                            tiles[y, x].LightOffset += 1;
-                            break;
-                        case 18000:
-                            tiles[y, x].LightOffset += 1;
-                            break;
-                    }
-                    Rectangle objectBounds = new Rectangle(x * 32, y * 32, 32 * 5, 32 * 5); //radius of the lightmap
-                    if (CalculateViewport().Intersects(objectBounds))
-                    {
-                        if (Lightmap[y, x] > 0f)
+                        if (y < 42) //ensures the underground is dark
                         {
-                            if (y < 42) //ensures the underground is dark
+                            if (tiles[y, x].IsBackground)
                             {
-                                if (tiles[y, x].IsBackground)
-                                {
-                                    MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
-                                            new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
-                                    RenderedLights++;
-                                }
-                                else
-                                {
-                                    MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
-                                        new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
-                                    RenderedLights++;
-                                }
+                                MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
+                                        new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
+                                RenderedLights++;
                             }
-                            if (tiles[y, x].Light > 0 && tiles[y, x].Type != TileType.Air)
+                            else
                             {
                                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
                                     new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
                                 RenderedLights++;
                             }
                         }
-
+                        if (tiles[y, x].Light > 0 && tiles[y, x].Type != TileType.Air)
+                        {
+                            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
+                                new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
+                            RenderedLights++;
+                        }
                     }
                 }
+
+                //for (int x = 0; x < Lightmap.GetLength(1); x++)
+                //{
+                //    for (int y = 0; y < Lightmap.GetLength(0); y++)
+                //    {
+
+                //        //Adjust shadow during "sun" movement.
+                //        switch (worldTime)
+                //        {
+                //            case 0:
+                //                tiles[y, x].LightOffset -= 1;
+                //                break;
+                //            case 6000:
+                //                tiles[y, x].LightOffset -= 1;
+                //                break;
+                //            case 12000:
+                //                tiles[y, x].LightOffset += 1;
+                //                break;
+                //            case 18000:
+                //                tiles[y, x].LightOffset += 1;
+                //                break;
+                //        }
+                //        Rectangle objectBounds = new Rectangle(x * 32, y * 32, 32 * 5, 32 * 5); //radius of the lightmap
+                //        if (CalculateViewport().Intersects(objectBounds))
+                //        {
+                //            if (Lightmap[y, x] > 0f)
+                //            {
+                //                if (y < 42) //ensures the underground is dark
+                //                {
+                //                    if (tiles[y, x].IsBackground)
+                //                    {
+                //                        MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
+                //                                new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
+                //                        RenderedLights++;
+                //                    }
+                //                    else
+                //                    {
+                //                        MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
+                //                            new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
+                //                        RenderedLights++;
+                //                    }
+                //                }
+                //                if (tiles[y, x].Light > 0 && tiles[y, x].Type != TileType.Air)
+                //                {
+                //                    MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
+                //                        new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
+                //                    RenderedLights++;
+                //                }
+                //            }
+
+                //        }
+                //    }
+                //}
             }
         }
 
@@ -404,18 +441,24 @@ namespace Minecraft2D.Map
                     return false;
             }
 
-            if (CurrentRenderedTiles != null)
+            float[] ranges = this.GetMaxRenderPoints();
+
+            for (int y = (int)ranges[2]; y < ranges[3] + 2; y++)
             {
-                foreach (var tile in CurrentRenderedTiles)
+                for (int x = (int)ranges[0]; x < ranges[1] + 2; x++)
                 {
-                    if (tile.TransparencyOfTile == TileTransparency.FullyOpague && tile.Bounds.Intersects(toCheck))
+                    //Console.WriteLine($"Length(0): {tiles.GetLength(0)}; Length(1): {tiles.GetLength(1)}");
+                    if (x > tiles.GetLength(1) - 1)
+                        continue;
+                    if (y > tiles.GetLength(0) - 1)
+                        continue;
+                    if (tiles[y, x].TransparencyOfTile == TileTransparency.FullyOpague && tiles[y, x].Bounds.Intersects(toCheck))
                         return false;
                 }
-                return true;
             }
-            else
-                return false;
+            return true;
         }
+
         public Vector2 WhereCanIGo(Vector2 originalPosition, Vector2 destination, Rectangle bounds)
         {
             Vector2 movementToTry = destination - originalPosition;
@@ -476,51 +519,111 @@ namespace Minecraft2D.Map
 
 
         private Vector2 LightSize = new Vector2(32 * 5, 32 * 5);
+
+        /// <summary>
+        /// size 4 array, meant for tile index not abs X positions
+        /// 0: minX
+        /// 1: maxX
+        /// 2: minY
+        /// 3: maxY
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private float[] GetMaxRenderPoints()
+        {
+            float minX = (float)Math.Floor(((float)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2)) / 32);
+            float maxX = (float)Math.Floor(((float)MainGame.GameCamera.Pos.X + (MainGame.GlobalGraphicsDevice.Viewport.Width / 2)) / 32);
+            float minY = (float)Math.Floor(((float)MainGame.GameCamera.Pos.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2)) / 32);
+            float maxY = (float)Math.Floor(((float)MainGame.GameCamera.Pos.Y + (MainGame.GlobalGraphicsDevice.Viewport.Height / 2)) / 32);
+            
+            return new float[4] { minX, maxX, minY, maxY }; ;
+        }
+
         public void Draw(GameTime gameTime)
         {
-            if (CurrentViewport == null)
-                CurrentViewport = CalculateViewport();
+            //if (CurrentViewport == null)
+            //    CurrentViewport = CalculateViewport();
 
-            OldViewport = CurrentViewport;
-            CurrentViewport = CalculateViewport();
+            //OldViewport = CurrentViewport;
+            //CurrentViewport = CalculateViewport();
 
-            if(CurrentViewport != OldViewport)
-                CurrentRenderedTiles = CalculateCurrentRenderedTiles();
+            //if(CurrentViewport != OldViewport)
+            //    CurrentRenderedTiles = CalculateCurrentRenderedTiles();
 
             if (player == null)
                 player = new Player();
-            
-            foreach (Tile block in CurrentRenderedTiles)
-            {
-                if (block.Type != TileType.Air)
-                {
-                    if (!block.IsBackground)
-                    {
-                        int x = (int)Math.Floor(block.Position.X / 32);
-                        int y = (int)Math.Floor(block.Position.Y / 32);
 
-                        MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"),
-                            new Rectangle(Convert.ToInt32(block.Position.X), Convert.ToInt32(block.Position.Y), 32, 32), //scaling to 32
-                            new Rectangle(block.TextureRegion.X, block.TextureRegion.Y, 16, 16),
-                            BlockTint,
-                            0f,
-                            Vector2.Zero,
-                            SpriteEffects.None,
-                            0f);
-                    }
-                    else
+            float[] ranges = this.GetMaxRenderPoints();
+
+            for(int y = (int)ranges[2]; y < ranges[3] + 2; y++)
+            {
+                for(int x = (int)ranges[0]; x < ranges[1] + 2; x++)
+                {
+                    //Console.WriteLine($"Length(0): {tiles.GetLength(0)}; Length(1): {tiles.GetLength(1)}");
+                    if (x > tiles.GetLength(1) - 1)
+                        continue;
+                    if (y > tiles.GetLength(0) - 1)
+                        continue;
+
+                    if(!tiles[y, x].Name.Trim().Contains("air"))
                     {
-                        MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"),
-                            new Rectangle(Convert.ToInt32(block.Position.X), Convert.ToInt32(block.Position.Y), 32, 32), //scaling to 32
-                            new Rectangle(block.TextureRegion.X, block.TextureRegion.Y, 16, 16),
-                            Color.Gray,
-                            0f,
-                            Vector2.Zero,
-                            SpriteEffects.None,
-                            0f);
+                        if(!tiles[y, x].IsBackground)
+                        {
+                            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"),
+                                new Rectangle((int)tiles[y, x].Position.X, (int)tiles[y, x].Position.Y, 32, 32),
+                                new Rectangle(tiles[y, x].TextureRegion.X, tiles[y, x].TextureRegion.Y, 16, 16),
+                                BlockTint,
+                                0f,
+                                Vector2.Zero,
+                                SpriteEffects.None,
+                                0f);
+                        }
+                        else
+                        {
+                            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"),
+                                new Rectangle((int)tiles[y, x].Position.X, (int)tiles[y, x].Position.Y, 32, 32),
+                                new Rectangle(tiles[y, x].TextureRegion.X, tiles[y, x].TextureRegion.Y, 16, 16),
+                                Color.Gray,
+                                0f,
+                                Vector2.Zero,
+                                SpriteEffects.None,
+                                0f);
+                        }
                     }
                 }
             }
+
+            //foreach (Tile block in CurrentRenderedTiles)
+            //{
+            //    if (block.Type != TileType.Air)
+            //    {
+            //        if (!block.IsBackground)
+            //        {
+            //            int x = (int)Math.Floor(block.Position.X / 32);
+            //            int y = (int)Math.Floor(block.Position.Y / 32);
+
+            //            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"),
+            //                new Rectangle(Convert.ToInt32(block.Position.X), Convert.ToInt32(block.Position.Y), 32, 32), //scaling to 32
+            //                new Rectangle(block.TextureRegion.X, block.TextureRegion.Y, 16, 16),
+            //                BlockTint,
+            //                0f,
+            //                Vector2.Zero,
+            //                SpriteEffects.None,
+            //                0f);
+            //        }
+            //        else
+            //        {
+            //            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"),
+            //                new Rectangle(Convert.ToInt32(block.Position.X), Convert.ToInt32(block.Position.Y), 32, 32), //scaling to 32
+            //                new Rectangle(block.TextureRegion.X, block.TextureRegion.Y, 16, 16),
+            //                Color.Gray,
+            //                0f,
+            //                Vector2.Zero,
+            //                SpriteEffects.None,
+            //                0f);
+            //        }
+            //    }
+            //}
 
             player.Draw(gameTime);
         }
