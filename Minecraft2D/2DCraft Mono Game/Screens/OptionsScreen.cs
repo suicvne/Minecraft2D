@@ -163,12 +163,12 @@ namespace Minecraft2D.Screens
         public override void Draw(GameTime gameTime)
         {
             int tx, ty;
-            tx = (int)Math.Floor((double)MainGame.GlobalGraphicsDevice.Viewport.Width / 32);
-            ty = (int)Math.Floor((double)MainGame.GlobalGraphicsDevice.Viewport.Height / 32);
+            tx = (int)Math.Floor((double)MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 32);
+            ty = (int)Math.Floor((double)MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 32);
 
             MainGame.GlobalGraphicsDevice.Clear(Color.CornflowerBlue);
 
-            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+            MainGame.GlobalSpriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
             for (int x = 0; x < tx; x++)
                 for (int y = 0; y < ty; y++)

@@ -9,6 +9,7 @@ using Minecraft2D.Screens;
 using Microsoft.Xna.Framework.Input;
 using Minecraft2D.Map;
 using System.Reflection;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Minecraft2D
 {
@@ -94,7 +95,23 @@ namespace Minecraft2D
 
             this.Window.ClientSizeChanged += (sender, e) =>
             {
-                if(manager != null)
+                if (ClientBounds != null)
+                {
+                    GlobalGraphicsDeviceManager.PreferredBackBufferWidth = Window.ClientBounds.Width;
+                    GlobalGraphicsDeviceManager.PreferredBackBufferHeight = Window.ClientBounds.Height;
+                }
+                else
+                {
+                    GlobalGraphicsDeviceManager.PreferredBackBufferWidth = V_WIDTH;
+                    GlobalGraphicsDeviceManager.PreferredBackBufferHeight = V_HEIGHT;
+                }
+                if (GlobalGraphicsDevice != null)
+                {
+                    MainGameScreen.worldRenderTarget = new RenderTarget2D(GlobalGraphicsDevice, GlobalGraphicsDeviceManager.PreferredBackBufferWidth, GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
+                    MainGameScreen.worldLightmapPass = new RenderTarget2D(GlobalGraphicsDevice, GlobalGraphicsDeviceManager.PreferredBackBufferWidth, GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
+                    MainGameScreen.allTogether = new RenderTarget2D(GlobalGraphicsDevice, GlobalGraphicsDeviceManager.PreferredBackBufferWidth, GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
+                }
+                if (manager != null)
                     manager.RecalculateMinMax();
             };
 
@@ -199,19 +216,27 @@ namespace Minecraft2D
             GlobalGraphicsDeviceManager.ApplyChanges();
 
             GameStarting = false;
+            if (Window.ClientBounds != null)
+            {
+                GlobalGraphicsDeviceManager.PreferredBackBufferWidth = Window.ClientBounds.Width;
+                GlobalGraphicsDeviceManager.PreferredBackBufferHeight = Window.ClientBounds.Height;
+                
+            }
+            else
+            {
+                GlobalGraphicsDeviceManager.PreferredBackBufferWidth = 1280;
+                GlobalGraphicsDeviceManager.PreferredBackBufferHeight = 720;
+            }
+        }
 
-//#if DEBUG
-//            JsonSerializer js = new JsonSerializer();
-//            js.Formatting = Formatting.Indented;
-
-//            using (StreamWriter sw = new StreamWriter(Environment.CurrentDirectory + Path.DirectorySeparatorChar + "blocks.json"))
-//            {
-//                using (JsonWriter jsw = new JsonTextWriter(sw))
-//                {
-//                    js.Serialize(jsw, PresetBlocks.BlocksAsArray());
-//                }
-//            }
-//#endif
+        public static Point PointToScreen(Point point)
+        {
+            if (GameCamera != null)
+            {
+                var matrix = Matrix.Invert(GameCamera._transform);
+                return Vector2.Transform(point.ToVector2(), matrix).ToPoint();
+            }
+            return Vector2.Zero.ToPoint();
         }
 
         protected override void LoadContent()
@@ -264,6 +289,7 @@ namespace Minecraft2D
 
                 base.Update(gameTime);
         }
+
         protected override void Draw(GameTime gameTime)
         {
             manager.Draw(gameTime);

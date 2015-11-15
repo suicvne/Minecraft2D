@@ -518,6 +518,14 @@ namespace Minecraft2D.Map
 
         public Player GetClientPlayer()
         {
+            if(players == null)
+            {
+                players = new List<Player>();
+                Player p = new Player();
+                p.IsClientPlayer = true;
+                p.Username = MainGame.GameOptions.Username;
+                players.Add(p);
+            }
             return players.Find(x => x.IsClientPlayer);
         }
 

@@ -20,9 +20,9 @@ namespace Minecraft2D.Screens
         public static World world;
         private MouseState mouseState = Mouse.GetState();
 
-        private RenderTarget2D worldRenderTarget;
-        private RenderTarget2D worldLightmapPass;
-        private RenderTarget2D allTogether;
+        public static RenderTarget2D worldRenderTarget;
+        public static RenderTarget2D worldLightmapPass;
+        public static RenderTarget2D allTogether;
 
         int currentTileIndex = 0;
         public static BlockTemplate PlacingTile { get; set; }
@@ -102,22 +102,22 @@ namespace Minecraft2D.Screens
                         if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Keys.LeftAlt))
                         {
                             worldRenderTarget.SaveAsPng(File.Create(Path.Combine("Screenshots", $"Screenshot_{nnow.Month}-{nnow.Day}-{nnow.Year}-{nnow.Hour}-{nnow.Minute}-{nnow.Second}.png")),
-                            MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
+                            MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
                         }
                         else
                         {
-                            RenderTarget2D allTogether = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
+                            RenderTarget2D allTogether = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
                             MainGame.GlobalGraphicsDevice.SetRenderTarget(allTogether);
                             MainGame.GlobalGraphicsDevice.Clear(Color.White);
 
                             MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture, MainGame.Multiply, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
-                            MainGame.GlobalSpriteBatch.Draw(worldRenderTarget, new Rectangle(0, 0, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height), Color.White);
-                            MainGame.GlobalSpriteBatch.Draw(worldLightmapPass, new Rectangle(0, 0, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height), Color.White);
+                            MainGame.GlobalSpriteBatch.Draw(worldRenderTarget, new Rectangle(0, 0, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight), Color.White);
+                            MainGame.GlobalSpriteBatch.Draw(worldLightmapPass, new Rectangle(0, 0, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight), Color.White);
                             MainGame.GlobalSpriteBatch.End();
                             MainGame.GlobalGraphicsDevice.SetRenderTarget(null);
 
                             allTogether.SaveAsPng(File.Create(Path.Combine("Screenshots", $"Screenshot_{nnow.Month}-{nnow.Day}-{nnow.Year}-{nnow.Hour}-{nnow.Minute}-{nnow.Second}.png")),
-                            MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
+                            MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
                         }
                     }
                     if (MainGame.GlobalInputHelper.CurrentMouseState.ScrollWheelValue > MainGame.GlobalInputHelper.LastMouseState.ScrollWheelValue)
@@ -192,8 +192,8 @@ namespace Minecraft2D.Screens
 
             if (world.GetClientPlayer() != null)
             {
-                MainGame.GameCamera.Pos.X = (int)Math.Min(Math.Max(world.GetClientPlayer().Position.X, MainGame.GlobalGraphicsDevice.Viewport.Width / 2), world.WorldSize.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2));
-                MainGame.GameCamera.Pos.Y = (int)Math.Min(Math.Max(world.GetClientPlayer().Position.Y, MainGame.GlobalGraphicsDevice.Viewport.Height / 2), world.WorldSize.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2));
+                MainGame.GameCamera.Pos.X = (int)Math.Min(Math.Max(world.GetClientPlayer().Position.X, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2), world.WorldSize.X - (MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2));
+                MainGame.GameCamera.Pos.Y = (int)Math.Min(Math.Max(world.GetClientPlayer().Position.Y, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2), world.WorldSize.Y - (MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2));
             }
 
             world.Update(gameTime);
@@ -263,12 +263,12 @@ namespace Minecraft2D.Screens
             if (MainGame.GameCamera == null)
             {
                 MainGame.GameCamera = new Graphics.Camera2D();
-                int x = MainGame.GlobalGraphicsDevice.Viewport.Width / 2;
-                int y = MainGame.GlobalGraphicsDevice.Viewport.Height / 2;
+                int x = MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2;
+                int y = MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2;
                 minX = x;
                 minY = y;
-                maxX = (int)world.WorldSize.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2);
-                maxY = (int)world.WorldSize.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2);
+                maxX = (int)world.WorldSize.X - (MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2);
+                maxY = (int)world.WorldSize.Y - (MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2);
                 MainGame.GameCamera.Pos = new Vector2i(x + (32 * 32), y + (25 * 32));
             }
             if(skinTest == null)

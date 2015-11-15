@@ -47,13 +47,13 @@ namespace Minecraft2D.Screens
         {
             Button ExitButton = new Button
                 ( 
-                    new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth),
-                    MainGame.GlobalGraphicsDevice.Viewport.Height - 120, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), 
+                    new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2 - (WidgetsMap.EnabledButton.RegionWidth),
+                    MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 120, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), 
                     "Exit"
                 );
 
-            Button OptionsButton = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDevice.Viewport.Height - 190, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Options");
-            Button PlayButton = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDevice.Viewport.Height - 260, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Load Test World");
+            Button OptionsButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 190, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Options");
+            Button PlayButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 260, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Load Test World");
 
             OptionsButton.Enabled = true;
 
@@ -78,8 +78,6 @@ namespace Minecraft2D.Screens
             ran.Next(0, splashMessages.Length);
             ran.Next(0, splashMessages.Length);
             splashIndex = ran.Next(0, splashMessages.Length);
-
-            targetTest = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height, false, MainGame.GlobalGraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
         }
 
         private void ExitButton_Clicked()
@@ -94,8 +92,8 @@ namespace Minecraft2D.Screens
         public override void Draw(GameTime gameTime)
         {
             int tx, ty;
-            tx = (int)Math.Floor((double)MainGame.GlobalGraphicsDevice.Viewport.Width / 32);
-            ty = (int)Math.Floor((double)MainGame.GlobalGraphicsDevice.Viewport.Height / 32);
+            tx = (int)Math.Floor((double)MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 32);
+            ty = (int)Math.Floor((double)MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 32);
 
             MainGame.GlobalGraphicsDevice.Clear(Color.CornflowerBlue);
             
@@ -109,7 +107,7 @@ namespace Minecraft2D.Screens
             //MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("minecraft-logo"), new Rectangle((MainGame.GlobalGraphicsDevice.Viewport.Width / 2), 31, 119, 44), WidgetsMap.raft.ToRectangle(), Color.White);
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("minecraft-logo"), 
-                new Rectangle((int)((MainGame.GlobalGraphicsDevice.Viewport.Width / 2 - ((MainGame.CustomContentManager.GetTexture("minecraft-logo").Width * scale) / 2))), 40, 
+                new Rectangle((int)((MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2 - ((MainGame.CustomContentManager.GetTexture("minecraft-logo").Width * scale) / 2))), 40, 
                 (int)(MainGame.CustomContentManager.GetTexture("minecraft-logo").Width * scale), 
                 (int)(MainGame.CustomContentManager.GetTexture("minecraft-logo").Height * scale)), Color.White);
 
@@ -118,7 +116,7 @@ namespace Minecraft2D.Screens
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32), Color.White);
 
-            GraphicsHelper.DrawText("Minecraft 2D Alpha " + MainGame.GameVersion.ToString(), new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
+            GraphicsHelper.DrawText("Minecraft 2D Alpha " + MainGame.GameVersion.ToString(), new Vector2(2, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 18), Color.DarkGray);
 
             int splashX = 480 - (int)((MainGame.CustomContentManager.SplashFont.MeasureString(splashMessages[splashIndex]).X) / 16f);
 
