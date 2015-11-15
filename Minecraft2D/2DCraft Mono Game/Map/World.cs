@@ -9,6 +9,7 @@ using System.IO;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using Minecraft2D.Saves;
+using Minecraft2D.Map.Entities;
 
 namespace Minecraft2D.Map
 {
@@ -210,9 +211,8 @@ namespace Minecraft2D.Map
 
             if(MainGame.GlobalInputHelper.IsNewPress(Keys.P))
             {
-                Entity e = new Entity();
+                EntityCthulu e = new EntityCthulu();
                 e.id = GenerateID();
-                e.Name = "Herobrine";
                 entities.Add(e);
 
                 //Player p = new Player();
