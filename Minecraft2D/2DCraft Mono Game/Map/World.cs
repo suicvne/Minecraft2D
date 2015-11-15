@@ -324,7 +324,7 @@ namespace Minecraft2D.Map
             //        MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
             MainGame.GlobalGraphicsDevice.Clear(Color.Black);
 
-            float[] ranges = this.GetMaxRenderPoints();
+            int[] ranges = this.GetMaxRenderPoints();
 
             for (int y = (int)ranges[2]; y < ranges[3] + 2; y++)
             {
@@ -441,7 +441,7 @@ namespace Minecraft2D.Map
                     return false;
             }
 
-            float[] ranges = this.GetMaxRenderPoints();
+            int[] ranges = this.GetMaxRenderPoints();
 
             for (int y = (int)ranges[2]; y < ranges[3] + 2; y++)
             {
@@ -529,14 +529,14 @@ namespace Minecraft2D.Map
         /// </summary>
         /// <returns>
         /// </returns>
-        private float[] GetMaxRenderPoints()
+        private int[] GetMaxRenderPoints()
         {
-            float minX = (float)Math.Floor(((float)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2)) / 32);
-            float maxX = (float)Math.Floor(((float)MainGame.GameCamera.Pos.X + (MainGame.GlobalGraphicsDevice.Viewport.Width / 2)) / 32);
-            float minY = (float)Math.Floor(((float)MainGame.GameCamera.Pos.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2)) / 32);
-            float maxY = (float)Math.Floor(((float)MainGame.GameCamera.Pos.Y + (MainGame.GlobalGraphicsDevice.Viewport.Height / 2)) / 32);
+            int minX = (int)Math.Floor(((float)MainGame.GameCamera.Pos.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2)) / 32);
+            int maxX = (int)Math.Floor(((float)MainGame.GameCamera.Pos.X + (MainGame.GlobalGraphicsDevice.Viewport.Width / 2)) / 32);
+            int minY = (int)Math.Floor(((float)MainGame.GameCamera.Pos.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2)) / 32);
+            int maxY = (int)Math.Floor(((float)MainGame.GameCamera.Pos.Y + (MainGame.GlobalGraphicsDevice.Viewport.Height / 2)) / 32);
             
-            return new float[4] { minX, maxX, minY, maxY }; ;
+            return new int[4] { minX, maxX, minY, maxY }; ;
         }
 
         public void Draw(GameTime gameTime)
@@ -553,11 +553,11 @@ namespace Minecraft2D.Map
             if (player == null)
                 player = new Player();
 
-            float[] ranges = this.GetMaxRenderPoints();
+            int[] ranges = this.GetMaxRenderPoints();
 
-            for(int y = (int)ranges[2]; y < ranges[3] + 2; y++)
+            for(int y = ranges[2]; y < ranges[3] + 2; y++)
             {
-                for(int x = (int)ranges[0]; x < ranges[1] + 2; x++)
+                for(int x = ranges[0]; x < ranges[1] + 2; x++)
                 {
                     //Console.WriteLine($"Length(0): {tiles.GetLength(0)}; Length(1): {tiles.GetLength(1)}");
                     if (x > tiles.GetLength(1) - 1)
