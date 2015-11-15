@@ -15,6 +15,7 @@ namespace Minecraft2D
 {
     public delegate void GameWindowClosing();
     public delegate void TextInputReceived(TextInputEventArgs e);
+    public delegate void GameWindowResized(Vector2 NewSize);
     public class MainGame : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
@@ -46,6 +47,7 @@ namespace Minecraft2D
 
         public static event GameWindowClosing WindowClosing;
         public static event TextInputReceived TextInputReceived;
+        public static event GameWindowResized WindowResized;
 
         private System.Windows.Forms.Form FormReference;
 
@@ -113,6 +115,8 @@ namespace Minecraft2D
                 }
                 if (manager != null)
                     manager.RecalculateMinMax();
+                if (WindowResized != null)
+                    WindowResized(new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height));
             };
 
             if (!LINUX)

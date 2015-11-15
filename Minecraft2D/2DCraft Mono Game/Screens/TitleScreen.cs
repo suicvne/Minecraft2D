@@ -35,7 +35,9 @@ namespace Minecraft2D.Screens
         Random ran = new Random(DateTime.Now.Millisecond);
         int splashIndex = 0;
 
-        RenderTarget2D targetTest;
+        #region Controls
+        Button ExitButton, OptionsButton, PlayButton;
+        #endregion
 
         public void AdvanceSplash()
         {
@@ -45,15 +47,15 @@ namespace Minecraft2D.Screens
 
         public TitleScreen()
         {
-            Button ExitButton = new Button
+            ExitButton = new Button
                 ( 
                     new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2 - (WidgetsMap.EnabledButton.RegionWidth),
                     MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 120, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), 
                     "Exit"
                 );
 
-            Button OptionsButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 190, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Options");
-            Button PlayButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 260, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Load Test World");
+            OptionsButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 190, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Options");
+            PlayButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 260, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Load Test World");
 
             OptionsButton.Enabled = true;
 
@@ -80,6 +82,14 @@ namespace Minecraft2D.Screens
             splashIndex = ran.Next(0, splashMessages.Length);
         }
 
+        private void RepositionButtons()
+        {
+            ExitButton.Position = new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2 - (WidgetsMap.EnabledButton.RegionWidth),
+                    MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 120, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2);
+            OptionsButton.Position = new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 190, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2);
+            PlayButton.Position = new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 260, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2);
+        }
+
         private void ExitButton_Clicked()
         {
             MainGame.WriteSettings();
@@ -92,8 +102,8 @@ namespace Minecraft2D.Screens
         public override void Draw(GameTime gameTime)
         {
             int tx, ty;
-            tx = (int)Math.Floor((double)MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 32);
-            ty = (int)Math.Floor((double)MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 32);
+            tx = (int)Math.Ceiling((double)MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 32);
+            ty = (int)Math.Ceiling((double)MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 32);
 
             MainGame.GlobalGraphicsDevice.Clear(Color.CornflowerBlue);
             
