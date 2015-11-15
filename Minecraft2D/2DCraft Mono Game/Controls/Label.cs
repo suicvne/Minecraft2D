@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Minecraft2D.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,7 +65,7 @@ namespace Minecraft2D.Controls
 
         public override void Draw(GameTime gameTime)
         {
-            DrawText(Content, new Vector2(Position.X, Position.Y), LabelColor);
+            GraphicsHelper.DrawText(Content, new Vector2(Position.X, Position.Y), LabelColor);
         }
     }
 }

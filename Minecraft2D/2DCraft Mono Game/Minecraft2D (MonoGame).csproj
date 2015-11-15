@@ -47,6 +47,7 @@
     <Compile Include="Graphics\ContentManager.cs" />
     <Compile Include="Controls\TextBox.cs" />
     <Compile Include="Controls\WidgetsMap.cs" />
+    <Compile Include="Graphics\GraphicsHelper.cs" />
     <Compile Include="Map\Entity.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="MainGame.cs" />

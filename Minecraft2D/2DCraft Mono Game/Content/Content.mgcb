@@ -50,7 +50,7 @@
 #begin minecraft-fnt.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
-/processorParam:TextureFormat=Compressed
+/processorParam:TextureFormat=NoChange
 /build:minecraft-fnt.spritefont
 
 #begin mojang.png

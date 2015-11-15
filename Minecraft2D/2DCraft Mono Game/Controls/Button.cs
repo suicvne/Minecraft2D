@@ -60,7 +60,9 @@ namespace Minecraft2D.Controls
 
         public override void Draw(GameTime gameTime)
         {
-            int textX = (int)(Position.Center.X - MainGame.CustomContentManager.GetFont("main-font").GetStringRectangle(ButtonText, new Vector2(Position.X, Position.Y)).Width / 2);
+            int textX = (int)(Position.Center.X - MainGame.CustomContentManager.SplashFont
+                .MeasureString(ButtonText).X / 2);
+                //.GetStringRectangle(ButtonText, new Vector2(Position.X, Position.Y)).Width / 2);
 
             if (Enabled == true)
             {
@@ -70,7 +72,7 @@ namespace Minecraft2D.Controls
                         new Rectangle(Position.X, Position.Y, Position.Width, Position.Height),
                         new Rectangle(WidgetsMap.HighlightedButton.X, WidgetsMap.HighlightedButton.Y, WidgetsMap.HighlightedButton.RegionWidth, WidgetsMap.HighlightedButton.RegionHeight), Color.White);
 
-                    TitleScreen.DrawText(ButtonText, new Vector2(textX, Position.Y + 13), Color.White);
+                    GraphicsHelper.DrawText(ButtonText, new Vector2(textX, Position.Y + 8), Color.White);
                     //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText, 
                     //    new Vector2(textX, Size.Y + 13), 
                     //    Color.White);
@@ -81,7 +83,7 @@ namespace Minecraft2D.Controls
                         new Rectangle(Position.X, Position.Y, Position.Width, Position.Height),
                         new Rectangle(WidgetsMap.EnabledButton.X, WidgetsMap.EnabledButton.Y, WidgetsMap.EnabledButton.RegionWidth, WidgetsMap.EnabledButton.RegionHeight), Color.White);
 
-                    TitleScreen.DrawText(ButtonText, new Vector2(textX, Position.Y + 13), Color.White);
+                    GraphicsHelper.DrawText(ButtonText, new Vector2(textX, Position.Y + 8), Color.White);
                     //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), this.ButtonText,
                     //    new Vector2(textX, Size.Y + 13),
                     //    Color.White);
@@ -93,7 +95,7 @@ namespace Minecraft2D.Controls
                         new Rectangle(Position.X, Position.Y, Position.Width, Position.Height),
                         new Rectangle(WidgetsMap.DisabledButton.X, WidgetsMap.DisabledButton.Y, WidgetsMap.DisabledButton.RegionWidth, WidgetsMap.DisabledButton.RegionHeight), Color.White);
 
-                TitleScreen.DrawText(ButtonText, new Vector2(textX, Position.Y + 13), Color.Gray);
+                GraphicsHelper.DrawText(ButtonText, new Vector2(textX, Position.Y + 13), Color.Gray);
             }
         }
     }

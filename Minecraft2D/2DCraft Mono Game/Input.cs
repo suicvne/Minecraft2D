@@ -362,6 +362,14 @@ namespace Minecraft2D
                 _lastKeyboardState.IsKeyUp(key) &&
                 _currentKeyboardState.IsKeyDown(key));
         }
+
+        public bool IsMouseInsideWindow()
+        {
+            //MouseState ms = Mouse.GetState();
+            Point pos = new Point(_currentMouseState.X, _currentMouseState.Y);
+            return MainGame.GlobalGraphicsDevice.Viewport.Bounds.Contains(pos);
+        }
+
         /// <summary>
         /// Checks if the requested key is a current press.
         /// </summary>

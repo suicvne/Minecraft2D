@@ -11,6 +11,7 @@
       "RegionWidth": 16,
       "RegionHeight": 16
     },
+    "PreferredTool": 0,
     "PlaceSoundName": "stone{0}",
     "Light": 0
   },
@@ -21,11 +22,12 @@
     "TransparencyOfTile": 1,
     "Hardness": 0.0,
     "TextureRegion": {
-		    "X": 0,
-        "Y": 0,
-        "RegionHeight": 0,
-        "RegionWidth": 0
-	  },
+      "X": 0,
+      "Y": 0,
+      "RegionHeight": 0,
+      "RegionWidth": 0
+    },
+    "PreferredTool": 4,
     "PlaceSoundName": null,
     "Light": 5
   },
@@ -41,6 +43,7 @@
       "RegionWidth": 16,
       "RegionHeight": 16
     },
+    "PreferredTool": 2,
     "PlaceSoundName": "grass{0}",
     "Light": 0
   },
@@ -56,6 +59,7 @@
       "RegionWidth": 16,
       "RegionHeight": 16
     },
+    "PreferredTool": 2,
     "PlaceSoundName": "gravel{0}",
     "Light": 0
   },
@@ -71,6 +75,7 @@
       "RegionWidth": 16,
       "RegionHeight": 16
     },
+    "PreferredTool": 4,
     "PlaceSoundName": "wood{0}",
     "Light": 12
   },
@@ -86,6 +91,7 @@
       "RegionWidth": 16,
       "RegionHeight": 16
     },
+    "PreferredTool": 4,
     "PlaceSoundName": "wood{0}",
     "Light": 3
   },
@@ -101,6 +107,7 @@
       "RegionWidth": 16,
       "RegionHeight": 16
     },
+    "PreferredTool": 1,
     "PlaceSoundName": "wood{0}",
     "Light": 0
   },
@@ -116,6 +123,7 @@
       "RegionWidth": 16,
       "RegionHeight": 16
     },
+    "PreferredTool": 4,
     "PlaceSoundName": "stone{0}",
     "Light": 0
   },
@@ -131,6 +139,71 @@
       "RegionWidth": 16,
       "RegionHeight": 16
     },
+    "PreferredTool": 0,
+    "PlaceSoundName": "stone{0}",
+    "Light": 0
+  },
+  {
+    "Name": "minecraft:workbench",
+    "Type": 5,
+    "Drops": "minecraft:workbench",
+    "TransparencyOfTile": 0,
+    "Hardness": 2,
+    "TextureRegion": {
+      "X": 192,
+      "Y": 48,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PreferredTool": 1,
+    "PlaceSoundName": "wood{0}",
+    "Light": 0
+  },
+  {
+    "Name": "minecraft:furnace",
+    "Type": 5,
+    "Drops": "minecraft:furnace",
+    "TransparencyOfTile": 0,
+    "Hardness": 3,
+    "TextureRegion": {
+      "X": 192,
+      "Y": 32,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PreferredTool": 0,
+    "PlaceSoundName": "stone{0}",
+    "Light": 0
+  },
+  {
+    "Name": "minecraft:furnace_active",
+    "Type": 5,
+    "Drops": "minecraft:furnace",
+    "TransparencyOfTile": 0,
+    "Hardness": 3,
+    "TextureRegion": {
+      "X": 208,
+      "Y": 48,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PreferredTool": 0,
+    "PlaceSoundName": "stone{0}",
+    "Light": 3
+  },
+  {
+    "Name": "minecraft:brick",
+    "Type": 5,
+    "Drops": "minecraft:brick",
+    "TransparencyOfTile": 0,
+    "Hardness": 3.5,
+    "TextureRegion": {
+      "X": 112,
+      "Y": 0,
+      "RegionWidth": 16,
+      "RegionHeight": 16
+    },
+    "PreferredTool": 0,
     "PlaceSoundName": "stone{0}",
     "Light": 0
   }

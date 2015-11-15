@@ -118,7 +118,7 @@ namespace Minecraft2D.Screens
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32), Color.White);
 
-            DrawText("Minecraft 2D Alpha " + MainGame.GameVersion.ToString(), new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
+            GraphicsHelper.DrawText("Minecraft 2D Alpha " + MainGame.GameVersion.ToString(), new Vector2(2, MainGame.GlobalGraphicsDevice.Viewport.Height - 18), Color.DarkGray);
 
             int splashX = 480 - (int)((MainGame.CustomContentManager.SplashFont.MeasureString(splashMessages[splashIndex]).X) / 16f);
 
@@ -150,17 +150,7 @@ namespace Minecraft2D.Screens
         }
         bool reverseTextScale = false;
 
-        public static void DrawText(string text, Vector2 position, Color tint)
-        {
-            if (tint == null)
-                tint = Color.White;
-
-            Vector2 offsetPos = new Vector2(position.X + 2, position.Y + 2);
-            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), text, offsetPos, Color.Black
-                    );
-            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"), text, position, tint
-                    );
-        }
+        
 
         public override void Update(GameTime gameTime)
         {

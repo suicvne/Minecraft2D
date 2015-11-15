@@ -14,6 +14,11 @@ namespace Minecraft2D.Map
         Air, Grass, Dirt, Stone, Torch, Jack
     }
 
+    public enum ToolType
+    {
+        Pickaxe, Axe, Shovel, Hand, None
+    }
+
     public enum TileTransparency
     {
         FullyOpague, FullyTransparent, PassThroughBreakable
@@ -27,6 +32,11 @@ namespace Minecraft2D.Map
         public string Drops { get; set; }
         public Vector2 Position { get; set; }
         public string PlaceSoundName { get; set; }
+        public ToolType PreferredTool { get; set; }
+
+        [NonSerialized]
+        public long TimePlaced = 0;
+
         public Rectangle Bounds
         {
             //TODO: proper things with things
@@ -65,6 +75,7 @@ namespace Minecraft2D.Map
             IsSelfPlaceholder = false;
             IsBackground = false;
             PlaceSoundName = null;
+            PreferredTool = ToolType.None;
         }
         public Tile Copy()
         {

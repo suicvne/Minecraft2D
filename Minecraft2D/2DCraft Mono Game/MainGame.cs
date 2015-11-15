@@ -232,36 +232,37 @@ namespace Minecraft2D
         
         protected override void Update(GameTime gameTime)
         {
-            if(GameExiting)
-            {
-                try
-                { this.Exit(); }
-                catch { Console.WriteLine("Exit failed??"); }
+            
+                if (GameExiting)
+                {
+                    try
+                    { this.Exit(); }
+                    catch { Console.WriteLine("Exit failed??"); }
+
+                }
+
+                GlobalInputHelper.Update();
+
+                if (GlobalInputHelper.IsNewPress(Keys.F11))
+                {
+                    GlobalGraphicsDeviceManager.IsFullScreen = !GlobalGraphicsDeviceManager.IsFullScreen;
+                    this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+                    GlobalGraphicsDeviceManager.ApplyChanges();
+                    GameOptions.Fullscreen = GlobalGraphicsDeviceManager.IsFullScreen;
+
+                }
+
+                if (GlobalInputHelper.IsNewPress(Keys.F12))
+                {
+                    GameOptions.Vsync = !GameOptions.Vsync;
+                    GlobalGraphicsDeviceManager.SynchronizeWithVerticalRetrace = !GlobalGraphicsDeviceManager.SynchronizeWithVerticalRetrace;
+                    this.IsFixedTimeStep = !IsFixedTimeStep;
+                    GlobalGraphicsDeviceManager.ApplyChanges();
+                }
                 
-            }
+                manager.Update(gameTime);
 
-            GlobalInputHelper.Update();
-
-            if(GlobalInputHelper.IsNewPress(Keys.F11))
-            {
-                GlobalGraphicsDeviceManager.IsFullScreen = !GlobalGraphicsDeviceManager.IsFullScreen;
-                this.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-                GlobalGraphicsDeviceManager.ApplyChanges();
-                GameOptions.Fullscreen = GlobalGraphicsDeviceManager.IsFullScreen;
-                
-            }
-
-            if(GlobalInputHelper.IsNewPress(Keys.F12))
-            {
-                GameOptions.Vsync = !GameOptions.Vsync;
-                GlobalGraphicsDeviceManager.SynchronizeWithVerticalRetrace = !GlobalGraphicsDeviceManager.SynchronizeWithVerticalRetrace;
-                this.IsFixedTimeStep = !IsFixedTimeStep;
-                GlobalGraphicsDeviceManager.ApplyChanges();
-            }
-
-            manager.Update(gameTime);
-
-            base.Update(gameTime);
+                base.Update(gameTime);
         }
         protected override void Draw(GameTime gameTime)
         {

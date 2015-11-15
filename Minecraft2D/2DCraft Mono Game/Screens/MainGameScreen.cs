@@ -9,6 +9,7 @@ using Minecraft2D.Map;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Minecraft2D.Controls;
+using System.IO;
 
 namespace Minecraft2D.Screens
 {
@@ -90,98 +91,111 @@ namespace Minecraft2D.Screens
             }
             if (!MainGame.GameOptions.UseController)
             {
-                if (MainGame.GlobalInputHelper.CurrentMouseState.ScrollWheelValue > MainGame.GlobalInputHelper.LastMouseState.ScrollWheelValue)
+                if(MainGame.GlobalInputHelper.IsMouseInsideWindow())
                 {
-                    currentTileIndex++;
-                    if (currentTileIndex >= TilesList.Length)
-                        currentTileIndex = 0;
-                    PlacingTile = TilesList[currentTileIndex];
-                }
-                if (MainGame.GlobalInputHelper.CurrentMouseState.ScrollWheelValue < MainGame.GlobalInputHelper.LastMouseState.ScrollWheelValue)
-                {
-                    currentTileIndex--;
-                    if (currentTileIndex < 0)
-                        currentTileIndex = TilesList.Length - 1;
-                    PlacingTile = TilesList[currentTileIndex];
-                }
+                    if(MainGame.GlobalInputHelper.IsNewPress(Keys.F2))
+                    {
+                        if (!Directory.Exists("Screenshots"))
+                            Directory.CreateDirectory("Screenshots");
+                        DateTime nnow = DateTime.Now;
+                        
+                        if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Keys.LeftAlt))
+                        {
+                            worldRenderTarget.SaveAsPng(File.Create(Path.Combine("Screenshots", $"Screenshot_{nnow.Month}-{nnow.Day}-{nnow.Year}-{nnow.Hour}-{nnow.Minute}-{nnow.Second}.png")),
+                            MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
+                        }
+                        else
+                        {
+                            RenderTarget2D allTogether = new RenderTarget2D(MainGame.GlobalGraphicsDevice, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
+                            MainGame.GlobalGraphicsDevice.SetRenderTarget(allTogether);
+                            MainGame.GlobalGraphicsDevice.Clear(Color.White);
 
-                if (mouseState.LeftButton == ButtonState.Pressed)
-                {
-                    if(MainGame.GameCamera != null)
+                            MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture, MainGame.Multiply, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+                            MainGame.GlobalSpriteBatch.Draw(worldRenderTarget, new Rectangle(0, 0, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height), Color.White);
+                            MainGame.GlobalSpriteBatch.Draw(worldLightmapPass, new Rectangle(0, 0, MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height), Color.White);
+                            MainGame.GlobalSpriteBatch.End();
+                            MainGame.GlobalGraphicsDevice.SetRenderTarget(null);
+
+                            allTogether.SaveAsPng(File.Create(Path.Combine("Screenshots", $"Screenshot_{nnow.Month}-{nnow.Day}-{nnow.Year}-{nnow.Hour}-{nnow.Minute}-{nnow.Second}.png")),
+                            MainGame.GlobalGraphicsDevice.Viewport.Width, MainGame.GlobalGraphicsDevice.Viewport.Height);
+                        }
+                    }
+                    if (MainGame.GlobalInputHelper.CurrentMouseState.ScrollWheelValue > MainGame.GlobalInputHelper.LastMouseState.ScrollWheelValue)
+                    {
+                        currentTileIndex++;
+                        if (currentTileIndex >= TilesList.Length)
+                            currentTileIndex = 0;
+                        PlacingTile = TilesList[currentTileIndex];
+                    }
+                    if (MainGame.GlobalInputHelper.CurrentMouseState.ScrollWheelValue < MainGame.GlobalInputHelper.LastMouseState.ScrollWheelValue)
+                    {
+                        currentTileIndex--;
+                        if (currentTileIndex < 0)
+                            currentTileIndex = TilesList.Length - 1;
+                        PlacingTile = TilesList[currentTileIndex];
+                    }
+
+                    if (mouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        if (MainGame.GameCamera != null)
+                        {
+                            Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
+                            Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
+                            
+                            Tile airP = PresetBlocks.TilesList.Find(x => x.Name == "minecraft:air").AsTile();
+                            airP.Position = new Vector2((float)Math.Floor(worldMousePosition.X / 32),
+                                (float)Math.Floor(worldMousePosition.Y / 32));
+                            world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, airP);
+                        }
+                    }
+                    else if (MainGame.GlobalInputHelper.CurrentMouseState.RightButton == ButtonState.Pressed)
                     {
                         Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
                         Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
 
-                        Tile airP = PresetBlocks.TilesList.Find(x => x.Name == "minecraft:air").AsTile();
-                        airP.Position = new Vector2((float)Math.Floor(worldMousePosition.X / 32),
-                            (float)Math.Floor(worldMousePosition.Y / 32));
-                        world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, airP);
+                        Tile toPlace = PlacingTile.AsTile();
+                        toPlace.Position = new Vector2((int)worldMousePosition.X, (int)worldMousePosition.Y);
+                        toPlace.TimePlaced = world.WorldTime;
+                        if (world.HasRoomForEntity(toPlace.Bounds, true, true))
+                        {
+                            if (world.GetTile((int)worldMousePosition.X, (int)worldMousePosition.Y).Type != toPlace.Type)
+                                world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, toPlace);
+                        }
+                    }
+                    else if (MainGame.GlobalInputHelper.CurrentMouseState.MiddleButton == ButtonState.Pressed)
+                    {
+                        Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
+                        Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
+
+                        Tile toPlace = PlacingTile.AsTile();
+                        toPlace.IsBackground = true;
+                        toPlace.Position = new Vector2((int)worldMousePosition.X, (int)worldMousePosition.Y);
+
+                        if (world.GetTile((int)worldMousePosition.X, (int)worldMousePosition.Y).Type != toPlace.Type)
+                            world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, toPlace);
+                    }
+                    if (MainGame.GlobalInputHelper.IsNewPress(Keys.F3))
+                    {
+                        MainGame.GameOptions.ShowDebugInformation = !MainGame.GameOptions.ShowDebugInformation;
+                    }
+                    if (MainGame.GlobalInputHelper.IsNewPress(Keys.Escape))
+                    {
+                        world.SaveWorldBinary("World1.mc2dbin");
+                        MainGame.manager.PushScreen(GameScreens.MAIN);
                     }
                 }
-                else if(MainGame.GlobalInputHelper.CurrentMouseState.RightButton == ButtonState.Pressed)
-                {
-                    Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
-                    Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
-
-                    Tile toPlace = PlacingTile.AsTile();
-                    toPlace.Position = new Vector2((int)worldMousePosition.X, (int)worldMousePosition.Y);
-
-                    if (world.GetTile((int)worldMousePosition.X, (int)worldMousePosition.Y).Type != toPlace.Type)
-                        world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, toPlace);
-                }
-                else if(MainGame.GlobalInputHelper.CurrentMouseState.MiddleButton == ButtonState.Pressed)
-                {
-                    Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
-                    Vector2 worldMousePosition = Vector2.Transform(new Vector2(mouseState.X, mouseState.Y), inverseViewMatrix);
-
-                    Tile toPlace = PlacingTile.AsTile();
-                    toPlace.IsBackground = true;
-                    toPlace.Position = new Vector2((int)worldMousePosition.X, (int)worldMousePosition.Y);
-
-                    if(world.GetTile((int)worldMousePosition.X, (int)worldMousePosition.Y).Type != toPlace.Type)
-                        world.SetTile((int)worldMousePosition.X, (int)worldMousePosition.Y, toPlace);
-                }
-                if (MainGame.GlobalInputHelper.IsNewPress(Keys.F3))
-                {
-                    MainGame.GameOptions.ShowDebugInformation = !MainGame.GameOptions.ShowDebugInformation;
-                }
-                if(MainGame.GlobalInputHelper.IsNewPress(Keys.Escape))
-                {
-                    world.SaveWorldBinary("World1.mc2dbin");
-                    MainGame.manager.PushScreen(GameScreens.MAIN);
-                }
-                //if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveUp))
-                //{
-                //    MainGame.GameCamera.Move(new Vector2i(0, -5));
-                //    if (MainGame.GameCamera.Pos.Y < minY)
-                //        MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, minY);
-                //}
-                //if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveRight))
-                //{
-                //    MainGame.GameCamera.Move(new Vector2i(5, 0));
-                //    if (MainGame.GameCamera.Pos.X > maxX)
-                //        MainGame.GameCamera.Pos = new Vector2i(maxX, MainGame.GameCamera.Pos.Y);
-                //}
-                //if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveLeft))
-                //{
-                //    MainGame.GameCamera.Move(new Vector2i(-5, 0));
-                //    if (MainGame.GameCamera.Pos.X < minX)
-                //        MainGame.GameCamera.Pos = new Vector2i(minX, MainGame.GameCamera.Pos.Y);
-                //}
-                //if (Keyboard.GetState().IsKeyDown(MainGame.GameOptions.MoveDown))
-                //{
-                //    MainGame.GameCamera.Move(new Vector2i(0, 5));
-                //    if (MainGame.GameCamera.Pos.Y > maxY)
-                //        MainGame.GameCamera.Pos = new Vector2i(MainGame.GameCamera.Pos.X, maxY);
-                //}
-                if (world.player != null)
-                {
-                    MainGame.GameCamera.Pos.X = (int)Math.Min(Math.Max(world.player.Position.X, MainGame.GlobalGraphicsDevice.Viewport.Width / 2), world.WorldSize.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2));
-                    MainGame.GameCamera.Pos.Y = (int)Math.Min(Math.Max(world.player.Position.Y, MainGame.GlobalGraphicsDevice.Viewport.Height / 2), world.WorldSize.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2));
-                }
             }
-            if(world.player != null)
-                world.player.Update(gameTime);
+            else
+            {
+
+            }
+
+            if (world.GetClientPlayer() != null)
+            {
+                MainGame.GameCamera.Pos.X = (int)Math.Min(Math.Max(world.GetClientPlayer().Position.X, MainGame.GlobalGraphicsDevice.Viewport.Width / 2), world.WorldSize.X - (MainGame.GlobalGraphicsDevice.Viewport.Width / 2));
+                MainGame.GameCamera.Pos.Y = (int)Math.Min(Math.Max(world.GetClientPlayer().Position.Y, MainGame.GlobalGraphicsDevice.Viewport.Height / 2), world.WorldSize.Y - (MainGame.GlobalGraphicsDevice.Viewport.Height / 2));
+            }
+
             world.Update(gameTime);
         }
 
@@ -276,7 +290,7 @@ namespace Minecraft2D.Screens
 
             #region Text drawing, crosshair drawing
             MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-            TitleScreen.DrawText("Minecraft 2D", new Vector2(0, 2), Color.White);
+            GraphicsHelper.DrawText("Minecraft 2D", new Vector2(0, 2), Color.White);
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(mouseState.X, mouseState.Y, 32, 32), Color.White);
 
@@ -318,16 +332,17 @@ namespace Minecraft2D.Screens
         {
             if (MainGame.GameOptions.ShowDebugInformation)
             {
-                TitleScreen.DrawText("Cam X: " + MainGame.GameCamera.Pos.X, new Vector2(0, 18), Color.White);
-                TitleScreen.DrawText("Cam Y: " + MainGame.GameCamera.Pos.Y, new Vector2(0, 18 * 2), Color.White);
-                TitleScreen.DrawText("FPS: " + framerate, new Vector2(0, 18 * 3), Color.White);
-                TitleScreen.DrawText("World Time: " + world.WorldTime, new Vector2(0, 18 * 4), Color.White);
-                TitleScreen.DrawText("World Size: " + world.WorldSize.X + " x " + world.WorldSize.Y, new Vector2(0, 18 * 5), Color.White);
+                GraphicsHelper.DrawText("Cam X: " + MainGame.GameCamera.Pos.X, new Vector2(0, 18), Color.White);
+                GraphicsHelper.DrawText("Cam Y: " + MainGame.GameCamera.Pos.Y, new Vector2(0, 18 * 2), Color.White);
+                GraphicsHelper.DrawText("FPS: " + framerate, new Vector2(0, 18 * 3), Color.White);
+                GraphicsHelper.DrawText("World Time: " + world.WorldTime, new Vector2(0, 18 * 4), Color.White);
+                GraphicsHelper.DrawText("World Size: " + world.WorldSize.X + " x " + world.WorldSize.Y, new Vector2(0, 18 * 5), Color.White);
 
                 //string WorldArea = string.Format("{0} x {1}", world.CalculateViewport().Width, world.CalculateViewport().Height);
+                GraphicsHelper.DrawText($"Entities: {world.entities.Count + world.players.Count} ({world.entities.Count} Mobs, {world.players.Count} Clients)", new Vector2(0, 18 * 6), Color.White);
                 //TitleScreen.DrawText($"Rendered Area: {world.CalculateViewport().X} x {world.CalculateViewport().Y}", new Vector2(0, 18 * 6), Color.White);
-                TitleScreen.DrawText("Rendered Lights: " + world.RenderedLights, new Vector2(0, 18 * 7), Color.White);
-                TitleScreen.DrawText("VSync Enabled: " + MainGame.GameOptions.Vsync, new Vector2(0, 18 * 8), Color.White);
+                GraphicsHelper.DrawText("Rendered Lights: " + world.RenderedLights, new Vector2(0, 18 * 7), Color.White);
+                GraphicsHelper.DrawText("VSync Enabled: " + MainGame.GameOptions.Vsync, new Vector2(0, 18 * 8), Color.White);
 
                 MainGame.GlobalSpriteBatch.End();
 
@@ -338,10 +353,10 @@ namespace Minecraft2D.Screens
                     SamplerState.PointClamp,
                     DepthStencilState.None,
                     RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
-                DrawRectangle(new Rectangle((int)world.player.Position.X,
-                    (int)world.player.Position.Y,
-                    world.player.Hitbox.Width,
-                    world.player.Hitbox.Height), Color.Green);
+                //DrawRectangle(new Rectangle((int)world.player.Position.X,
+                //    (int)world.player.Position.Y,
+                //    world.player.Hitbox.Width,
+                //    world.player.Hitbox.Height), Color.Green);
 
                 
 
