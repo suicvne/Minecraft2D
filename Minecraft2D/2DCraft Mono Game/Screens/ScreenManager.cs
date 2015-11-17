@@ -27,15 +27,17 @@ namespace Minecraft2D.Screens
         private TitleScreen titleScreen;
         private OptionsScreen options;
         private DebugInfo debugScreen;
+        private SplashIntroScreen splashScreen;
 
         public ScreenManager()
         {
+            splashScreen = new SplashIntroScreen();
             mainGameScreen = new MainGameScreen();
             titleScreen = new TitleScreen();
             options = new OptionsScreen();
             debugScreen = new DebugInfo();
             MainGame.CustomContentManager = new Graphics.ContentManager();
-            CurrentScreen = GameScreens.MAIN;
+            CurrentScreen = GameScreens.SPLASH;
             LoadContent();
         }
         
@@ -48,7 +50,8 @@ namespace Minecraft2D.Screens
                 MainGame.CustomContentManager.AddTexture("terrain", MainGame.GlobalContentManager.Load<Texture2D>("terrain"));
                 MainGame.CustomContentManager.AddTexture("crosshair", MainGame.GlobalContentManager.Load<Texture2D>("crosshair"));
                 MainGame.CustomContentManager.AddTexture("smoothlight", MainGame.GlobalContentManager.Load<Texture2D>("smoothlight"));
-                MainGame.CustomContentManager.AddTexture("minecraft-logo", MainGame.GlobalContentManager.Load<Texture2D>("logo"));
+                MainGame.CustomContentManager.AddTexture("minecraft-logo", MainGame.GlobalContentManager.Load<Texture2D>("logo_minecraft"));
+                MainGame.CustomContentManager.AddTexture("mikesantiago-logo", MainGame.GlobalContentManager.Load<Texture2D>("logo"));
                 MainGame.CustomContentManager.AddTexture("mojang-logo", MainGame.GlobalContentManager.Load<Texture2D>("mojang"));
                 MainGame.CustomContentManager.AddTexture("widgets", MainGame.GlobalContentManager.Load<Texture2D>("widgets"));
 
@@ -103,6 +106,9 @@ namespace Minecraft2D.Screens
         {
             switch(CurrentScreen)
             {
+                case (GameScreens.SPLASH):
+                    splashScreen.Update(gameTime);
+                    break;
                 case (GameScreens.GAME):
                     mainGameScreen.Update(gameTime);
                     break;
@@ -122,6 +128,9 @@ namespace Minecraft2D.Screens
         {
             switch (CurrentScreen)
             {
+                case (GameScreens.SPLASH):
+                    splashScreen.Update(gameTime);
+                    break;
                 case GameScreens.GAME:
                     mainGameScreen.Draw(gameTime);
                     break;
