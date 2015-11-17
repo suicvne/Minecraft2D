@@ -54,8 +54,8 @@ namespace Minecraft2D.Screens
                     "Exit"
                 );
 
-            OptionsButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 190, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Options");
-            PlayButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 260, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Load Test World");
+            OptionsButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 190, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Options");
+            PlayButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 260, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Load Test World");
 
             OptionsButton.Enabled = true;
 
@@ -126,7 +126,7 @@ namespace Minecraft2D.Screens
 
             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32), Color.White);
 
-            GraphicsHelper.DrawText("Minecraft 2D Alpha " + MainGame.GameVersion.ToString(), new Vector2(2, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 18), Color.DarkGray);
+            GraphicsHelper.DrawText("Minecraft 2D Alpha " + MainGame.GameVersion.ToString(), new Vector2(2, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 22), Color.DarkGray);
 
             int splashX = 480 - (int)((MainGame.CustomContentManager.SplashFont.MeasureString(splashMessages[splashIndex]).X) / 16f);
 

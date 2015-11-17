@@ -48,7 +48,7 @@ namespace Minecraft2D.Screens
         public void AddTextBoxWithLabel(TextBox ctrl1, Label label)
         {
             ControlsList.Add(ctrl1);
-            label.Position = new Rectangle(((TextBox)ctrl1).Position.X, ((TextBox)ctrl1).Position.Y - 20, label.Position.Width, label.Position.Height);
+            label.Position = new Rectangle(((TextBox)ctrl1).Position.X, ((TextBox)ctrl1).Position.Y - 26, label.Position.Width, label.Position.Height);
             ControlsList.Add(label);
         }
 

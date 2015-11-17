@@ -19,14 +19,14 @@ namespace Minecraft2D.Screens
             doneButton.Clicked += () => MainGame.manager.PushScreen(GameScreens.MAIN);
 
             Label TitleLabel = new Label("CatchLabel", "Here's some debug info :)", new Vector2(16, 10), Color.Gray);
-            Label MC2DVer = new Label("MC2DVer", "* Minecraft 2D Version: " + MainGame.GameVersion.ToString(), new Vector2(20, 44), Color.Gray);
+            Label MC2DVer = new Label("MC2DVer", "* Minecraft 2D Version: " + MainGame.GameVersion.ToString(), new Vector2(20, 46), Color.Gray);
             Label NETVer = new Label("NETVer", "* .NET Version: " + Assembly
                      .GetExecutingAssembly()
                      .GetReferencedAssemblies()
-                     .Where(x => x.Name == "System.Core").First().Version.ToString(3), new Vector2(20, 58), Color.Gray);
-            Label BlockCount = new Label("BlockCount", "* Total Loaded Blocks: " + PresetBlocks.TilesList.Count, new Vector2(20, 72), Color.Gray);
-            Label WorkingDirectory = new Label("WorkingDirectory", "* Current Directory: " + Environment.CurrentDirectory, new Vector2(20, 86), Color.Gray);
-            Label OSInfo = new Label("OSINFO", $"* OS Info: {Environment.OSVersion.Platform} {Environment.OSVersion.VersionString} 64 Bit: {Environment.Is64BitOperatingSystem}", new Vector2(20, 86 + 14), Color.Gray);
+                     .Where(x => x.Name == "System.Core").First().Version.ToString(3), new Vector2(20, 62), Color.Gray);
+            Label BlockCount = new Label("BlockCount", "* Total Loaded Blocks: " + PresetBlocks.TilesList.Count, new Vector2(20, 78), Color.Gray);
+            Label WorkingDirectory = new Label("WorkingDirectory", "* Current Directory: " + Environment.CurrentDirectory, new Vector2(20, 94), Color.Gray);
+            Label OSInfo = new Label("OSINFO", $"* OS Info: {Environment.OSVersion.Platform} {Environment.OSVersion.VersionString} 64 Bit: {Environment.Is64BitOperatingSystem}", new Vector2(20, 86 + 24), Color.Gray);
             //Label GPU = new Label("GPU", $"* GPU: ", new Vector2(20, 86 + 14 + 14), Color.Gray);
 
             AddControl(doneButton);

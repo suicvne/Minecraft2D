@@ -23,7 +23,7 @@ namespace Minecraft2D.Screens
     {
         public GameScreens CurrentScreen { get; set; }
 
-        private static Minecraft2D.Screens.MainGameScreen mainGameScreen;
+        private static MainGameScreen mainGameScreen;
         private TitleScreen titleScreen;
         private OptionsScreen options;
         private DebugInfo debugScreen;
@@ -100,6 +100,9 @@ namespace Minecraft2D.Screens
         public void Dispose()
         {
             mainGameScreen = null;
+            debugScreen = null;
+            options = null;
+            titleScreen = null;
         }
 
         public void Update(GameTime gameTime)

@@ -44,7 +44,7 @@ namespace Minecraft2D.Options
             Vsync = true;
             Fullscreen = false;
 
-            Username = "Player" + MainGame.RandomGenerator.Next(0, 9000);
+            Username = "Player" + MainGame.RandomGenerator.Next(1000, 9000);
         }
 
         public void TryGetSkinFromServers()
@@ -61,7 +61,8 @@ namespace Minecraft2D.Options
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Couldn't get skin for username " + Username.Trim());
+                Console.WriteLine($"Couldn't get skin for username {Username.Trim()}\n    {ex.Message}"
+                    );
             }
         }
     }

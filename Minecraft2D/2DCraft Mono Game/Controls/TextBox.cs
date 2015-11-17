@@ -131,18 +131,18 @@ namespace Minecraft2D.Controls
 
                 if (HasFocus)
                 {
-                    if (Content.Length < (Position.Width / 8))
-                        if(Content.Length - 1 > 0)
-                            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, 
-                            "_", 
-                            new 
-                            Vector2(Position.X + (Content.Length * 8) + 8, 
-                            Position.Y + 12), Color.White);
-                        else
-                            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont,
-                            "_",
-                            new Vector2(Position.X + (Content.Length * 8),
-                            Position.Y + 12), Color.White);
+                    //if (Content.Length < (Position.Width / 8))
+                    //    if(Content.Length - 1 > 0)
+                    //        MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, 
+                    //        "_", 
+                    //        new 
+                    //        Vector2(Position.X + (Content.Length * 8) + 8, 
+                    //        Position.Y + 12), Color.White);
+                    //    else
+                    //        MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont,
+                    //        "_",
+                    //        new Vector2(Position.X + (Content.Length * 8),
+                    //        Position.Y + 12), Color.White);
                 }
             }
             else
