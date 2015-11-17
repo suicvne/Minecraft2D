@@ -22,7 +22,13 @@ namespace Minecraft2D.Screens
                 Control f = ControlsList.Find(x => x.Name == "usrnametb");
                 if(f != null)
                 {
-                    MainGame.GameOptions.Username = ((TextBox)f).Content;
+                    if(!String.IsNullOrEmpty(((TextBox)f).Content))
+                        MainGame.GameOptions.Username = ((TextBox)f).Content.Trim();
+                    else if(String.IsNullOrEmpty(MainGame.GameOptions.Username))
+                    {
+                        MainGame.GameOptions.Username = $"Player{MainGame.RandomGenerator.Next(1000, 9000)}";
+                    }
+
                 }
                 MainGame.manager.PushScreen(GameScreens.MAIN);
             };

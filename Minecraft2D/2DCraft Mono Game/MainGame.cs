@@ -209,38 +209,14 @@ namespace Minecraft2D
                 FormReference.Location = new System.Drawing.Point(x, y);
 
                 FormReference.WindowState = GameOptions.WindowState;
-                if (GameOptions.WindowLocation != null)
-                    FormReference.Location = GameOptions.WindowLocation;
-                if (GameOptions.WindowSize != null)
-                    FormReference.Size = GameOptions.WindowSize;
+                
             }
             GlobalGraphicsDeviceManager.SynchronizeWithVerticalRetrace = GameOptions.Vsync;
-            this.IsFixedTimeStep = GameOptions.Vsync;
+            //this.IsFixedTimeStep = GameOptions.Vsync;
             GlobalGraphicsDeviceManager.IsFullScreen = GameOptions.Fullscreen;
             GlobalGraphicsDeviceManager.ApplyChanges();
 
             GameStarting = false;
-            if (Window.ClientBounds != null)
-            {
-                GlobalGraphicsDeviceManager.PreferredBackBufferWidth = Window.ClientBounds.Width;
-                GlobalGraphicsDeviceManager.PreferredBackBufferHeight = Window.ClientBounds.Height;
-                
-            }
-            else
-            {
-                GlobalGraphicsDeviceManager.PreferredBackBufferWidth = 1280;
-                GlobalGraphicsDeviceManager.PreferredBackBufferHeight = 720;
-            }
-        }
-
-        public static Point PointToScreen(Point point)
-        {
-            if (GameCamera != null)
-            {
-                var matrix = Matrix.Invert(GameCamera._transform);
-                return Vector2.Transform(point.ToVector2(), matrix).ToPoint();
-            }
-            return Vector2.Zero.ToPoint();
         }
 
         protected override void LoadContent()
@@ -260,8 +236,7 @@ namespace Minecraft2D
         }
         
         protected override void Update(GameTime gameTime)
-        {
-            
+        {            
                 if (GameExiting)
                 {
                     try
@@ -285,7 +260,7 @@ namespace Minecraft2D
                 {
                     GameOptions.Vsync = !GameOptions.Vsync;
                     GlobalGraphicsDeviceManager.SynchronizeWithVerticalRetrace = !GlobalGraphicsDeviceManager.SynchronizeWithVerticalRetrace;
-                    this.IsFixedTimeStep = !IsFixedTimeStep;
+                    //this.IsFixedTimeStep = !IsFixedTimeStep;
                     GlobalGraphicsDeviceManager.ApplyChanges();
                 }
                 

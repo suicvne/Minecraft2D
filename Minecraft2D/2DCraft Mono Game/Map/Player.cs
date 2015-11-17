@@ -39,7 +39,6 @@ namespace Minecraft2D.Map
                 Username = MainGame.GameOptions.Username;
             else
                 Username = "Connected Player";
-
         }
 
         /// <summary>
@@ -134,6 +133,11 @@ namespace Minecraft2D.Map
             MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, Username, new Vector2((int)(Position.X - (size.X / 4)), Position.Y - 16), Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0f);
         }
 
+        private void MakeTextureThing()
+        {
+
+        }
+
         private void DrawClientPlayer()
         {
             Matrix inverseViewMatrix = Matrix.Invert(MainGame.GameCamera.get_transformation(MainGame.GlobalGraphicsDevice));
@@ -145,6 +149,7 @@ namespace Minecraft2D.Map
                 float distanceY = worldMousePosition.Y - Position.Y;
                 float angle = (float)Math.Atan2(distanceY, distanceX);
 
+                MakeTextureThing();
 
                 if (Direction == 0)
                 {

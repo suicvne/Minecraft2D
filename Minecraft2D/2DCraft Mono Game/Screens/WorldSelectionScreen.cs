@@ -14,7 +14,7 @@ namespace Minecraft2D.Screens
         public WorldSelectionScreen()
         {
             //for now
-            Button worldOne, worldTwo, worldThree, worldFour, worldFive;
+            //Button worldOne, worldTwo, worldThree, worldFour, worldFive;
 
             if(Directory.Exists("Saves"))
             {
