@@ -226,8 +226,12 @@ namespace Minecraft2D.Map
                     p.Update(gameTime);
 
             if (entities != null && entities.Count > 0)
-                foreach (var e in entities)
+            {
+                foreach (dynamic e in entities)
+                {
                     e.Update(gameTime);
+                }
+            }
         }
 
         private int GenerateID()
