@@ -12,11 +12,9 @@ namespace Minecraft2D.Map.Entities
         public EntityCthulu() : base()
         {
             Hitbox = new Microsoft.Xna.Framework.Rectangle(0, 0, 256, 100);
-            Name = "Cthulu";
+            Name = "Lamborghini";
         }
-
-
-        int tickCount = 0;
+        
         public new void Update(GameTime gameTime)
         {
             //base.Update(gameTime);

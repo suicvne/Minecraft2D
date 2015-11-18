@@ -20,6 +20,7 @@ namespace Minecraft2D.Screens
         public static RenderTarget2D worldLightmapPass;
         public static RenderTarget2D allTogether;
         public static BlockTemplate PlacingTile { get; set; }
+        public static MessageQueue MainMessageQueue { get; set; }
 
         private int currentTileIndex = 0;
         private BlockTemplate[] TilesList { get; set; }
@@ -35,6 +36,8 @@ namespace Minecraft2D.Screens
         public MainGameScreen()
         {
             world = new World();
+            MainMessageQueue = new MessageQueue();
+            AddControl(MainMessageQueue);
 
             MainGame.WindowClosing += () =>
             {
@@ -76,6 +79,9 @@ namespace Minecraft2D.Screens
             }
 
             world.Update(gameTime);
+
+            foreach (Control d in this.ControlsList)
+                d.Update(gameTime);
         }
 
         private void CheckKeyboardMouseInput()
@@ -87,6 +93,10 @@ namespace Minecraft2D.Screens
                 {
                     MainGame.GameOptions.LightsDisabled = !MainGame.GameOptions.LightsDisabled;
                 }
+                if(MainGame.GlobalInputHelper.IsNewPress(Keys.L))
+                {
+                    MainMessageQueue.AddMessage(new Minecraft2DMessage { Sender = "GAME", Content = "Test", Global = true });
+                }
 #endif
 
                 if (MainGame.GlobalInputHelper.IsNewPress(Keys.F2))
@@ -97,8 +107,13 @@ namespace Minecraft2D.Screens
 
                     if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Keys.LeftAlt))
                     {
-                        worldRenderTarget.SaveAsPng(File.Create(Path.Combine("Screenshots", $"Screenshot_{nnow.Month}-{nnow.Day}-{nnow.Year}-{nnow.Hour}-{nnow.Minute}-{nnow.Second}.png")),
-                        MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
+                        using (FileStream f = File.Create(Path.Combine("Screenshots", $"Screenshot_{nnow.Month}-{nnow.Day}-{nnow.Year}-{nnow.Hour}-{nnow.Minute}-{nnow.Second}.png")))
+                        {
+                            worldRenderTarget.SaveAsPng(f,
+                            MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
+                            f.Close();
+                        }
+                        MainMessageQueue.AddMessage(new Minecraft2DMessage { Content = "Screenshot captured!", Global = false, Sender = "GAME", To = MainGame.GameOptions.Username });
                     }
                     else
                     {
@@ -112,8 +127,13 @@ namespace Minecraft2D.Screens
                         MainGame.GlobalSpriteBatch.End();
                         MainGame.GlobalGraphicsDevice.SetRenderTarget(null);
 
-                        allTogether.SaveAsPng(File.Create(Path.Combine("Screenshots", $"Screenshot_{nnow.Month}-{nnow.Day}-{nnow.Year}-{nnow.Hour}-{nnow.Minute}-{nnow.Second}.png")),
-                        MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
+                        using (FileStream f = File.Create(Path.Combine("Screenshots", $"Screenshot_{nnow.Month}-{nnow.Day}-{nnow.Year}-{nnow.Hour}-{nnow.Minute}-{nnow.Second}.png")))
+                        {
+                            allTogether.SaveAsPng(f,
+                            MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
+                            f.Close();
+                        }
+                        MainMessageQueue.AddMessage(new Minecraft2DMessage { Content = "Screenshot captured!", Global = false, Sender = "GAME", To = MainGame.GameOptions.Username });
                     }
                 }
                 if (MainGame.GlobalInputHelper.CurrentMouseState.ScrollWheelValue > MainGame.GlobalInputHelper.LastMouseState.ScrollWheelValue)
@@ -269,13 +289,14 @@ namespace Minecraft2D.Screens
             #region Text drawing, crosshair drawing
             MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
             GraphicsHelper.DrawText("Minecraft 2D", new Vector2(0, 2), Color.White);
-
-            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32), Color.White);
+            
+            foreach (Control d in this.ControlsList)
+                d.Draw(gameTime);
 
             MainGame.GlobalSpriteBatch.Draw
                 (
                     MainGame.CustomContentManager.GetTexture("widgets"), 
-                    new Rectangle(2,
+                    new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth - WidgetsMap.SingleInventory.RegionWidth * 2 - 2,
                         MainGame.GlobalGraphicsDevice.Viewport.Height - WidgetsMap.SingleInventory.RegionHeight * 2 - 2, 
                         24 * 2, 
                         23 * 2),
@@ -285,23 +306,29 @@ namespace Minecraft2D.Screens
             MainGame.GlobalSpriteBatch.Draw
                 (
                     MainGame.CustomContentManager.GetTexture("terrain"),
-                    new Rectangle(8,
+                    new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth - WidgetsMap.SingleInventory.RegionWidth * 2 + 4,
                     (MainGame.GlobalGraphicsDevice.Viewport.Height - WidgetsMap.SingleInventory.RegionHeight * 2 - 2) + 6, 
                     32, 
                     32),
                     PlacingTile.TextureRegion.ToRectangle(),
                     Color.White
                 );
+            MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("crosshair"), new Rectangle(MainGame.GlobalInputHelper.CurrentMouseState.X, MainGame.GlobalInputHelper.CurrentMouseState.Y, 32, 32), Color.White);
+
 
             /**
             These lines really need to stay together
             */
             DrawDebugText();
+            
+
             if (!MainGame.GameOptions.ShowDebugInformation)
                 MainGame.GlobalSpriteBatch.End();
             /**
             */
             #endregion
+
+            
 
             elapsedMs++;
         }
@@ -322,18 +349,18 @@ namespace Minecraft2D.Screens
 
                 MainGame.GlobalSpriteBatch.End();
 
-
-
-                //MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
-                //    BlendState.AlphaBlend,
-                //    SamplerState.PointClamp,
-                //    DepthStencilState.None,
-                //    RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
-                ////DrawRectangle(new Rectangle((int)world.player.Position.X,
-                ////    (int)world.player.Position.Y,
-                ////    world.player.Hitbox.Width,
-                ////    world.player.Hitbox.Height), Color.Green);
-                //MainGame.GlobalSpriteBatch.End();
+#if DEBUG
+                MainGame.GlobalSpriteBatch.Begin(SpriteSortMode.Texture,
+                    BlendState.AlphaBlend,
+                    SamplerState.PointClamp,
+                    DepthStencilState.None,
+                    RasterizerState.CullNone, null, MainGame.GameCamera.get_transformation(MainGame.GlobalSpriteBatch.GraphicsDevice));
+                GraphicsHelper.DrawRectangle(new Rectangle((int)world.GetClientPlayer().Position.X,
+                    (int)world.GetClientPlayer().Position.Y,
+                    world.GetClientPlayer().Hitbox.Width,
+                    world.GetClientPlayer().Hitbox.Height), Color.Green);
+                MainGame.GlobalSpriteBatch.End();
+#endif
             }
         }
         #endregion

@@ -43,6 +43,7 @@
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\Label.cs" />
+    <Compile Include="Controls\MessageQueue.cs" />
     <Compile Include="Graphics\Camera2D.cs" />
     <Compile Include="Graphics\ContentManager.cs" />
     <Compile Include="Controls\TextBox.cs" />
