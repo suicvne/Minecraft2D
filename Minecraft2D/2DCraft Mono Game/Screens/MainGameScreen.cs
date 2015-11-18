@@ -113,7 +113,7 @@ namespace Minecraft2D.Screens
                             MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
                             f.Close();
                         }
-                        MainMessageQueue.AddMessage(new Minecraft2DMessage { Content = "Screenshot captured!", Global = false, Sender = "GAME", To = MainGame.GameOptions.Username });
+                        MainMessageQueue.AddMessage(new Minecraft2DMessage { Content = "Screenshot captured!", Global = false, To = MainGame.GameOptions.Username });
                     }
                     else
                     {

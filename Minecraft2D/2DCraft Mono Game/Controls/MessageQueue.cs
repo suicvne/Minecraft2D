@@ -9,6 +9,11 @@ using MonoGame.Extended.BitmapFonts;
 
 namespace Minecraft2D.Controls
 {
+    public enum MessageLevel
+    {
+        Normal, Warning, Error, Success
+    }
+
     public class Minecraft2DMessage
     {
         public string Sender { get; set; }
@@ -17,11 +22,13 @@ namespace Minecraft2D.Controls
         public string Content { get; set; }
         public string To { get; set; }
         public int ID { get; set; }
+        public MessageLevel MessageLevel { get; set; }
 
         public Minecraft2DMessage()
         {
             SentAt = DateTime.Now;
             ID = MainGame.RandomGenerator.Next(0, 999999);
+            MessageLevel = MessageLevel.Normal;
         }
     }
 
@@ -33,7 +40,7 @@ namespace Minecraft2D.Controls
         public List<Minecraft2DMessage> MessageList { get; set; }
         public bool Visible { get; set; }
         public float OpacityMod { get; set; }
-        private int QueueTimeout = 1000;
+        private int QueueTimeout = 500;
 
         private int TimeoutCounter = 0;
 
@@ -42,7 +49,6 @@ namespace Minecraft2D.Controls
             MessageList = new List<Minecraft2DMessage>();
 #if DEBUG
             Minecraft2DMessage debugMessage = new Minecraft2DMessage();
-            debugMessage.Sender = "GAME";
             debugMessage.Global = true;
             debugMessage.Content = "Your game is running in debug mode, be warned.";
             debugMessage.To = null;
@@ -65,16 +71,22 @@ namespace Minecraft2D.Controls
         public override void Draw(GameTime gameTime)
         {
             GraphicsHelper.DrawRectangle(new Rectangle(0,
-                MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - Math.Min(MessageList.Count * 12, 300),
+                MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - Math.Min(MessageList.Count * 12, 144),
                 500,
-                Math.Min(MessageList.Count * 12, 300)), 
+                Math.Min(MessageList.Count * 12, 144)), 
                 Color.Gray, 
                 OpacityMod);
-            if (MessageList.Count > 25)
+            if (MessageList.Count > 12)
             {
-                for (int i = MessageList.Count; i > 25; i--)
+                int y = 0;
+                for (int i = MessageList.Count - 1; i > MessageList.Count - 13; i--)
                 {
+                    MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"),
+                        MessageList[i].Sender == null ?
+                        MessageList[i].Content : $"<{MessageList[i].Sender}> {MessageList[i].Content}",
+                            new Vector2(0, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 12 - y), ColorFromLevel(MessageList[i].MessageLevel) * OpacityMod);
 
+                    y += 12;
                 }
             }
             else
@@ -83,12 +95,29 @@ namespace Minecraft2D.Controls
                 for(int i = MessageList.Count - 1; i >= 0; i--)
                 {
                     MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"),
-                        MessageList[i].Sender.ToUpper() == "GAME" ? 
+                        MessageList[i].Sender == null ? 
                         MessageList[i].Content : $"<{MessageList[i].Sender}> {MessageList[i].Content}", 
-                            new Vector2(0, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 12 - y), Color.White * OpacityMod);
+                            new Vector2(0, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 12 - y), ColorFromLevel(MessageList[i].MessageLevel) * OpacityMod);
 
                     y += 12;
                 }
+            }
+        }
+
+        private Color ColorFromLevel(MessageLevel ml)
+        {
+            switch(ml)
+            {
+                case MessageLevel.Normal:
+                    return Color.White;
+                case MessageLevel.Error:
+                    return Color.Red;
+                case MessageLevel.Success:
+                    return Color.Green;
+                case MessageLevel.Warning:
+                    return Color.Yellow;
+                default:
+                    return Color.White;
             }
         }
 
@@ -96,7 +125,7 @@ namespace Minecraft2D.Controls
         {
             if (TimeoutCounter > 0)
             {
-                if (TimeoutCounter < 250)
+                if (TimeoutCounter < (QueueTimeout / 4))
                 {
                     if (OpacityMod > 0f)
                         OpacityMod -= .1f * (float)gameTime.ElapsedGameTime.TotalSeconds * QueueTimeout / 64;
