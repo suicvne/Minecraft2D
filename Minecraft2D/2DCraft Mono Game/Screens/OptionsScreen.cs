@@ -139,8 +139,11 @@ namespace Minecraft2D.Screens
             usernameTextBox.Content = MainGame.GameOptions.Username;
             usernameTextBox.Name = "usrnametb";
 
-            Button FullscreenButton = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width - 470,
+            Button FullscreenButton = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width - 580,
                     MainGame.GlobalGraphicsDevice.Viewport.Height - (230 - 70), (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.Fullscreen.ToString());
+            //MainGame.GlobalGraphicsDevice.Viewport.Width - 580
+            //Button FullscreenButton = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width - 470,
+            //        MainGame.GlobalGraphicsDevice.Viewport.Height - (230 - 70), (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), MainGame.GameOptions.Fullscreen.ToString());
             FullscreenButton.Clicked += () =>
             {
                 MainGame.GlobalGraphicsDeviceManager.IsFullScreen = !MainGame.GlobalGraphicsDeviceManager.IsFullScreen;
@@ -150,6 +153,15 @@ namespace Minecraft2D.Screens
                 FullscreenButton.ButtonText = MainGame.GameOptions.Fullscreen.ToString();
             };
 
+            //MainGame.GlobalGraphicsDevice.Viewport.Width - 380
+            Button DiscordButton = new Button(new Rectangle(MainGame.GlobalGraphicsDevice.Viewport.Width - 380,
+                    MainGame.GlobalGraphicsDevice.Viewport.Height - (230 - 70), (WidgetsMap.EnabledButton.RegionWidth * 2) - 256, WidgetsMap.EnabledButton.RegionHeight * 2), "Discord");
+            DiscordButton.Enabled = false;
+            DiscordButton.Clicked += ()=>
+            {
+                usernameTextBox.IsPasswordField = !usernameTextBox.IsPasswordField;
+            };
+
             AddControl(doneButton);
             AddButtonWithLabel(MoveLeftMod, new Label(name: "lbl", text: "Move Left", pos: Vector2.Zero, tnt: Color.Gray));
             AddButtonWithLabel(MoveRightMod, new Label(name: "lbl", text: "Move Right", pos: Vector2.Zero, tnt: Color.Gray));
@@ -157,6 +169,7 @@ namespace Minecraft2D.Screens
             AddButtonWithLabel(MoveDownMod, new Label(name: "lbl", text: "Move Down", pos: Vector2.Zero, tnt: Color.Gray));
             AddButtonWithLabel(JumpMod, new Label(name: "lbl", text: "Jump", pos: Vector2.Zero, tnt: Color.Gray));
             AddButtonWithLabel(FullscreenButton, new Label(name: "lbl", text: "Fullscreen", pos: Vector2.Zero, tnt: Color.Gray));
+            AddButtonWithLabel(DiscordButton, new Label(name: "lbl", text: "Coming soon!", pos: Vector2.Zero, tnt: Color.Gray));
             AddTextBoxWithLabel(usernameTextBox, new Label(name: "lbl", text: "Username", pos: Vector2.Zero, tnt: Color.Gray));
         }
 

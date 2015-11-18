@@ -27,6 +27,11 @@ namespace Minecraft2D.Screens
             Label BlockCount = new Label("BlockCount", "* Total Loaded Blocks: " + PresetBlocks.TilesList.Count, new Vector2(20, 78), Color.Gray);
             Label WorkingDirectory = new Label("WorkingDirectory", "* Current Directory: " + Environment.CurrentDirectory, new Vector2(20, 94), Color.Gray);
             Label OSInfo = new Label("OSINFO", $"* OS Info: {Environment.OSVersion.Platform} {Environment.OSVersion.VersionString} 64 Bit: {Environment.Is64BitOperatingSystem}", new Vector2(20, 86 + 24), Color.Gray);
+#if DEBUG
+            Label DEBUG = new Label("DEBUG", $"#if DEBUG defined", new Vector2(20, 86 + 48), Color.Gray);
+            Label AboutDebugControls = new Label("AboutDebugControls", "When running in Debug, you can use the following controls for cool stuff\nF2: Screenshot\nF3: Toggle Debug Info\nF4: Toggle Lights\nAlt + F2: Screenshot w/out Lights", 
+                new Vector2(20, 86 + 48 + 24), Color.White);
+#endif
             //Label GPU = new Label("GPU", $"* GPU: ", new Vector2(20, 86 + 14 + 14), Color.Gray);
 
             AddControl(doneButton);
@@ -36,6 +41,10 @@ namespace Minecraft2D.Screens
             AddControl(BlockCount);
             AddControl(WorkingDirectory);
             AddControl(OSInfo);
+#if DEBUG
+            AddControl(DEBUG);
+            AddControl(AboutDebugControls);
+#endif
             //AddControl(GPU);
         }
 

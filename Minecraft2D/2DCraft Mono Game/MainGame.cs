@@ -97,16 +97,16 @@ namespace Minecraft2D
 
             this.Window.ClientSizeChanged += (sender, e) =>
             {
-                if (ClientBounds != null)
-                {
-                    GlobalGraphicsDeviceManager.PreferredBackBufferWidth = Window.ClientBounds.Width;
-                    GlobalGraphicsDeviceManager.PreferredBackBufferHeight = Window.ClientBounds.Height;
-                }
-                else
-                {
-                    GlobalGraphicsDeviceManager.PreferredBackBufferWidth = V_WIDTH;
-                    GlobalGraphicsDeviceManager.PreferredBackBufferHeight = V_HEIGHT;
-                }
+                //if (ClientBounds != null)
+                //{
+                //    GlobalGraphicsDeviceManager.PreferredBackBufferWidth = Window.ClientBounds.Width;
+                //    GlobalGraphicsDeviceManager.PreferredBackBufferHeight = Window.ClientBounds.Height;
+                //}
+                //else
+                //{
+                //    GlobalGraphicsDeviceManager.PreferredBackBufferWidth = V_WIDTH;
+                //    GlobalGraphicsDeviceManager.PreferredBackBufferHeight = V_HEIGHT;
+                //}
                 if (GlobalGraphicsDevice != null)
                 {
                     MainGameScreen.worldRenderTarget = new RenderTarget2D(GlobalGraphicsDevice, GlobalGraphicsDeviceManager.PreferredBackBufferWidth, GlobalGraphicsDeviceManager.PreferredBackBufferHeight);

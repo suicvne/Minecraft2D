@@ -14,10 +14,10 @@ namespace Minecraft2D.Controls
     {
         public string Content { get; set; }
         public bool AllowPasting { get; set; }
-        
+        public bool IsPasswordField { get; set; }
         public Rectangle Position { get; set; }
-        private Rectangle BackgroundRectangle;
 
+        private Rectangle BackgroundRectangle;
         private Language_Learning_Application.clsClipBoard clipboard = new Language_Learning_Application.clsClipBoard();
 
         public event TextBoxClicked MouseClicked;
@@ -28,6 +28,7 @@ namespace Minecraft2D.Controls
             HasFocus = false;
             Enabled = true;
             AllowPasting = true;
+            IsPasswordField = false;
 
             Position = new Rectangle(0, 0, 32 * 5, 32);
             BackgroundRectangle = new Rectangle(Position.X - 2, Position.Y - 2, Position.Width + 16, Position.Height + 16);
@@ -55,6 +56,7 @@ namespace Minecraft2D.Controls
             HasFocus = false;
             Enabled = enabl;
             AllowPasting = true;
+            IsPasswordField = false;
 
             Position = pos;
             BackgroundRectangle = new Rectangle(pos.X - 2, pos.Y - 2, pos.Width + 4, pos.Height + 4);
@@ -112,38 +114,39 @@ namespace Minecraft2D.Controls
         {
             if(Enabled)
             {
-                DrawRectangle(BackgroundRectangle, Color.White, 1f);
-                DrawRectangle(Position, Color.Black, 1f);
-
-                //for(int i = 0; i < Content.Length; i++)
-                //{
-                //    if (i * 16 > Position.Width)
-                //        break;
-
-                //}
-
-                if(Content.Length > (Position.Width / 8))
-                    MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, Content.Substring(0, Position.Width / 8),
-                        new Vector2(Position.X + 1, Position.Y + 10), Color.White);
-                else
-                    MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, Content,
-                            new Vector2(Position.X + 1, Position.Y + 10), Color.White);
-
                 if (HasFocus)
                 {
-                    //if (Content.Length < (Position.Width / 8))
-                    //    if(Content.Length - 1 > 0)
-                    //        MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, 
-                    //        "_", 
-                    //        new 
-                    //        Vector2(Position.X + (Content.Length * 8) + 8, 
-                    //        Position.Y + 12), Color.White);
-                    //    else
-                    //        MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont,
-                    //        "_",
-                    //        new Vector2(Position.X + (Content.Length * 8),
-                    //        Position.Y + 12), Color.White);
+                    DrawRectangle(BackgroundRectangle, Color.Yellow, 1f);
                 }
+                else
+                {
+                    DrawRectangle(BackgroundRectangle, Color.White, 1f);
+                }
+                DrawRectangle(Position, Color.Black, 1f);
+
+                string passwordSub = new string(Content.Select(r => r == ' ' ? ' ' : '*').ToArray());
+                if(Content.Length > (Position.Width / 8))
+                    MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, IsPasswordField ? passwordSub : Content.Substring(0, Position.Width / 8),
+                        new Vector2(Position.X + 1, Position.Y + 10), Color.White);
+                else
+                    MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, IsPasswordField ? passwordSub : Content,
+                            new Vector2(Position.X + 1, Position.Y + 10), Color.White);
+
+                //if (HasFocus)
+                //{
+                //    //if (Content.Length < (Position.Width / 8))
+                //    //    if(Content.Length - 1 > 0)
+                //    //        MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, 
+                //    //        "_", 
+                //    //        new 
+                //    //        Vector2(Position.X + (Content.Length * 8) + 8, 
+                //    //        Position.Y + 12), Color.White);
+                //    //    else
+                //    //        MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont,
+                //    //        "_",
+                //    //        new Vector2(Position.X + (Content.Length * 8),
+                //    //        Position.Y + 12), Color.White);
+                //}
             }
             else
             {

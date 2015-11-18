@@ -31,6 +31,11 @@ namespace Minecraft2D.Options
 
         public string Username { get; set; }
 
+#if DEBUG
+        [NonSerialized]
+        public bool LightsDisabled = false;
+#endif
+
         public Options()
         {
             UseController = false;
@@ -61,8 +66,23 @@ namespace Minecraft2D.Options
             }
             catch(Exception ex)
             {
-                Console.WriteLine($"Couldn't get skin for username {Username.Trim()}\n    {ex.Message}"
+                Console.WriteLine($"Couldn't get skin for username {Username.Trim()} from skins.minecraft.net\n    {ex.Message}"
                     );
+                //http://s3.amazonaws.com/MinecraftSkins/%s.png
+                try
+                {
+                    using (WebClient wc = new WebClient())
+                    {
+                        byte[] bytes = wc.DownloadData("http://s3.amazonaws.com/MinecraftSkins/" + Username.Trim() + ".png");
+                        MemoryStream ms = new MemoryStream(bytes);
+                        SkinOverride = Texture2D.FromStream(MainGame.GlobalGraphicsDevice, ms);
+                    }
+                }
+                catch(Exception ex2)
+                {
+                    Console.WriteLine($"Couldn't get skin for username {Username.Trim()} from old skin server\n    {ex2.Message}"
+                    );
+                }
             }
         }
     }

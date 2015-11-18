@@ -81,9 +81,9 @@ namespace Minecraft2D.Screens
 
         public void RecalculateMinMax()
         {
-            if(CurrentScreen == GameScreens.GAME)
-                if (mainGameScreen != null)
-                    mainGameScreen.RecalculateMinMax();
+            //if(CurrentScreen == GameScreens.GAME)
+            //    if (mainGameScreen != null)
+            //        mainGameScreen.RecalculateMinMax();
         }
 
         public void PushScreen(GameScreens screen)
@@ -93,7 +93,10 @@ namespace Minecraft2D.Screens
             if(screen == GameScreens.OPTIONS)
                 options = new OptionsScreen();
             if (screen == GameScreens.GAME)
+            {
+                mainGameScreen = new MainGameScreen();
                 Thread.Sleep(200);
+            }
             CurrentScreen = screen;
         }
 
@@ -132,7 +135,7 @@ namespace Minecraft2D.Screens
             switch (CurrentScreen)
             {
                 case (GameScreens.SPLASH):
-                    splashScreen.Update(gameTime);
+                    splashScreen.Draw(gameTime);
                     break;
                 case GameScreens.GAME:
                     mainGameScreen.Draw(gameTime);

@@ -95,7 +95,7 @@ namespace Minecraft2D.Controls
                         new Rectangle(Position.X, Position.Y, Position.Width, Position.Height),
                         new Rectangle(WidgetsMap.DisabledButton.X, WidgetsMap.DisabledButton.Y, WidgetsMap.DisabledButton.RegionWidth, WidgetsMap.DisabledButton.RegionHeight), Color.White);
 
-                GraphicsHelper.DrawText(ButtonText, new Vector2(textX, Position.Y + 13), Color.Gray);
+                GraphicsHelper.DrawText(ButtonText, new Vector2(textX, Position.Y + 8), Color.Gray);
             }
         }
     }

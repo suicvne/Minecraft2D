@@ -39,7 +39,7 @@ namespace Minecraft2D.Map
         public World()
         {
             entities = new List<Entity>();
-            Lightmap = new int[tiles.GetLength(1), tiles.GetLength(0)];
+            Lightmap = new int[tiles.GetLength(0), tiles.GetLength(1)];
             GenerateNewWorld();
             if (File.Exists("World1.mc2dwld"))
             {
@@ -57,7 +57,7 @@ namespace Minecraft2D.Map
 
         private void GenerateNewWorld()
         {
-            Lightmap = new int[tiles.GetLength(1), tiles.GetLength(0)];
+            Lightmap = new int[tiles.GetLength(0), tiles.GetLength(1)];
             WorldSize = new Vector2(tiles.GetLength(1) * 32, tiles.GetLength(0) * 32);
             for (int x = 0; x < 100; x++)
             {
