@@ -33,15 +33,16 @@ namespace Minecraft2D.Screens
         private TimeSpan ElapsedTime = TimeSpan.Zero;
         #endregion
 
-        public MainGameScreen()
+        public MainGameScreen(int worldLoadIndex = -1)
         {
-            world = new World();
+            world = new World(worldLoadIndex);
             MainMessageQueue = new MessageQueue();
             AddControl(MainMessageQueue);
 
             MainGame.WindowClosing += () =>
             {
-                world.SaveWorldBinary("World1.mc2dbin");
+                //world.SaveWorldBinary("World1.mc2dbin");
+                world.WorldObj.SaveWorld();
                 MainGame.WriteSettings();
             };
 
@@ -74,8 +75,8 @@ namespace Minecraft2D.Screens
 
             if (world.GetClientPlayer() != null)
             {
-                MainGame.GameCamera.Pos.X = (int)Math.Min(Math.Max(world.GetClientPlayer().Position.X, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2), world.WorldSize.X - (MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2));
-                MainGame.GameCamera.Pos.Y = (int)Math.Min(Math.Max(world.GetClientPlayer().Position.Y, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2), world.WorldSize.Y - (MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2));
+                MainGame.GameCamera.Pos.X = (int)Math.Min(Math.Max(world.GetClientPlayer().Position.X, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2), world.WorldObj.MetaFile.WorldSize.X - (MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2));
+                MainGame.GameCamera.Pos.Y = (int)Math.Min(Math.Max(world.GetClientPlayer().Position.Y, MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2), world.WorldObj.MetaFile.WorldSize.Y - (MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2));
             }
 
             world.Update(gameTime);
@@ -86,6 +87,34 @@ namespace Minecraft2D.Screens
 
         private void CheckKeyboardMouseInput()
         {
+
+            #region take these out
+
+            if(MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Keys.Up))
+            {
+                MainGame.GameCamera.Move(new Vector2i(0, -1));
+            }
+            if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Keys.Right))
+            {
+                MainGame.GameCamera.Move(new Vector2i(1, 0));
+            }
+            if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Keys.Down))
+            {
+                MainGame.GameCamera.Move(new Vector2i(0, 1));
+            }
+            if (MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Keys.Left))
+            {
+                MainGame.GameCamera.Move(new Vector2i(-1, 0));
+            }
+            if(MainGame.GlobalInputHelper.CurrentKeyboardState.IsKeyDown(Keys.R))
+            {
+                world.GetClientPlayer().Move(new Vector2(22 * 32, 16 * 32));
+            }
+
+
+            #endregion
+
+
             if (MainGame.GlobalInputHelper.IsMouseInsideWindow())
             {
 #if DEBUG
@@ -196,7 +225,7 @@ namespace Minecraft2D.Screens
                 }
                 if (MainGame.GlobalInputHelper.IsNewPress(Keys.Escape))
                 {
-                    world.SaveWorldBinary("World1.mc2dbin");
+                    world.WorldObj.SaveWorld();
                     MainGame.manager.PushScreen(GameScreens.MAIN);
                 }
             }
@@ -341,7 +370,7 @@ namespace Minecraft2D.Screens
                 GraphicsHelper.DrawText("Cam Y: " + MainGame.GameCamera.Pos.Y, new Vector2(0, 18 * 2), Color.White);
                 GraphicsHelper.DrawText("FPS: " + framerate, new Vector2(0, 18 * 3), Color.White);
                 GraphicsHelper.DrawText("World Time: " + world.WorldTime, new Vector2(0, 18 * 4), Color.White);
-                GraphicsHelper.DrawText("World Size: " + world.WorldSize.X + " x " + world.WorldSize.Y, new Vector2(0, 18 * 5), Color.White);
+                GraphicsHelper.DrawText("World Size: " + world.WorldObj.MetaFile.WorldSize.X + " x " + world.WorldObj.MetaFile.WorldSize.Y, new Vector2(0, 18 * 5), Color.White);
 
                 GraphicsHelper.DrawText($"Entities: {world.entities.Count + world.players.Count} ({world.entities.Count} Mobs, {world.players.Count} Clients)", new Vector2(0, 18 * 6), Color.White);
                 GraphicsHelper.DrawText("Rendered Lights: " + world.RenderedLights, new Vector2(0, 18 * 7), Color.White);

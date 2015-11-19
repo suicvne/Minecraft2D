@@ -18,8 +18,10 @@ namespace Minecraft2D
     public delegate void GameWindowResized(Vector2 NewSize);
     public class MainGame : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+
+        public static string GameSaveDirectory { get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Minecraft2D"); } }
         public static ScreenManager manager;
         public static Camera2D GameCamera { get; set; }
         public static Camera2D HudCam { get; set; }

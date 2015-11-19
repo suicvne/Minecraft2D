@@ -86,7 +86,7 @@ namespace Minecraft2D.Screens
             //        mainGameScreen.RecalculateMinMax();
         }
 
-        public void PushScreen(GameScreens screen)
+        public void PushScreen(GameScreens screen, int worldLoadIndex = -1)
         {
             if (screen == GameScreens.MAIN)
                 titleScreen.AdvanceSplash();
@@ -94,7 +94,7 @@ namespace Minecraft2D.Screens
                 options = new OptionsScreen();
             if (screen == GameScreens.GAME)
             {
-                mainGameScreen = new MainGameScreen();
+                mainGameScreen = new MainGameScreen(worldLoadIndex);
                 Thread.Sleep(200);
             }
             CurrentScreen = screen;

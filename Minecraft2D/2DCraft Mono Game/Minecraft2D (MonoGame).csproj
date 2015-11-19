@@ -53,6 +53,11 @@
     <Compile Include="Map\Entity.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="MainGame.cs" />
+    <Compile Include="Map\SaveBackend\BinaryMetaReader.cs" />
+    <Compile Include="Map\SaveBackend\BinaryMetaWriter.cs" />
+    <Compile Include="Map\SaveBackend\BinarySaveReader.cs" />
+    <Compile Include="Map\SaveBackend\BinarySaveWriter.cs" />
+    <Compile Include="Map\WorldObjects.cs" />
     <Compile Include="Screens\DebugInfo.cs" />
     <Compile Include="Screens\MainGameScreen.cs" />
     <Compile Include="ObjectCopier.cs" />

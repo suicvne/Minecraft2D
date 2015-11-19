@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using MonoGame.Extended.BitmapFonts;
 using Minecraft2D.Controls;
+using System.IO;
 
 namespace Minecraft2D.Screens
 {
@@ -90,6 +91,14 @@ namespace Minecraft2D.Screens
                 ran.Next(0, splashMessages.Length);
                 splashIndex = ran.Next(0, splashMessages.Length);
             }
+
+            CheckSave(); //this will only be temp
+        }
+
+        public void CheckSave()
+        {
+            if(Directory.Exists(Path.Combine(MainGame.GameSaveDirectory, "World0")))
+                ((Button)ControlsList.Find(srch => srch.Name == "PlayButton")).ButtonText = "Load Saved World";
         }
 
         public TitleScreen()
@@ -102,14 +111,16 @@ namespace Minecraft2D.Screens
                 );
 
             OptionsButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 190, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Options");
-            PlayButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 260, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), "Load Test World");
+            PlayButton = new Button(new Rectangle(MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2 - (WidgetsMap.EnabledButton.RegionWidth), MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight - 260, WidgetsMap.EnabledButton.RegionWidth * 2, WidgetsMap.EnabledButton.RegionHeight * 2), 
+                Directory.Exists(Path.Combine(MainGame.GameSaveDirectory, "World0")) ? "Load Saved World" : "Create New World");
+            PlayButton.Name = "PlayButton";
 
             OptionsButton.Enabled = true;
 
             ExitButton.Clicked += ExitButton_Clicked;
             PlayButton.Clicked += () => 
             {
-                MainGame.manager.PushScreen(GameScreens.GAME);
+                MainGame.manager.PushScreen(GameScreens.GAME, Directory.Exists(Path.Combine(MainGame.GameSaveDirectory, "World0")) ? 0 : -1);
             };
             OptionsButton.Name = "OptionsButton";
             OptionsButton.Clicked += () =>

@@ -15,8 +15,9 @@ namespace Minecraft2D.Map
 {
     public class World
     {
-        private Tile[,] tiles = new Tile[256, 100];
-        public int[,] Lightmap { get; set; }
+        public WorldObjects WorldObj;
+        //private Tile[,] tiles = new Tile[256, 100];
+        //public int[,] Lightmap { get; set; }
 
         private Random ran = new Random((int)DateTime.Now.Millisecond * 69);
         private PresetBlocks presets = new PresetBlocks();
@@ -26,8 +27,7 @@ namespace Minecraft2D.Map
 
         Color shading = Color.White;
         int Lighting = 0;
-
-        public Vector2 WorldSize { get; set; }
+        
         public long WorldTime { get { return worldTime; } set { worldTime = value; } }
 
         public int RenderedLights { get; internal set; }
@@ -36,173 +36,36 @@ namespace Minecraft2D.Map
         public List<Player> players { get; internal set; }
         public List<Entity> entities { get; internal set; }
 
-        public World()
+        public World(int SaveIndex = -1)
         {
-            entities = new List<Entity>();
-            Lightmap = new int[tiles.GetLength(0), tiles.GetLength(1)];
-            GenerateNewWorld();
-            if (File.Exists("World1.mc2dwld"))
+            if(SaveIndex != -1)
             {
-                LoadWorld("World1.mc2dwld");
-                File.Delete("World1.mc2dwld");
-                SaveWorldBinary("World1.mc2dbin");
+                WorldObj = new WorldObjects(this);
+                WorldObj.WorldIndex = SaveIndex;
+                WorldObj.LoadWorld();
+                WorldObj.GenerateInitialLightmap();
             }
-            else if (File.Exists("World1.mc2dbin"))
-                LoadWorldBinary("World1.mc2dbin");
             else
-                GenerateNewWorld();
-            GenerateLightmap();
+            {
+                WorldObj = new WorldObjects(this);
+                WorldObj.GenerateFlatlands();
+                WorldObj.GenerateInitialLightmap();
+            }
 
+            entities = new List<Entity>();
+            
+            if(players == null || GetClientPlayer() == null)
+            {
+                players = new List<Player>();
+                Player p = new Player();
+                p.Position = new Vector2(50 * 32, 50 * 32);
+                p.IsClientPlayer = true;
+                p.Username = MainGame.GameOptions.Username;
+                players.Add(p);
+            }   
         }
 
-        private void GenerateNewWorld()
-        {
-            Lightmap = new int[tiles.GetLength(0), tiles.GetLength(1)];
-            WorldSize = new Vector2(tiles.GetLength(1) * 32, tiles.GetLength(0) * 32);
-            for (int x = 0; x < 100; x++)
-            {
-                for (int y = 0; y < 256; y++)
-                {
-                    if (y > 32)
-                    {
-                        if (y == 33)
-                        {
-                            Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:grass").AsTile();
-                            t.Position = new Vector2(x * 32, y * 32);
-                            tiles[y, x] = t;
-                            t = null;
-                        }
-                        else if (y <= 37)
-                        {
-                            Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:dirt").AsTile();
-                            t.Position = new Vector2(x * 32, y * 32);
-                            tiles[y, x] = t;
-                            t = null;
-                        }
-                        else if (y == 255)
-                        {
-                            //TODO: bedrock
-                            Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:bedrock").AsTile();
-                            t.Position = new Vector2(x * 32, y * 32);
-                            tiles[y, x] = t;
-                            t = null;
-                        }
-                        else
-                        {
-                            Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:stone").AsTile();
-                            t.Position = new Vector2(x * 32, y * 32);
-                            tiles[y, x] = t;
-                            t = null;
-                        }
-                    }
-                    else
-                    {
-                        Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == "minecraft:air").AsTile();
-                        t.Position = new Vector2(x * 32, y * 32);
-                        tiles[y, x] = t;
-                        t = null;
-                    }
-                }
-            }
-        }
-
-        private void GenerateLightmap()
-        {
-            for (int x = 0; x < tiles.GetLength(1); x++)
-            {
-                for (int y = 0; y < tiles.GetLength(0); y++)
-                {
-                    if (tiles[y, x].Type == TileType.Air || tiles[y, x].IsBackground)
-                        Lightmap[y, x] = 5;
-                    else if (tiles[y, x].Type == TileType.Torch)
-                        Lightmap[y, x] = 12;
-                }
-            }
-        }
-
-        public void SaveWorldBinary(string path)
-        {
-            Minecraft2D.Saves.Tile[,] saveConverterTiles = new Saves.Tile[tiles.GetLength(0), tiles.GetLength(1)];
-            foreach (var t in tiles)
-            {
-                Saves.Tile saveTile = new Saves.Tile { BackgroundTile = t.IsBackground, Name = t.Name, X = (int)t.Position.X, Y = (int)t.Position.Y };
-                saveConverterTiles[(int)(Math.Floor(t.Position.Y / 32)), (int)(Math.Floor(t.Position.X / 32))] = saveTile;
-            }
-
-            BinarySaveWriter bsw = new BinarySaveWriter(path, saveConverterTiles);
-            bsw.WriteSave();
-        }
-
-        public void LoadWorldBinary(string path)
-        {
-            BinarySaveReader bsr = new BinarySaveReader(path);
-            try
-            {
-                bsr.ReadMap();
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine($"Error reading world: {ex.Message}");
-                GenerateNewWorld();
-                return;
-            }
-            if (bsr.ReadTiles != null)
-            {
-                tiles = new Tile[bsr.ReadTiles.GetLength(0), bsr.ReadTiles.GetLength(1)];
-                foreach (var t in bsr.ReadTiles)
-                {
-                    Tile ingameTile = PresetBlocks.TilesList.Find(srch => srch.Name == t.Name.Trim()) != null ? PresetBlocks.TilesList.Find(srch => srch.Name == t.Name.Trim()).AsTile() : new Tile();
-                    ingameTile.IsBackground = t.BackgroundTile;
-                    if (ingameTile.IsBackground)
-                        ingameTile.TransparencyOfTile = TileTransparency.FullyTransparent;
-                    ingameTile.Position = new Vector2(t.X, t.Y);
-                    tiles[(int)Math.Floor((float)t.Y / 32), (int)Math.Floor((float)t.X / 32)] = ingameTile;
-                }
-            }
-        }
-
-        public void SaveWorld(string path)
-        {
-            using (StreamWriter sw = new StreamWriter(path))
-            {
-                for (int x = 0; x < tiles.GetLength(1); x++)
-                {
-                    for (int y = 0; y < tiles.GetLength(0); y++)
-                    {
-                        string format =
-                            string.Format("{0};{1};{2};{3}", tiles[y, x].Name, tiles[y, x].Position.X, tiles[y, x].Position.Y, tiles[y, x].IsBackground);
-                        sw.WriteLine(format);
-                    }
-                }
-                sw.Flush();
-            }
-        }
-
-        public void LoadWorld(string path)
-        {
-            using (StreamReader sr = new StreamReader(path))
-            {
-                string input = "";
-                while (!sr.EndOfStream)
-                {
-                    input = sr.ReadLine();
-                    if (input.Trim() != String.Empty)
-                    {
-                        string[] split = input.Split(new char[] { ';' }, 4);
-                        int x, y;
-                        bool isBg = bool.Parse(split[3]);
-                        x = (int)Math.Floor((double)Int32.Parse(split[1]) / 32);
-                        y = (int)Math.Floor((double)Int32.Parse(split[2]) / 32);
-                        string tileDataName = split[0];
-                        Tile t = PresetBlocks.TilesList.Find(srch => srch.Name == tileDataName.Trim()) != null ? PresetBlocks.TilesList.Find(srch => srch.Name == tileDataName.Trim()).AsTile() : new Tile();
-                        t.Position = new Vector2(x * 32, y * 32);
-                        t.IsBackground = isBg;
-                        tiles[y, x] = t;
-                    }
-                }
-            }
-        }
-
+        
         private long oldTime;
         public void Update(GameTime gameTime)
         {
@@ -214,11 +77,6 @@ namespace Minecraft2D.Map
                 EntityCthulu e = new EntityCthulu();
                 e.id = GenerateID();
                 entities.Add(e);
-
-                //Player p = new Player();
-                //p.IsClientPlayer = false;
-                //p.Username = "Connected Player";
-                //players.Add(p);
             }
 
             if(players != null)
@@ -295,21 +153,21 @@ namespace Minecraft2D.Map
             {
                 for (int x = (int)ranges[0]; x < ranges[1] + 2; x++)
                 {
-                    if (x > tiles.GetLength(1) - 1)
+                    if (x > WorldObj.ForegroundLayerTiles.GetLength(1) - 1)
                         continue;
-                    if (y > tiles.GetLength(0) - 1)
+                    if (y > WorldObj.ForegroundLayerTiles.GetLength(0) - 1)
                         continue;
 
-                    if(tiles[y, x].Name.Contains("furnace") && tiles[y, x].Light > 0)
+                    if(WorldObj.ForegroundLayerTiles[y, x].Name.Contains("furnace") && WorldObj.ForegroundLayerTiles[y, x].Light > 0)
                     {
-                        long deltaTime = worldTime - tiles[y, x].TimePlaced;
+                        long deltaTime = worldTime - WorldObj.ForegroundLayerTiles[y, x].TimePlaced;
                         if(deltaTime > 3000)
                         {
                             Tile replacementTile = PresetBlocks.TilesList.Find(i => i.Name == "minecraft:furnace").AsTile();
-                            replacementTile.Position = tiles[y, x].Position;
+                            replacementTile.Position = WorldObj.ForegroundLayerTiles[y, x].Position;
                             replacementTile.TimePlaced = worldTime;
-                            tiles[y, x] = replacementTile;
-                            Lightmap[y, x] = 0;
+                            WorldObj.ForegroundLayerTiles[y, x] = replacementTile;
+                            WorldObj.Lightmap[y, x] = 0;
                         }
                     }
                 }
@@ -323,10 +181,10 @@ namespace Minecraft2D.Map
         {
             int tX = (int)Math.Floor((double)(x + 16) / 32); //add half of the cross hair so it's centered
             int tY = (int)Math.Floor((double)(y + 16) / 32);
-            if (tX > tiles.GetLength(1) - 1 || tX < 0 || tY > tiles.GetLength(0) - 1 || tY < 0)
+            if (tX > WorldObj.ForegroundLayerTiles.GetLength(1) - 1 || tX < 0 || tY > WorldObj.ForegroundLayerTiles.GetLength(0) - 1 || tY < 0)
                 return null;
             else
-                return tiles[tY, tX];
+                return WorldObj.ForegroundLayerTiles[tY, tX];
         }
 
 
@@ -338,21 +196,21 @@ namespace Minecraft2D.Map
         {
             int tX = (int)Math.Floor((double)(x + 16) / 32); //add half of the cross hair so it's centered
             int tY = (int)Math.Floor((double)(y + 16) / 32);
-            if (tX > tiles.GetLength(1) || tX < 0 || tY > tiles.GetLength(0) || tY < 0)
+            if (tX > WorldObj.ForegroundLayerTiles.GetLength(1) || tX < 0 || tY > WorldObj.ForegroundLayerTiles.GetLength(0) || tY < 0)
                 return;
-            if (tiles[tY, tX].Hardness == -1)
+            if (WorldObj.ForegroundLayerTiles[tY, tX].Hardness == -1)
                 return;
 
             else
             {
                 if (toReplace.Type == TileType.Air)
                 {
-                    if (tiles[tY, tX].PlaceSoundName != null)
+                    if (WorldObj.ForegroundLayerTiles[tY, tX].PlaceSoundName != null)
                     {
                         if (placeSoundSEI == null)
                         {
                             int soundIndex = ran.Next(1, 5);
-                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(WorldObj.ForegroundLayerTiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
                             placeSoundSEI.Play();
                         }
                         else
@@ -360,22 +218,22 @@ namespace Minecraft2D.Map
                             //if (placeSoundSEI.State == SoundState.Paused)
                             //{
                             int soundIndex = ran.Next(1, 5);
-                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(WorldObj.ForegroundLayerTiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
                             placeSoundSEI.Play();
                             //}
                         }
                     }
-                    tiles[tY, tX] = toReplace;
+                    WorldObj.ForegroundLayerTiles[tY, tX] = toReplace;
                 }
                 else
                 {
-                    tiles[tY, tX] = toReplace;
-                    if (tiles[tY, tX].PlaceSoundName != null)
+                    WorldObj.ForegroundLayerTiles[tY, tX] = toReplace;
+                    if (WorldObj.ForegroundLayerTiles[tY, tX].PlaceSoundName != null)
                     {
                         if (placeSoundSEI == null)
                         {
                             int soundIndex = ran.Next(1, 5);
-                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(WorldObj.ForegroundLayerTiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
                             placeSoundSEI.Play();
                         }
                         else
@@ -383,13 +241,13 @@ namespace Minecraft2D.Map
                             //if (placeSoundSEI.State == SoundState.Stopped)
                             //{
                             int soundIndex = ran.Next(1, 5);
-                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(tiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
+                            placeSoundSEI = MainGame.CustomContentManager.GetSoundEffect(string.Format(WorldObj.ForegroundLayerTiles[tY, tX].PlaceSoundName, soundIndex)).CreateInstance();
                             placeSoundSEI.Play();
                             //}
                         }
                     }
                 }
-                tiles[tY, tX].Position = new Vector2(tX * 32, tY * 32);
+                WorldObj.ForegroundLayerTiles[tY, tX].Position = new Vector2(tX * 32, tY * 32);
 
                 //if (tiles[tY, tX].Type == TileType.Air || tiles[tY, tX].IsBackground)
                 //    Lightmap[tY, tX] = 5;
@@ -397,11 +255,11 @@ namespace Minecraft2D.Map
                 //    Lightmap[tY, tX] = 12;
                 //else
                 //    Lightmap[tY, tX] = 0;
-                Lightmap[tY, tX] = tiles[tY, tX].Light;
-                if (tiles[tY, tX].IsBackground)
+                WorldObj.Lightmap[tY, tX] = WorldObj.ForegroundLayerTiles[tY, tX].Light;
+                if (WorldObj.ForegroundLayerTiles[tY, tX].IsBackground)
                 {
-                    Lightmap[tY, tX] = 5;
-                    tiles[tY, tX].TransparencyOfTile = TileTransparency.FullyTransparent;
+                    WorldObj.Lightmap[tY, tX] = 5;
+                    WorldObj.ForegroundLayerTiles[tY, tX].TransparencyOfTile = TileTransparency.FullyTransparent;
                 }
             }
         }
@@ -423,16 +281,16 @@ namespace Minecraft2D.Map
                 for (int x = (int)ranges[0]; x < ranges[1] + 2; x++)
                 {
                     //Console.WriteLine($"Length(0): {tiles.GetLength(0)}; Length(1): {tiles.GetLength(1)}");
-                    if (x > tiles.GetLength(1) - 1)
+                    if (x > WorldObj.ForegroundLayerTiles.GetLength(1) - 1)
                         continue;
-                    if (y > tiles.GetLength(0) - 1)
+                    if (y > WorldObj.ForegroundLayerTiles.GetLength(0) - 1)
                         continue;
 
-                    if (Lightmap[y, x] > 0f)
+                    if (WorldObj.Lightmap[y, x] > 0f)
                     {
                         if (y < 42) //ensures the underground is dark
                         {
-                            if (tiles[y, x].IsBackground)
+                            if (WorldObj.ForegroundLayerTiles[y, x].IsBackground)
                             {
                                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
                                         new Rectangle(x * 32 - 64, y * 32 - 64, 32 * 5, 32 * 5), Color.White);
@@ -441,14 +299,14 @@ namespace Minecraft2D.Map
                             else
                             {
                                 MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
-                                    new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
+                                    new Rectangle(x * 32 - WorldObj.ForegroundLayerTiles[y, x].LightOffset, y * 32 - WorldObj.ForegroundLayerTiles[y, x].LightOffset, 32 * WorldObj.Lightmap[y, x], 32 * WorldObj.Lightmap[y, x]), Color.White);
                                 RenderedLights++;
                             }
                         }
-                        if (tiles[y, x].Light > 0 && tiles[y, x].Type != TileType.Air)
+                        if (WorldObj.ForegroundLayerTiles[y, x].Light > 0 && WorldObj.ForegroundLayerTiles[y, x].Type != TileType.Air)
                         {
                             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("smoothlight"),
-                                new Rectangle(x * 32 - tiles[y, x].LightOffset, y * 32 - tiles[y, x].LightOffset, 32 * Lightmap[y, x], 32 * Lightmap[y, x]), Color.White);
+                                new Rectangle(x * 32 - WorldObj.ForegroundLayerTiles[y, x].LightOffset, y * 32 - WorldObj.ForegroundLayerTiles[y, x].LightOffset, 32 * WorldObj.Lightmap[y, x], 32 * WorldObj.Lightmap[y, x]), Color.White);
                             RenderedLights++;
                         }
                     }
@@ -541,9 +399,9 @@ namespace Minecraft2D.Map
                     return false;
                 if (toCheck.Y < 0)
                     return false;
-                if (toCheck.X > (WorldSize.X - 32))
+                if (toCheck.X > (WorldObj.MetaFile.WorldSize.X - 32))
                     return false;
-                if (toCheck.Y > (WorldSize.Y - 32))
+                if (toCheck.Y > (WorldObj.MetaFile.WorldSize.Y - 32))
                     return false;
             }
 
@@ -564,11 +422,11 @@ namespace Minecraft2D.Map
                 for (int x = (int)ranges[0]; x < ranges[1] + 2; x++)
                 {
                     //Console.WriteLine($"Length(0): {tiles.GetLength(0)}; Length(1): {tiles.GetLength(1)}");
-                    if (x > tiles.GetLength(1) - 1)
+                    if (x > WorldObj.ForegroundLayerTiles.GetLength(1) - 1)
                         continue;
-                    if (y > tiles.GetLength(0) - 1)
+                    if (y > WorldObj.ForegroundLayerTiles.GetLength(0) - 1)
                         continue;
-                    if (tiles[y, x].TransparencyOfTile == TileTransparency.FullyOpague && tiles[y, x].Bounds.Intersects(toCheck))
+                    if (WorldObj.ForegroundLayerTiles[y, x].TransparencyOfTile == TileTransparency.FullyOpague && WorldObj.ForegroundLayerTiles[y, x].Bounds.Intersects(toCheck))
                         return false;
                 }
             }
@@ -613,29 +471,8 @@ namespace Minecraft2D.Map
         {
             return new Rectangle((int)positionToTry.X, (int)positionToTry.Y, width, height);
         }
-
-        [Obsolete]
-        private List<Tile> CurrentRenderedTiles;
-        [Obsolete]
-        private List<Tile> CalculateCurrentRenderedTiles()
-        {
-            List<Tile> tilesToBeRendered = new List<Tile>();
-
-            foreach (var block in tiles)
-            {
-                Rectangle objectBounds = new Rectangle((int)block.Position.X, (int)block.Position.Y, 34, 34);
-                int x, y;
-                x = (int)Math.Floor((double)block.Position.X / 32);
-                y = (int)Math.Floor((double)block.Position.Y / 32);
-                if (CurrentViewport.Intersects(objectBounds))
-                {
-                    tilesToBeRendered.Add(block);
-                }
-            }
-            return tilesToBeRendered;
-        }
-
-
+        
+        
         private Vector2 LightSize = new Vector2(32 * 5, 32 * 5);
 
         /// <summary>
@@ -688,18 +525,18 @@ namespace Minecraft2D.Map
                 for (int x = ranges[0]; x < ranges[1] + 2; x++)
                 {
                     //Console.WriteLine($"Length(0): {tiles.GetLength(0)}; Length(1): {tiles.GetLength(1)}");
-                    if (x > tiles.GetLength(1) - 1)
+                    if (x > WorldObj.ForegroundLayerTiles.GetLength(1) - 1)
                         continue;
-                    if (y > tiles.GetLength(0) - 1)
+                    if (y > WorldObj.ForegroundLayerTiles.GetLength(0) - 1)
                         continue;
 
-                    if (!tiles[y, x].Name.Trim().Contains("air"))
+                    if (!WorldObj.ForegroundLayerTiles[y, x].Name.Trim().Contains("air"))
                     {
-                        if (!tiles[y, x].IsBackground)
+                        if (!WorldObj.ForegroundLayerTiles[y, x].IsBackground)
                         {
                             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"),
-                                new Rectangle((int)tiles[y, x].Position.X, (int)tiles[y, x].Position.Y, 32, 32),
-                                new Rectangle(tiles[y, x].TextureRegion.X, tiles[y, x].TextureRegion.Y, 16, 16),
+                                new Rectangle((int)WorldObj.ForegroundLayerTiles[y, x].Position.X, (int)WorldObj.ForegroundLayerTiles[y, x].Position.Y, 32, 32),
+                                new Rectangle(WorldObj.ForegroundLayerTiles[y, x].TextureRegion.X, WorldObj.ForegroundLayerTiles[y, x].TextureRegion.Y, 16, 16),
                                 BlockTint,
                                 0f,
                                 Vector2.Zero,
@@ -709,8 +546,8 @@ namespace Minecraft2D.Map
                         else
                         {
                             MainGame.GlobalSpriteBatch.Draw(MainGame.CustomContentManager.GetTexture("terrain"),
-                                new Rectangle((int)tiles[y, x].Position.X, (int)tiles[y, x].Position.Y, 32, 32),
-                                new Rectangle(tiles[y, x].TextureRegion.X, tiles[y, x].TextureRegion.Y, 16, 16),
+                                new Rectangle((int)WorldObj.ForegroundLayerTiles[y, x].Position.X, (int)WorldObj.ForegroundLayerTiles[y, x].Position.Y, 32, 32),
+                                new Rectangle(WorldObj.ForegroundLayerTiles[y, x].TextureRegion.X, WorldObj.ForegroundLayerTiles[y, x].TextureRegion.Y, 16, 16),
                                 Color.Gray,
                                 0f,
                                 Vector2.Zero,
