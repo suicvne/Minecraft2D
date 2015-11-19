@@ -28,21 +28,68 @@ namespace Minecraft2D.Screens
             "Tune lower!",
             "00-00-001~",
             "!!",
-            "Can't see me!"
+            "Can't see me!",
+            "Your son is a nuke!",
+            "Eat me? Yes.",
+            "LinusTechTips",
+            "Mono is eh!",
+            "DirectX 9!",
+            "doot doot",
+            $"You're the star, {MainGame.GameOptions.Username}",
+            "using MonoGame.Framework!",
+            "Indie!",
+            "idspispopd!",
+            "Some of these are Notch's!",
+            "C#6 is a lifesaver!",
+            "Only 5gb on CD!",
+            "missingno"
         };
         
         float scale = 1.3f;
         Random ran = new Random(DateTime.Now.Millisecond);
         int splashIndex = 0;
+        string splashOverride;
 
         #region Controls
         Button ExitButton, OptionsButton, PlayButton;
         #endregion
 
+        private void AbstractText(string text)
+        {
+
+        }
+
         public void AdvanceSplash()
         {
-            ran.Next(0, splashMessages.Length);
-            splashIndex = ran.Next(0, splashMessages.Length);
+            if (DateTime.Now.Month == 10 && DateTime.Now.Day == 31)
+            {
+                splashOverride = "Spookycraft!";
+            }
+            else if(DateTime.Now.Month == 1 && DateTime.Now.Day == 20)
+            {
+                splashOverride = "Happy birthday, Mike!";
+            }
+            else if(DateTime.Now.Month == 11 && DateTime.Now.Day == 26)
+            {
+                splashOverride = "Happy Thanksgiving!";
+            }
+            else if (DateTime.Now.Month == 1 && DateTime.Now.Day == 1)
+            {
+                splashOverride = "Happy New Year!";
+            }
+            else if (DateTime.Now.Month == 1 && DateTime.Now.Day == 22)
+            {
+                splashOverride = "Happy birthday, Jaclyn!";
+            }
+            else if(DateTime.Now.Month == 9 && DateTime.Now.Day == 11)
+            {
+                splashOverride = "Happy birthday, AeroMatter!";
+            }
+            else
+            {
+                ran.Next(0, splashMessages.Length);
+                splashIndex = ran.Next(0, splashMessages.Length);
+            }
         }
 
         public TitleScreen()
@@ -134,9 +181,19 @@ namespace Minecraft2D.Screens
             Vector2 expansionCenter = MainGame.CustomContentManager.SplashFont.MeasureString(splashMessages[splashIndex]);
             expansionCenter.X = expansionCenter.X / 4;
 
-            MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, splashMessages[splashIndex], 
+            if(splashMessages == null)
+            {
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, "missingno",
                 new Vector2(splashX, 120), Color.Yellow, rotation: -.25f, origin: expansionCenter, scale: textScale, effects: SpriteEffects.None, layerDepth: 0f
                     );
+            }
+            else
+            {
+                MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.SplashFont, splashOverride == null ? splashMessages[splashIndex] : splashOverride,
+                new Vector2(splashX, 120), Color.Yellow, rotation: -.25f, origin: expansionCenter, scale: textScale, effects: SpriteEffects.None, layerDepth: 0f
+                    );
+            }
+            
             //DrawText(splashMessages[splashIndex], new Vector2(200, 200), Color.Yellow);
 
             //MainGame.GlobalSpriteBatch.DrawString(MainGame.CustomContentManager.GetFont("main-font"),
