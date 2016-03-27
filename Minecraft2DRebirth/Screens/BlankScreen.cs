@@ -36,11 +36,16 @@ namespace Minecraft2DRebirth.Screens
         /// <returns></returns>
         private Vector2 OffsetMouse(Vector2 input)
         {
-            Vector2 output = input;
-            Vector2 windowPosition = Minecraft2D.inputHelper.game.Window.Position.ToVector2();
+			Vector2 output = input;
+			Vector2 windowPosition = Minecraft2D.inputHelper.game.Window.Position.ToVector2();
+
+			Console.WriteLine ($"{windowPosition.ToString()}");
+
             var graphicsDevice = Minecraft2D.graphics.GetGraphicsDeviceManager().GraphicsDevice;
+			#if !LINUX //TODO: Test Mac
             output.X -= windowPosition.X;
             output.Y -= windowPosition.Y;
+			#endif
             return output;
         }
 
