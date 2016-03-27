@@ -29,13 +29,18 @@ namespace Minecraft2DRebirth.Screens
             graphics.GetSpriteBatch().End();
         }
 
+        /// <summary>
+        /// Used to correct the mouse position based on window position.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         private Vector2 OffsetMouse(Vector2 input)
         {
             Vector2 output = input;
+            Vector2 windowPosition = Minecraft2D.inputHelper.game.Window.Position.ToVector2();
             var graphicsDevice = Minecraft2D.graphics.GetGraphicsDeviceManager().GraphicsDevice;
-            Console.WriteLine(Minecraft2D.inputHelper.game.Window.Position.ToVector2().ToString());
-            output.X -= graphicsDevice.Viewport.X;
-            output.Y -= graphicsDevice.Viewport.Y;
+            output.X -= windowPosition.X;
+            output.Y -= windowPosition.Y;
             return output;
         }
 
