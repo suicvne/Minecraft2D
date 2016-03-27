@@ -377,7 +377,12 @@ namespace Minecraft2DRebirth.Input
             
             if(game != null)
             {
-                return game.GraphicsDevice.Viewport.Bounds.Contains(pos);
+                Rectangle actualBounds = new Rectangle();
+                actualBounds.Width = game.GraphicsDevice.Viewport.Width;
+                actualBounds.Height = game.GraphicsDevice.Viewport.Height;
+                actualBounds.X = game.Window.Position.X;
+                actualBounds.Y = game.Window.Position.Y;
+                return actualBounds.Contains(pos);
             }
             return false;
         }
