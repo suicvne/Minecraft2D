@@ -97,52 +97,7 @@ namespace Minecraft2D
             Content.RootDirectory = "Content";
             this.Window.AllowUserResizing = true;
 
-            this.Window.ClientSizeChanged += (sender, e) =>
-            {
-                //if (ClientBounds != null)
-                //{
-                //    GlobalGraphicsDeviceManager.PreferredBackBufferWidth = Window.ClientBounds.Width;
-                //    GlobalGraphicsDeviceManager.PreferredBackBufferHeight = Window.ClientBounds.Height;
-                //}
-                //else
-                //{
-                //    GlobalGraphicsDeviceManager.PreferredBackBufferWidth = V_WIDTH;
-                //    GlobalGraphicsDeviceManager.PreferredBackBufferHeight = V_HEIGHT;
-                //}
-                if (GlobalGraphicsDevice != null)
-                {
-                    MainGameScreen.worldRenderTarget = new RenderTarget2D(GlobalGraphicsDevice, GlobalGraphicsDeviceManager.PreferredBackBufferWidth, GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
-                    MainGameScreen.worldLightmapPass = new RenderTarget2D(GlobalGraphicsDevice, GlobalGraphicsDeviceManager.PreferredBackBufferWidth, GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
-                    MainGameScreen.allTogether = new RenderTarget2D(GlobalGraphicsDevice, GlobalGraphicsDeviceManager.PreferredBackBufferWidth, GlobalGraphicsDeviceManager.PreferredBackBufferHeight);
-                }
-                if (manager != null)
-                    manager.RecalculateMinMax();
-                if (WindowResized != null)
-                    WindowResized(new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height));
-            };
-
-            if (!LINUX)
-            {
-                FormReference.Resize += (sender, e) =>
-                {
-                    if (!GameStarting)
-                    {
-                        GameOptions.WindowState = FormReference.WindowState;
-                        GameOptions.WindowSize = FormReference.Size;
-                        GameOptions.WindowLocation = FormReference.Location;
-                    }
-                };
-                FormReference.FormClosing += (sender, e) =>
-                {
-                    if (WindowClosing != null)
-                        WindowClosing();
-                };
-            }
-            else
-            {
-
-            }
-
+            
             this.Window.TextInput += (sender, e) =>
             {
                 if (TextInputReceived != null)
@@ -227,6 +182,8 @@ namespace Minecraft2D
             GlobalSpriteBatch = spriteBatch;
             GlobalContentManager = Content;
             GlobalGraphicsDevice = GraphicsDevice;
+
+            CustomContentManager = new ContentManager();
 
             manager = new ScreenManager();
             manager.LoadContent();

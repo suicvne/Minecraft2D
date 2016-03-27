@@ -2,7 +2,7 @@
 
 namespace Minecraft2D
 {
-#if WINDOWS || LINUX
+#if WINDOWS
     static class Program
     {
         /// <summary>
