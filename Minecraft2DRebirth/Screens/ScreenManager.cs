@@ -11,7 +11,7 @@ namespace Minecraft2DRebirth.Screens
         public ScreenManager()
         {}
 
-        public void PushScreen(ref IScreen screen)
+        public void PushScreen(IScreen screen)
         {
             PreviousScreen = CurrentScreen;
             CurrentScreen = screen;

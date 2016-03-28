@@ -13,6 +13,8 @@
     <MonoGamePlatform>Linux</MonoGamePlatform>
     <MonoGameContentBuilderExe>
     </MonoGameContentBuilderExe>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -23,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE;LINUX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -32,23 +35,31 @@
     <DefineConstants>TRACE;LINUX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Controls\Button.cs" />
+    <Compile Include="Controls\IControl.cs" />
+    <Compile Include="Controls\SplashLabel.cs" />
+    <Compile Include="Controls\WidgetsMap.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Graphics\Graphics.cs" />
+    <Compile Include="Graphics\SkinRegion.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Minecraft2D.cs" />
+    <Compile Include="Native\OperatingSystemDetermination.cs" />
     <Compile Include="Overlay\IOverlay.cs" />
     <Compile Include="Overlay\OverlayManager.cs" />
-    <Compile Include="Overlay\ScreenOverlay.cs" />
+    <Compile Include="Overlay\DebugOverlay.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screens\BlankScreen.cs" />
     <Compile Include="Screens\IScreen.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
+    <Compile Include="Screens\TitleScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -64,6 +75,7 @@
       <HintPath>..\packages\MonoGame.Framework.DesktopGL.3.5.0.1678\lib\net40\OpenTK.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Tao.Sdl, Version=1.2.13.0, Culture=neutral, PublicKeyToken=9c7a200e36c0094e, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
@@ -87,6 +99,7 @@
   </Target>
   -->
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
 </Project>

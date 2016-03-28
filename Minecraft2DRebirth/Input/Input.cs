@@ -36,6 +36,14 @@ namespace Minecraft2DRebirth.Input
         }
 
         /// <summary>
+        /// so hax
+        /// </summary>
+        public void CallExit()
+        {
+            game.Exit();
+        }
+
+        /// <summary>
         /// Fetches the latest input states.
         /// </summary>
         public void Update()
@@ -369,7 +377,7 @@ namespace Minecraft2DRebirth.Input
                 _lastKeyboardState.IsKeyUp(key) &&
                 _currentKeyboardState.IsKeyDown(key));
         }
-
+        
         public bool IsMouseInsideWindow()
         {
             //MouseState ms = Mouse.GetState();

@@ -26,7 +26,6 @@ namespace Minecraft2D.Screens
             "All assets belong to Mojang!",
             "Windows 10 is eh!",
             "Tune lower!",
-            "00-00-001~",
             "!!",
             "Can't see me!",
             "Your son is a nuke!",

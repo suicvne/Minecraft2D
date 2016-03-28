@@ -40,6 +40,9 @@ namespace Minecraft2DRebirth.Graphics
         {
             IOverlay screenOverlay = new DebugOverlay(screenManager);
             overlayManager.PushOverlay(screenOverlay);
+
+            IScreen titleScreen = new TitleScreen();
+            screenManager.PushScreen(titleScreen);
         }
 
         public void Draw()
@@ -56,12 +59,53 @@ namespace Minecraft2DRebirth.Graphics
 
         public void LoadContent()
         {
-            var sprFont = contentManager.Load<SpriteFont>("Fallback");
-            spriteFonts.Add("fallback", sprFont);
+            spriteFonts.Add("fallback", contentManager.Load<SpriteFont>("Fallback"));
+            spriteFonts.Add("minecraft", contentManager.Load<SpriteFont>("minecraft-fnt"));
 
-            textures.Add("cursor", contentManager.Load<Texture2D>("cursor"));
+            contentManager.RootDirectory = "Content";
+
+            textures.Add("cursor", contentManager.Load<Texture2D>("crosshair"));
+            textures.Add("widgets", contentManager.Load<Texture2D>("widgets"));
+            textures.Add("terrain", contentManager.Load<Texture2D>("terrain"));
 
             Console.WriteLine("Loaded content.");
+        }
+
+        public void DrawText(string text, Vector2 position, Color tint)
+        {
+            if (tint == null)
+                tint = Color.White;
+
+            Vector2 offsetPos = new Vector2(position.X + 2, position.Y + 2); //offset used for shadow
+            spriteBatch.DrawString(GetSpriteFontByName("minecraft"), text, offsetPos, Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(GetSpriteFontByName("minecraft"), text, position, tint, 0, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        }
+
+        public void DrawText(string text, Rectangle size, Color tint, float scale)
+        {
+            var textSize = GetSpriteFontByName("minecraft").MeasureString(text) * scale;
+            if (tint == null)
+                tint = Color.White;
+
+            Vector2 origin;
+            if (scale > 1f)
+            {
+                origin = textSize / 128;
+                Console.WriteLine($"TextSize: " + textSize.ToString());
+                Console.WriteLine("Origin: " + origin.ToString());
+            }
+            else
+                origin = Vector2.Zero;
+
+
+            Vector2 offsetPos = new Vector2(size.X + 2, size.Y + 2); //offset used for shadow
+            spriteBatch.DrawString(GetSpriteFontByName("minecraft"), text, offsetPos, Color.Black, 0, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(GetSpriteFontByName("minecraft"), text, size.ToVector2(), tint, 0, origin, scale, SpriteEffects.None, 0f);
+        }
+
+        public Rectangle GetScreenViewport()
+        {
+            return GetGraphicsDeviceManager().GraphicsDevice.Viewport.ToRectangle();
         }
 
         public void UnloadContent()
@@ -93,6 +137,5 @@ namespace Minecraft2DRebirth.Graphics
 
             return null;
         }
-
     }
 }
