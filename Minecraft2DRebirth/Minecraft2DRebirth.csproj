@@ -45,6 +45,8 @@
     <Compile Include="Controls\IControl.cs" />
     <Compile Include="Controls\SplashLabel.cs" />
     <Compile Include="Controls\WidgetsMap.cs" />
+    <Compile Include="Entity\IAnimatedEntity.cs" />
+    <Compile Include="Entity\IEntity.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Graphics\Graphics.cs" />
     <Compile Include="Graphics\SkinRegion.cs" />
@@ -56,12 +58,21 @@
     <Compile Include="Overlay\DebugOverlay.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Screens\BlankScreen.cs" />
+    <Compile Include="Screens\TestScreen\AnimatedEntityTest.cs" />
+    <Compile Include="Screens\TestScreen\DebugScreen.cs" />
     <Compile Include="Screens\IScreen.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Screens\TitleScreen.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="KeraLua, Version=1.3.2.0, Culture=neutral, PublicKeyToken=04d04586786c6f34, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLua.1.3.2.1\lib\net45\KeraLua.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLua, Version=1.3.2.0, Culture=neutral, PublicKeyToken=8df2ab518030ea95, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLua.1.3.2.1\lib\net45\NLua.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="MonoGame.Framework">
@@ -102,4 +113,8 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+xcopy /s /y "C:\Users\Mike\Documents\GitHub\Minecraft2D\packages\NLua.1.3.2.1\lib\native\*.*" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -41,8 +41,9 @@ namespace Minecraft2DRebirth.Graphics
             IOverlay screenOverlay = new DebugOverlay(screenManager);
             overlayManager.PushOverlay(screenOverlay);
 
-            IScreen titleScreen = new TitleScreen();
-            screenManager.PushScreen(titleScreen);
+            //IScreen titleScreen = new TitleScreen();
+            IScreen debugScreen = new BlankScreen();
+            screenManager.PushScreen(debugScreen);
         }
 
         public void Draw()
@@ -67,6 +68,7 @@ namespace Minecraft2DRebirth.Graphics
             textures.Add("cursor", contentManager.Load<Texture2D>("crosshair"));
             textures.Add("widgets", contentManager.Load<Texture2D>("widgets"));
             textures.Add("terrain", contentManager.Load<Texture2D>("terrain"));
+            textures.Add("Luigi", contentManager.Load<Texture2D>("Character"));
 
             Console.WriteLine("Loaded content.");
         }

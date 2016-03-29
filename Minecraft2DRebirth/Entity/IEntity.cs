@@ -9,9 +9,8 @@ namespace Minecraft2DRebirth.Entity
 {
     public abstract class IEntity
     {
-        public float X { get; internal set; }
-        public float Y { get; internal set; }
-        public string EntityName { get; internal set; }
+        public Vector2 Position { get; set; }
+        public string EntityName { get; set; }
 
         public abstract void Draw(Graphics.Graphics graphics);
         public abstract void Update(GameTime gameTime);
