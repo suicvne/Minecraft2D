@@ -5,7 +5,7 @@ namespace Minecraft2DRebirth.Screens
 {
     public class ScreenManager
     {
-        public IScreen CurrentScreen { get; internal set; } = new BlankScreen();
+        public IScreen CurrentScreen { get; internal set; } //TODO: make proper blank screen without a graphics argument
         public IScreen PreviousScreen { get; internal set; } = null;
 
         public ScreenManager()

@@ -48,7 +48,12 @@ namespace Minecraft2DRebirth
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            //this.IsMouseVisible = true;
+            this.IsMouseVisible = true;
+
+            this.Window.ClientSizeChanged += (sender, e) =>
+            {
+                Console.WriteLine("Resized: {0}x{1}", _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
+            };
         }
 
         //This is called first
@@ -69,7 +74,7 @@ namespace Minecraft2DRebirth
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            graphics = new Graphics.Graphics(_spriteBatch, this.Content, _graphics);
+            graphics = new Graphics.Graphics(this, _spriteBatch, this.Content, _graphics);
             graphics.LoadContent();
 
             inputHelper = new InputHelper(this); //this will not copy. my C++ instincts are kicking in ;)

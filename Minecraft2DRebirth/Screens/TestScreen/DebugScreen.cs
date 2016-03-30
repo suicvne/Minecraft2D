@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Minecraft2DRebirth.Native;
 using Minecraft2DRebirth.Screens.TestScreen;
+using Minecraft2DRebirth.Graphics;
 
 namespace Minecraft2DRebirth.Screens
 {
@@ -28,15 +29,35 @@ namespace Minecraft2DRebirth.Screens
         }
 
         private AnimatedEntityTest TestEntity;
+        private RenderTarget2D renderTarget;
+        private Lighted LightsRenderer;
 
-        public BlankScreen()
+        public BlankScreen(Graphics.Graphics graphics)
         {
             TestEntity = new AnimatedEntityTest();
             TestEntity.Animating = false;
+
+            renderTarget = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice, 
+                graphics.ScreenRectangle().Width,
+                graphics.ScreenRectangle().Height
+            );
+
+            LightsRenderer = new Lighted(graphics);
+            LightsRenderer.AmbientLight = new Color(75, 75, 75);
+            graphics.ResolutionChanged += (sender, e) =>
+            {
+                Console.WriteLine($"[DebugScreen] Recreating render targets (New size: {e.Width}x{e.Height}");
+                renderTarget.Dispose();
+                renderTarget = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice,
+                    graphics.ScreenRectangle().Width,
+                    graphics.ScreenRectangle().Height
+                );
+            };
         }
 
         public override void Draw(Graphics.Graphics graphics)
         {
+            graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 
             {
@@ -49,6 +70,10 @@ namespace Minecraft2DRebirth.Screens
             }
 
             graphics.GetSpriteBatch().End();
+            graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(null);
+
+            LightsRenderer.BaseScene = renderTarget;
+            LightsRenderer.Draw(graphics);
         }
         
         private void UpdateX(GameTime gameTime)
