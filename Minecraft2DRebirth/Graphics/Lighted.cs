@@ -98,7 +98,7 @@ namespace Minecraft2DRebirth.Graphics
                 var point = Minecraft2D.inputHelper.MousePosition;
                 point.X -= graphics.GetTexture2DByName("circle").Width / 2;
                 point.Y -= graphics.GetTexture2DByName("circle").Height / 2;
-                graphics.GetSpriteBatch().Draw(graphics.GetTexture2DByName("circle"), point, Color.Red);
+                graphics.GetSpriteBatch().Draw(graphics.GetTexture2DByName("circle"), point, Color.White);
             }
 
             graphics.GetSpriteBatch().End();

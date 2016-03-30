@@ -23,7 +23,7 @@ namespace Minecraft2DRebirth.Screens
         {
             get
             {
-                return "Blank";
+                return "Testing Screen";
             }
             internal set { }
         }
@@ -43,7 +43,7 @@ namespace Minecraft2DRebirth.Screens
             );
 
             LightsRenderer = new Lighted(graphics);
-            LightsRenderer.AmbientLight = new Color(75, 75, 75);
+            LightsRenderer.AmbientLight = new Color(20, 20, 20   ); //Pure darkness
             graphics.ResolutionChanged += (sender, e) =>
             {
                 Console.WriteLine($"[DebugScreen] Recreating render targets (New size: {e.Width}x{e.Height}");
