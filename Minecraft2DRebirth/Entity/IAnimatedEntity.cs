@@ -5,11 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Minecraft2DRebirth.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Minecraft2DRebirth.Entity
 {
     public class IAnimatedEntity : IEntity
     {
+        public enum Direction
+        {
+            Left,
+            Right,
+            Neutral
+        }
+
+        public Direction CurrentDirection { get; set; } = Direction.Right;
+
         /// <summary>
         /// The amount of frames in one animation.
         /// </summary>
@@ -55,7 +65,9 @@ namespace Minecraft2DRebirth.Entity
                 (int)Math.Round(SpriteSize.Y * Constants.SpriteScale)
             );
             var texture = graphics.GetTexture2DByName(SheetName);
-            graphics.GetSpriteBatch().Draw(texture, destinationRectangle, sourceRectangle, Color.White);
+            graphics.GetSpriteBatch().Draw(texture, destinationRectangle, sourceRectangle, Color.White, 0f, Vector2.Zero, 
+                CurrentDirection == Direction.Left ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 
+            0);
         }
 
         public override void Update(GameTime gameTime)

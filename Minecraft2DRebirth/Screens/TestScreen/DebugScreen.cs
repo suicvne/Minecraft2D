@@ -11,9 +11,9 @@ namespace Minecraft2DRebirth.Screens
 {
     internal class PhysicsConstants
     {
-        public const float Friction = 0.00049804687f;
-        public const float WalkingAcceleration = 0.00083007812f;
-        public const float MaxSpeedX = 0.15859375f;
+        public const float Friction = 0.0049804687f; //0.00049804687f;
+        public const float WalkingAcceleration = 0.0093007812f;
+        public const float MaxSpeedX = 0.55859375f;
     }
 
     public class BlankScreen : IScreen
@@ -32,6 +32,7 @@ namespace Minecraft2DRebirth.Screens
         public BlankScreen()
         {
             TestEntity = new AnimatedEntityTest();
+            TestEntity.Animating = false;
         }
 
         public override void Draw(Graphics.Graphics graphics)
@@ -53,16 +54,16 @@ namespace Minecraft2DRebirth.Screens
         private void UpdateX(GameTime gameTime)
         {
             float actualAcceleration = 0.0f;
-            if (TestEntity.Direction > 0) //right
+            if (TestEntity.CurrentDirection == Entity.IAnimatedEntity.Direction.Right) //right
                 actualAcceleration = PhysicsConstants.WalkingAcceleration;
-            else if (TestEntity.Direction < 0)
+            else if (TestEntity.CurrentDirection == Entity.IAnimatedEntity.Direction.Left)
                 actualAcceleration = -PhysicsConstants.WalkingAcceleration;
 
             float xVelocity = actualAcceleration * gameTime.ElapsedGameTime.Milliseconds;
 
-            if (TestEntity.Direction > 0) //right
+            if (TestEntity.CurrentDirection == Entity.IAnimatedEntity.Direction.Right) //right
                 xVelocity = Math.Min(xVelocity, PhysicsConstants.MaxSpeedX);
-            else if (TestEntity.Direction < 0)
+            else if (TestEntity.CurrentDirection == Entity.IAnimatedEntity.Direction.Left)
                 xVelocity = Math.Max(xVelocity, -PhysicsConstants.MaxSpeedX);
 
             ///Always on ground so, always calculating this
@@ -71,7 +72,7 @@ namespace Minecraft2DRebirth.Screens
                 Math.Max(0.0f, xVelocity - PhysicsConstants.Friction * gameTime.ElapsedGameTime.Milliseconds) : 
                 Math.Min(0.0f, xVelocity + PhysicsConstants.Friction * gameTime.ElapsedGameTime.Milliseconds);
 
-            TestEntity.AnimationFPS = 1 / xVelocity;
+            TestEntity.AnimationFPS = (1 / Math.Abs(xVelocity / 4));
 
             float deltaX = xVelocity * gameTime.ElapsedGameTime.Milliseconds;
 
@@ -81,18 +82,23 @@ namespace Minecraft2DRebirth.Screens
 
         public override void Update(GameTime gameTime)
         {
-            if (Minecraft2D.inputHelper.IsNewPress(Microsoft.Xna.Framework.Input.Keys.Space))
-                TestEntity.Animating = !TestEntity.Animating;
-            if (Minecraft2D.inputHelper.IsCurPress(Microsoft.Xna.Framework.Input.Keys.Right))
+            if (Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
             {
-                TestEntity.Direction = 1;
+                TestEntity.Animating = true;
+                TestEntity.CurrentDirection = Entity.IAnimatedEntity.Direction.Right;
+                UpdateX(gameTime);
             }
-            else if (Minecraft2D.inputHelper.IsCurPress(Microsoft.Xna.Framework.Input.Keys.Left))
+            else if (Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
             {
-                TestEntity.Direction = -1;
+                TestEntity.Animating = true;
+                TestEntity.CurrentDirection = Entity.IAnimatedEntity.Direction.Left;
+                UpdateX(gameTime);
             }
-
-            UpdateX(gameTime);
+            else
+            {
+                TestEntity.Animating = false;
+                TestEntity.CurrentFrameIndex = 0; //reset
+            }
 
             TestEntity.Update(gameTime);
         }

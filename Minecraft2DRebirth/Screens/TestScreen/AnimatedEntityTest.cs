@@ -10,11 +10,6 @@ namespace Minecraft2DRebirth.Screens.TestScreen
 {
     public class AnimatedEntityTest : IAnimatedEntity
     {
-        /// <summary>
-        /// 1 = right
-        /// 0, -1 = left.
-        /// </summary>
-        public int Direction { get; internal set; } = 1;
 
         public AnimatedEntityTest()
         {
@@ -24,6 +19,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
             YFrameIndex = 0;
             SpriteSize = new Vector2(17, 30);
             Position = new Vector2(200, 200);
+            CurrentDirection = Direction.Right;
         }
 
         public new void Draw(Graphics.Graphics graphics)
@@ -33,10 +29,6 @@ namespace Minecraft2DRebirth.Screens.TestScreen
 
         public new void Update(GameTime gameTime)
         {
-            if (Direction > 0)
-                this.YFrameIndex = 0;
-            else if (Direction <= 0)
-                this.YFrameIndex = 1;
             base.Update(gameTime);
         }
     }
