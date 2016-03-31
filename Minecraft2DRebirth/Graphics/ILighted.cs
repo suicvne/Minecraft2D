@@ -22,6 +22,15 @@ namespace Minecraft2DRebirth.Graphics
         /// Defines the color of the light.
         /// </summary>
         public Color Color;
+
+        public static LightSource MakeLightSource(Point point, Color color)
+        {
+            return new LightSource
+            {
+                Color = color,
+                Size = new Rectangle(point.X, point.Y, 512, 512)
+            };
+        }
     }
 
     /// <summary>

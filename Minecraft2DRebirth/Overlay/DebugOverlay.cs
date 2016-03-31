@@ -36,6 +36,14 @@ namespace Minecraft2DRebirth.Overlay
             {
                 graphics.GetSpriteBatch().DrawString(fallbackFont, $"PreviousScreen: {screenManager.PreviousScreen.ScreenName}", new Vector2(0, 16), Color.Black);
             }
+            if(screenManager.CurrentScreen != null && screenManager.CurrentScreen.GetType() == typeof(BlankScreen))
+            {
+                var debugScreen = (BlankScreen)screenManager.CurrentScreen;
+                graphics.GetSpriteBatch().DrawString(fallbackFont,
+                    $"Cursor Light Color: " + debugScreen.LightsRenderer.CursorLightColor.ToString(), new Vector2(0, 64), Color.Black);
+                graphics.GetSpriteBatch().DrawString(fallbackFont,
+                    $"Lights: " + debugScreen.LightsRenderer.Lights.Count(), new Vector2(0, 64 + 16), Color.Black);
+            }
 
             graphics.GetSpriteBatch().DrawString(fallbackFont, $"Mouse Position: {Minecraft2D.inputHelper.MousePosition.ToString()}; Inside: {Minecraft2D.inputHelper.IsMouseInsideWindow()}"
                 , new Vector2(0, 32), Color.Black);

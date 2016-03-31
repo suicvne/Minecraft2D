@@ -43,10 +43,16 @@ namespace Minecraft2DRebirth.Graphics
             get; set;
         } = true;
 
+#if DEBUG
         public bool DrawLightAtCursor
         {
             get; set;
         } = true;
+        public Color CursorLightColor
+        {
+            get; set;
+        } = Color.White;
+#endif
 
         private Color _AmbientLight;
         public Color AmbientLight { get { return _AmbientLight; } set { _AmbientLight = value; } }
@@ -93,13 +99,15 @@ namespace Minecraft2DRebirth.Graphics
                 );
             });
 
+#if DEBUG
             if (DrawLightAtCursor)
             {
                 var point = Minecraft2D.inputHelper.MousePosition;
                 point.X -= graphics.GetTexture2DByName("circle").Width / 2;
                 point.Y -= graphics.GetTexture2DByName("circle").Height / 2;
-                graphics.GetSpriteBatch().Draw(graphics.GetTexture2DByName("circle"), point, Color.White);
+                graphics.GetSpriteBatch().Draw(graphics.GetTexture2DByName("circle"), point, CursorLightColor);
             }
+#endif
 
             graphics.GetSpriteBatch().End();
 

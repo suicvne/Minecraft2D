@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Minecraft2DRebirth.Input
 {
@@ -382,7 +383,6 @@ namespace Minecraft2DRebirth.Input
         {
             //MouseState ms = Mouse.GetState();
             Point pos = new Point(_currentMouseState.X, _currentMouseState.Y);
-            
             if(game != null)
             {
                 Rectangle actualBounds = new Rectangle();
@@ -390,6 +390,8 @@ namespace Minecraft2DRebirth.Input
                 actualBounds.Height = game.GraphicsDevice.Viewport.Height;
                 actualBounds.X = game.Window.Position.X;
                 actualBounds.Y = game.Window.Position.Y;
+                pos.X += actualBounds.X; //offsettings
+                pos.Y += actualBounds.Y; //TODO: check if works fine on linux?
                 return actualBounds.Contains(pos);
             }
             return false;

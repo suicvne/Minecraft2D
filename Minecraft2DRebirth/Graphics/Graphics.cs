@@ -94,7 +94,7 @@ namespace Minecraft2DRebirth.Graphics
             textures.Add("terrain", contentManager.Load<Texture2D>("terrain"));
             textures.Add("Luigi", contentManager.Load<Texture2D>("Character"));
             textures.Add("trivium", contentManager.Load<Texture2D>("trivium"));
-            textures.Add("circle", contentManager.Load<Texture2D>("Circle"));
+            textures.Add("circle", contentManager.Load<Texture2D>("Circle-Large"));
 
             Console.WriteLine("Loaded content.");
         }

@@ -46,7 +46,7 @@ namespace Minecraft2DRebirth.Screens
         /// <param name="graphics"></param>
         public void DrawCursor(Graphics.Graphics graphics)
         {
-            var destinationRect = new Rectangle(Minecraft2D.inputHelper.MousePosition.OffsetForMouseInput().ToPoint(),
+            var destinationRect = new Rectangle(Minecraft2D.inputHelper.MousePosition.ToPoint(),
                 new Point(32, 32));
             graphics.GetSpriteBatch().Draw(graphics.GetTexture2DByName("cursor"), destinationRect, Color.White);
         }
