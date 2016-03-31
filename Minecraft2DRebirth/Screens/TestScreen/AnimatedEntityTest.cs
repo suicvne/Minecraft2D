@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Minecraft2DRebirth.Entity;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,18 @@ using System.Threading.Tasks;
 
 namespace Minecraft2DRebirth.Screens.TestScreen
 {
-    public class AnimatedEntityTest : IAnimatedEntity
+    public class PlayerTest : IAnimatedEntity
     {
+        #region Physics "Constants"
+        public static float Friction = 0.000049804687f; //0.00049804687f;
+        public const float WalkingAcceleration = .00083007812f * 12;
+        public const float RunningAcceleration = .00083007812f * 32;
+        public const float MaxSpeedX = 0.25859375f;
+        public const int MaxAnimationFPS = 45;
+        #endregion
 
-        public AnimatedEntityTest()
+
+        public PlayerTest()
         {
             SheetName = "Luigi";
             AnimationFPS = 250;
@@ -27,9 +36,87 @@ namespace Minecraft2DRebirth.Screens.TestScreen
             base.Draw(graphics);
         }
 
+        private float runningFrame = WalkingAcceleration;
+        public float xVelocity = 0.0f;
+        private void UpdateX(GameTime gameTime)
+        {
+            float actualAcceleration = 0.0f;
+            if (XMovement > 0) //right
+                //if (Minecraft2D.inputHelper.IsCurPress(Keys.X))
+                //{
+                //    runningFrame += 0.00012f;
+                //    actualAcceleration = Math.Min(runningFrame, RunningAcceleration);
+                //}
+                //else
+                {
+                    actualAcceleration = WalkingAcceleration;
+                }
+            else if (XMovement < 0)
+                //if (Minecraft2D.inputHelper.IsCurPress(Keys.X))
+                //{
+                //    runningFrame += 0.000012f * gameTime.ElapsedGameTime.Milliseconds;
+                //    actualAcceleration = Math.Max(-runningFrame, -RunningAcceleration);
+                //}
+                //else
+                {
+                //runningFrame -= Math.Min(0.000012f * gameTime.ElapsedGameTime.Milliseconds, -WalkingAcceleration);
+                actualAcceleration = -WalkingAcceleration;
+                }
+
+
+            xVelocity = actualAcceleration * gameTime.ElapsedGameTime.Milliseconds;
+
+            if (XMovement > 0) //right
+                xVelocity = Math.Min(xVelocity, MaxSpeedX);
+            else if (XMovement < 0)
+                xVelocity = Math.Max(xVelocity, -MaxSpeedX);
+            //else if(XMovement == 0)
+            else if(XMovement == 0)
+                xVelocity = xVelocity > 0.0f ?
+                    Math.Max(0.0f, xVelocity - Friction * gameTime.ElapsedGameTime.Milliseconds) :
+                    Math.Min(0.0f, xVelocity + Friction * gameTime.ElapsedGameTime.Milliseconds);
+
+
+
+            AnimationFPS = Math.Max((1 / Math.Abs(xVelocity / 4)), MaxAnimationFPS);
+
+            float deltaX = xVelocity * gameTime.ElapsedGameTime.Milliseconds;
+
+            Position = new Vector2(Position.X + deltaX,
+                Position.Y);
+        }
+
+        public void UpdateY(GameTime gameTime)
+        {
+
+        }
+
+        private int XMovement = 0;
+
         public new void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            if (Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
+            {
+                Animating = true;
+                CurrentDirection = Entity.IAnimatedEntity.Direction.Right;
+                XMovement = 1;
+                UpdateX(gameTime);
+            }
+            else if (Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
+            {
+                Animating = true;
+                CurrentDirection = Entity.IAnimatedEntity.Direction.Left;
+                XMovement = -1;
+                UpdateX(gameTime);
+            }
+            else
+            {
+                Animating = false;
+                CurrentFrameIndex = 0; //reset
+                XMovement = 0;
+            }
         }
+
     }
 }

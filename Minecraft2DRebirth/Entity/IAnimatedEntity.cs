@@ -61,8 +61,8 @@ namespace Minecraft2DRebirth.Entity
             Rectangle destinationRectangle = new Rectangle(
                 (int)Position.X,
                 (int)Position.Y,
-                (int)Math.Round(SpriteSize.X * Constants.SpriteScale),
-                (int)Math.Round(SpriteSize.Y * Constants.SpriteScale)
+                (int)Math.Floor(SpriteSize.X * Constants.SpriteScale),
+                (int)Math.Floor(SpriteSize.Y * Constants.SpriteScale)
             );
             var texture = graphics.GetTexture2DByName(SheetName);
             graphics.GetSpriteBatch().Draw(texture, destinationRectangle, sourceRectangle, Color.White, 0f, Vector2.Zero, 

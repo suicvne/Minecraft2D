@@ -11,15 +11,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Minecraft2DRebirth.Screens
 {
-    internal class PhysicsConstants
-    {
-        public const float Friction = 0.00049804687f; //0.00049804687f;
-        public const float WalkingAcceleration = .00083007812f * 4;
-        public const float RunningAcceleration = .00083007812f * 20;
-        public const float MaxSpeedX = 0.65859375f;
-        public const int MaxAnimationFPS = 45;
-    }
-
     public class BlankScreen : IScreen
     {
         public override string ScreenName
@@ -31,13 +22,13 @@ namespace Minecraft2DRebirth.Screens
             internal set { }
         }
 
-        private AnimatedEntityTest TestEntity;
+        public PlayerTest TestEntity;
         private RenderTarget2D renderTarget;
         public Lighted LightsRenderer;
 
         public BlankScreen(Graphics.Graphics graphics)
         {
-            TestEntity = new AnimatedEntityTest();
+            TestEntity = new PlayerTest();
             TestEntity.Animating = false;
 
             renderTarget = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice, 
@@ -49,7 +40,7 @@ namespace Minecraft2DRebirth.Screens
             LightsRenderer.AmbientLight = new Color(20, 20, 20   ); //Pure darkness
             graphics.ResolutionChanged += (sender, e) =>
             {
-                Console.WriteLine($"[DebugScreen] Recreating render targets (New size: {e.Width}x{e.Height}");
+                Console.WriteLine($"[DebugScreen] Recreating render targets (New size: {e.Width}x{e.Height})");
                 renderTarget.Dispose();
                 renderTarget = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice,
                     graphics.ScreenRectangle().Width,
@@ -78,63 +69,11 @@ namespace Minecraft2DRebirth.Screens
             LightsRenderer.BaseScene = renderTarget;
             LightsRenderer.Draw(graphics);
         }
+
         
-        private void UpdateX(GameTime gameTime)
-        {
-            float actualAcceleration = 0.0f;
-            if (TestEntity.CurrentDirection == Entity.IAnimatedEntity.Direction.Right) //right
-                if (Minecraft2D.inputHelper.IsCurPress(Keys.X))
-                    actualAcceleration = PhysicsConstants.RunningAcceleration;
-                else
-                    actualAcceleration = PhysicsConstants.WalkingAcceleration;
-            else if (TestEntity.CurrentDirection == Entity.IAnimatedEntity.Direction.Left)
-                if (Minecraft2D.inputHelper.IsCurPress(Keys.X))
-                    actualAcceleration = -PhysicsConstants.RunningAcceleration;
-                else
-                    actualAcceleration = -PhysicsConstants.WalkingAcceleration;
-
-
-            float xVelocity = actualAcceleration * gameTime.ElapsedGameTime.Milliseconds;
-
-            if (TestEntity.CurrentDirection == Entity.IAnimatedEntity.Direction.Right) //right
-                xVelocity = Math.Min(xVelocity, PhysicsConstants.MaxSpeedX);
-            else if (TestEntity.CurrentDirection == Entity.IAnimatedEntity.Direction.Left)
-                xVelocity = Math.Max(xVelocity, -PhysicsConstants.MaxSpeedX);
-
-            ///Always on ground so, always calculating this
-
-            xVelocity = xVelocity > 0.0f ? 
-                Math.Max(0.0f, xVelocity - PhysicsConstants.Friction * gameTime.ElapsedGameTime.Milliseconds) : 
-                Math.Min(0.0f, xVelocity + PhysicsConstants.Friction * gameTime.ElapsedGameTime.Milliseconds);
-
-            TestEntity.AnimationFPS = Math.Max((1 / Math.Abs(xVelocity / 4)), PhysicsConstants.MaxAnimationFPS);
-
-            float deltaX = xVelocity * gameTime.ElapsedGameTime.Milliseconds;
-
-            TestEntity.Position = new Vector2(TestEntity.Position.X + deltaX,
-                TestEntity.Position.Y);
-        }
 
         public override void Update(GameTime gameTime)
         {
-            if (Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
-            {
-                TestEntity.Animating = true;
-                TestEntity.CurrentDirection = Entity.IAnimatedEntity.Direction.Right;
-                UpdateX(gameTime);
-            }
-            else if (Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
-            {
-                TestEntity.Animating = true;
-                TestEntity.CurrentDirection = Entity.IAnimatedEntity.Direction.Left;
-                UpdateX(gameTime);
-            }
-            else
-            {
-                TestEntity.Animating = false;
-                TestEntity.CurrentFrameIndex = 0; //reset
-            }
-
             if(Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.R)) //modify R
             {
                 Color light = LightsRenderer.CursorLightColor;

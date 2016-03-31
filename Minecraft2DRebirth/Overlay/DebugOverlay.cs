@@ -43,6 +43,8 @@ namespace Minecraft2DRebirth.Overlay
                     $"Cursor Light Color: " + debugScreen.LightsRenderer.CursorLightColor.ToString(), new Vector2(0, 64), Color.Black);
                 graphics.GetSpriteBatch().DrawString(fallbackFont,
                     $"Lights: " + debugScreen.LightsRenderer.Lights.Count(), new Vector2(0, 64 + 16), Color.Black);
+                graphics.GetSpriteBatch().DrawString(fallbackFont,
+                    $"X-Velocity: " + debugScreen.TestEntity.xVelocity, new Vector2(0, 64 + 32), Color.Black);
             }
 
             graphics.GetSpriteBatch().DrawString(fallbackFont, $"Mouse Position: {Minecraft2D.inputHelper.MousePosition.ToString()}; Inside: {Minecraft2D.inputHelper.IsMouseInsideWindow()}"
