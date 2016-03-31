@@ -49,6 +49,7 @@ namespace Minecraft2DRebirth
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             this.IsMouseVisible = true;
+			this.Window.AllowUserResizing = true;
 
             this.Window.ClientSizeChanged += (sender, e) =>
             {

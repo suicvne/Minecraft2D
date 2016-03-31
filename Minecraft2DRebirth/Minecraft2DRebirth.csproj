@@ -114,7 +114,5 @@
     <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-xcopy /s /y "C:\Users\Mike\Documents\GitHub\Minecraft2D\packages\NLua.1.3.2.1\lib\native\*.*" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
