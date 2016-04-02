@@ -26,19 +26,10 @@ namespace Minecraft2DRebirth
         /// The name of the map.
         /// </summary>
         public string MapName;
-
-        public static int ToBlocks(this int games)
-        {
-            return (int)Math.Floor((double)(games / Constants.TileSize));
-        }
-
-        public static int ToGame(this int tiles)
-        {
-            return tiles * Constants.TileSize;
-        }
+        
     }
 
-    interface IMap
+    public interface IMap
     {
         ITile[,] TileMap { get; set; }
         MapMetadata Metadata { get; set; }

@@ -25,6 +25,13 @@ namespace Minecraft2DRebirth.Entity
 
         private Vector2 _Position;
         public Vector2 Position { get { return _Position; } set { _Position = value; } }
+
+        private Rectangle _Hitbox;
+        public Rectangle Hitbox
+        {
+            get { return _Hitbox; }
+            set { _Hitbox = value; }
+        }
         #endregion
 
         public Direction CurrentDirection { get; set; } = Direction.Right;

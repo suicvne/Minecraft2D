@@ -15,7 +15,7 @@ namespace Minecraft2DRebirth.Screens
 {
     public class BlankScreen : IScreen
     {
-        private BasicLightableScene Scene;
+        private BasicLightableSceneWithMap Scene;
         private AnnoyingLightEntityTest FakeSunEntity;
 
         public override string ScreenName
@@ -34,22 +34,12 @@ namespace Minecraft2DRebirth.Screens
             TestEntity = new PlayerTest();
             TestEntity.Animating = false;
 
-            Scene = new BasicLightableScene(graphics);
-            Scene.AmbientLight = new Color(20, 20, 20);
+            Scene = new BasicLightableSceneWithMap(graphics);
+            Scene.AmbientLight = Color.White;//new Color(20, 20, 20);
+            TestEntity.LightSize = 0f;
             Scene.AddEntity(TestEntity); //player entity
-            FakeSunEntity = new AnnoyingLightEntityTest();
-            Scene.AddEntity(FakeSunEntity); //lol
-
-            //var screen = graphics.ScreenRectangle();
-            //screen.Width *= Constants.TileSize;
-            //screen.Height *= Constants.TileSize;
-            //screen.X -= (screen.Width / 2);
-            //screen.Y -= (screen.Height / 2);
-            //Scene.AddStaticLight(new LightSource
-            //{
-            //    Color = Color.White,
-            //    Size = screen
-            //});
+            //FakeSunEntity = new AnnoyingLightEntityTest();
+            //Scene.AddEntity(FakeSunEntity); //lol
         }
 
         public override void Draw(Graphics.Graphics graphics)
@@ -64,6 +54,7 @@ namespace Minecraft2DRebirth.Screens
         public override void Update(GameTime gameTime)
         {
             Scene.Update(gameTime);
+            /*
             GameTime += (uint)(gameTime.ElapsedGameTime.Milliseconds * IncrementMultiplier);
             Angle += (int)(gameTime.ElapsedGameTime.Milliseconds);
             FakeSunEntity.Angle = (Angle / 78);
@@ -76,6 +67,7 @@ namespace Minecraft2DRebirth.Screens
             int rgb = (int)Math.Min(GameTime / (255 / 2), 255);
             var colour = new Color(rgb, rgb, rgb);
             Scene.AmbientLight = new Color(rgb, rgb, rgb);
+            */
         }
     }
 }
