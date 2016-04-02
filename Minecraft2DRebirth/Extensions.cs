@@ -85,6 +85,10 @@ namespace Minecraft2DRebirth
         {
             return (degrees * Math.PI) / 180;
         }
+        public static double ToDegrees(this double rads)
+        {
+            return (rads * 180) / Math.PI;
+        }
 
         public static Rectangle ToRectangle(this Viewport vp)
         {

@@ -13,6 +13,7 @@ namespace Minecraft2DRebirth.Scenes
 {
     public class BasicLightableScene : ILightableScene
     {
+        #region Header implementation
         private Color _AmbientLight = Color.White; //fully lit.
         public Color AmbientLight
         {
@@ -73,7 +74,17 @@ namespace Minecraft2DRebirth.Scenes
         {
             get { return _StaticLights; } set { _StaticLights = (List<LightSource>)value; }
         }
+        #endregion
 
+        public void AddEntity(IEntity entity)
+        {
+            _Entities.Add(entity);
+        }
+
+        public void AddStaticLight(LightSource light)
+        {
+            _StaticLights.Add(light);
+        }
 
         public BasicLightableScene(Graphics.Graphics graphics)
         {

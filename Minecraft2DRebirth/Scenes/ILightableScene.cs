@@ -1,4 +1,5 @@
-﻿using Minecraft2DRebirth.Graphics;
+﻿using Minecraft2DRebirth.Entity;
+using Minecraft2DRebirth.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,9 @@ namespace Minecraft2DRebirth.Scenes
         /// Defines static lights in the scene.
         /// </summary>
         IEnumerable<LightSource> StaticLights { get; set; }
+
+        void AddStaticLight(LightSource light);
+        void AddEntity(IEntity entity);
 
         /*
          Note to readers.

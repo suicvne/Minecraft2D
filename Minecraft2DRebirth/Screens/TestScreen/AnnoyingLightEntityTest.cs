@@ -11,7 +11,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
     public class AnnoyingLightEntityTest : IDynamicLightEntity
     {
         #region Lighting
-        public Color LightColor { get { return new Color(200, 100, 100); } set { } }
+        public Color LightColor { get { return new Color(255, 165, 0); } set { } }
         public Vector2 LightOffset { get { return Vector2.Zero; } set { } }
         public float LightSize { get { return 0.75f; } set { } }
         #endregion
@@ -22,7 +22,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
 
         public AnnoyingLightEntityTest()
         {
-            Position = new Vector2(0, 0);
+            Position = new Vector2(300, 100);
         }
 
         public void Draw(Graphics.Graphics graphics)
@@ -30,18 +30,20 @@ namespace Minecraft2DRebirth.Screens.TestScreen
             /*Nothing :D*/
         }
 
-        private double Angle = 0d;
-        private const double Amplitude = 6;
+        public double Angle = 0d;
+        private const double Amplitude = 1;
         private const double XMovementConstant = 0.85948;
         public void Update(GameTime gameTime)
         {
             //Angle += 2 * (gameTime.ElapsedGameTime.Milliseconds / 8);
-            Angle += 2;
+            //Angle += 2;
             var position = Position;
             position.Y += (float)(Amplitude * Math.Sin(Angle.ToRadians()));
-            position.X += (float)(XMovementConstant * gameTime.ElapsedGameTime.Milliseconds);
-            if (position.X > 900)
-                position.X = -200;
+            position.X += (float)(Amplitude * Math.Cos(Angle.ToRadians()));
+            ////position.X = (float)Angle.ToRadians().ToDegrees();
+            //position.X += (float)(XMovementConstant * gameTime.ElapsedGameTime.Milliseconds);
+            //if (position.X > 900)
+            //    position.X = -200;
 
             Position = position;
         }

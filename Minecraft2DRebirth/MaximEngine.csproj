@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{0A8F3460-66E4-4B8E-A991-5611559C7E39}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Minecraft2DRebirth</RootNamespace>
     <AssemblyName>Minecraft2DRebirth</AssemblyName>
@@ -40,6 +40,9 @@
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\IControl.cs" />
@@ -53,7 +56,11 @@
     <Compile Include="Graphics\ILighted.cs" />
     <Compile Include="Graphics\Lighted.cs" />
     <Compile Include="Graphics\SkinRegion.cs" />
+    <Compile Include="Maps\IMap.cs" />
     <Compile Include="Input\Input.cs" />
+    <Compile Include="Maps\IMinecraftBlock.cs" />
+    <Compile Include="Maps\ITile.cs" />
+    <Compile Include="Maps\MinecraftBlock.cs" />
     <Compile Include="Minecraft2D.cs" />
     <Compile Include="Native\OperatingSystemDetermination.cs" />
     <Compile Include="Overlay\IOverlay.cs" />

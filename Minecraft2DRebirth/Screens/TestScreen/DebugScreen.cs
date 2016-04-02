@@ -13,12 +13,10 @@ using Minecraft2DRebirth.Scenes;
 
 namespace Minecraft2DRebirth.Screens
 {
-    //TODO: Create an 'IScene' interface for a basic 2D scene involving entities
-    //TODO: Create an 'ILightableScene' interface implementing everything in 'ILight' for direct integration with lighting.
-
     public class BlankScreen : IScreen
     {
         private BasicLightableScene Scene;
+        private AnnoyingLightEntityTest FakeSunEntity;
 
         public override string ScreenName
         {
@@ -38,70 +36,46 @@ namespace Minecraft2DRebirth.Screens
 
             Scene = new BasicLightableScene(graphics);
             Scene.AmbientLight = new Color(20, 20, 20);
-            ((List<IEntity>)Scene.Entities).Add(TestEntity); //player entity
-            ((List<IEntity>)Scene.Entities).Add(new AnnoyingLightEntityTest()); //lol
+            Scene.AddEntity(TestEntity); //player entity
+            FakeSunEntity = new AnnoyingLightEntityTest();
+            Scene.AddEntity(FakeSunEntity); //lol
 
-            //LightsRenderer.AmbientLight = new Color(20, 20, 20   ); //Pure darkness
-            //graphics.ResolutionChanged += (sender, e) =>
+            //var screen = graphics.ScreenRectangle();
+            //screen.Width *= Constants.TileSize;
+            //screen.Height *= Constants.TileSize;
+            //screen.X -= (screen.Width / 2);
+            //screen.Y -= (screen.Height / 2);
+            //Scene.AddStaticLight(new LightSource
             //{
-            //    Console.WriteLine($"[DebugScreen] Recreating render targets (New size: {e.Width}x{e.Height})");
-            //    renderTarget.Dispose();
-            //    renderTarget = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice,
-            //        graphics.ScreenRectangle().Width,
-            //        graphics.ScreenRectangle().Height
-            //    );
-            //};
+            //    Color = Color.White,
+            //    Size = screen
+            //});
         }
 
         public override void Draw(Graphics.Graphics graphics)
         {
             Scene.Draw(graphics);
         }
-        
+
+        private uint GameTime = 0;
+        private int Angle = 270;
+        private const uint MaxGameTime = 24000;
+        private int IncrementMultiplier = 1;
         public override void Update(GameTime gameTime)
         {
             Scene.Update(gameTime);
-            //if(Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.R)) //modify R
-            //{
-            //    Color light = LightsRenderer.CursorLightColor;
-            //    light.R += 1;
-            //    if (light.R > 255)
-            //        light.R = 0;
+            GameTime += (uint)(gameTime.ElapsedGameTime.Milliseconds * IncrementMultiplier);
+            Angle += (int)(gameTime.ElapsedGameTime.Milliseconds);
+            FakeSunEntity.Angle = (Angle / 78);
 
-            //    LightsRenderer.CursorLightColor = light;
-            //}
-            //if (Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.G)) //modify G
-            //{
-            //    Color light = LightsRenderer.CursorLightColor;
-            //    light.G += 1;
-            //    if (light.G > 255)
-            //        light.G = 0;
+            if (GameTime > MaxGameTime)
+                IncrementMultiplier = -1;
+            else if (GameTime == 0)
+                IncrementMultiplier = 1;
 
-            //    LightsRenderer.CursorLightColor = light;
-            //}
-            //if (Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.B)) //modify B
-            //{
-            //    Color light = LightsRenderer.CursorLightColor;
-            //    light.B += 1;
-            //    if (light.B > 255)
-            //        light.B = 0;
-
-            //    LightsRenderer.CursorLightColor = light;
-            //}
-
-            //if(Minecraft2D.inputHelper.IsNewPress(Input.MouseButtons.LeftButton) && Minecraft2D.inputHelper.IsMouseInsideWindow())
-            //{
-            //    var point = Minecraft2D.inputHelper.MousePosition;
-            //    point.X -= (512 / 2);
-            //    point.Y -= (512 / 2);
-
-            //    ((List<LightSource>)LightsRenderer.Lights).Add(LightSource.MakeLightSource(point.ToPoint(), LightsRenderer.CursorLightColor));
-            //}
-
-            //if (Minecraft2D.inputHelper.IsNewPress(Keys.Space))
-            //    LightsRenderer.RenderLights = !LightsRenderer.RenderLights;
-
-            //TestEntity.Update(gameTime);
+            int rgb = (int)Math.Min(GameTime / (255 / 2), 255);
+            var colour = new Color(rgb, rgb, rgb);
+            Scene.AmbientLight = new Color(rgb, rgb, rgb);
         }
     }
 }
