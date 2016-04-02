@@ -61,6 +61,8 @@
     <Compile Include="Maps\IMinecraftBlock.cs" />
     <Compile Include="Maps\ITile.cs" />
     <Compile Include="Maps\MinecraftBlock.cs" />
+    <Compile Include="Maps\MinecraftMap.cs" />
+    <Compile Include="Maps\StoneBlock.cs" />
     <Compile Include="Minecraft2D.cs" />
     <Compile Include="Native\OperatingSystemDetermination.cs" />
     <Compile Include="Overlay\IOverlay.cs" />

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Minecraft2DRebirth.Maps
 {
+    // TODO: scripting.
+
     /// <summary>
     /// Defines a default air block.
     /// </summary>
@@ -74,8 +71,8 @@ namespace Minecraft2DRebirth.Maps
         public float TopSide() { return Position.Y; }
         public float BottomSide() { return Position.Y + Constants.TileSize; }
 
-        public void Draw(Graphics.Graphics graphics) { }
+        public virtual void Draw(Graphics.Graphics graphics) { }
 
-        public void Update(GameTime gameTime) { }
+        public virtual void Update(GameTime gameTime) { }
     }
 }

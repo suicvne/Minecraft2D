@@ -11,6 +11,7 @@ namespace Minecraft2DRebirth.Entity
     {
         Vector2 Position { get; set; }
         string EntityName { get; set; }
+        Rectangle Hitbox { get; set; }
 
         void Draw(Graphics.Graphics graphics);
         void Update(GameTime gameTime);

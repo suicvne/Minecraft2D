@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Minecraft2DRebirth.Maps
 {
-    interface ITile
+    public interface ITile
     {
         /// <summary>
         /// The name of the tile.
