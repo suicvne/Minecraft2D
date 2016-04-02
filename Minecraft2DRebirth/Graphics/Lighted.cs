@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Minecraft2DRebirth.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,6 +117,17 @@ namespace Minecraft2DRebirth.Graphics
 
         public void Draw(Graphics graphics)
         {
+            throw new NotImplementedException("Use 2 null overloads instead.");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="graphics"></param>
+        /// <param name="singleEntity">A single entity to act as a single use dynamic light.</param>
+        /// <param name="entities">A list of dynamic lights.</param>
+        public void Draw(Graphics graphics, IDynamicLightEntity singleEntity = null, IEnumerable<IDynamicLightEntity> entities = null)
+        {
             if (BaseScene == null)
                 throw new Exception("Valid fully lit scene was not given!");
 
@@ -129,6 +141,31 @@ namespace Minecraft2DRebirth.Graphics
                 graphics.GetSpriteBatch().Draw(LightScene, graphics.ScreenRectangle(), Color.White);
 
             graphics.GetSpriteBatch().End();
+        }
+
+        public void DrawLightOnEntity(Graphics graphics, ref IDynamicLightEntity entity)
+        {
+            graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(_LightScene);
+            
+            graphics.GetSpriteBatch().Begin(blendState: BlendState.Additive);
+
+            var lightDrawPoint = entity.Position.ToRectangle();
+            if (entity.LightOffset != null) //offset the light
+            {
+                lightDrawPoint.X += (int)entity.LightOffset.X;
+                lightDrawPoint.Y += (int)entity.LightOffset.Y;
+            }
+            if (entity.LightSize > 1.0f)
+            {
+                lightDrawPoint.Width = (int)(entity.LightSize * lightDrawPoint.Width);
+                lightDrawPoint.Height = (int)(entity.LightSize * lightDrawPoint.Height);
+            }
+            graphics.GetSpriteBatch().Draw(graphics.GetTexture2DByName("circle"),
+                lightDrawPoint,
+                entity.LightColor != null ? entity.LightColor : Color.White);
+
+            graphics.GetSpriteBatch().End();
+            graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(null);
         }
     }
 }

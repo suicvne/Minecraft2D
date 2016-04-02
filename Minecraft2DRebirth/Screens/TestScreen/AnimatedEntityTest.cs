@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Minecraft2DRebirth.Entity;
+using Minecraft2DRebirth.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,38 @@ using System.Threading.Tasks;
 
 namespace Minecraft2DRebirth.Screens.TestScreen
 {
-    public class PlayerTest : IAnimatedEntity
+    public class PlayerTest : IAnimatedEntity, IDynamicLightEntity
     {
+        #region Dynamic Light Stuff
+        public Color LightColor
+        {
+            get
+            {
+                return Color.White; 
+            }
+            set { }
+        }
+
+        public Vector2 LightOffset
+        {
+            get
+            {
+                return new Vector2(SpriteSize.X / 2, SpriteSize.Y / 2);
+            }
+            set { }
+        }
+
+        public float LightSize
+        {
+            get
+            {
+                return 1.0f;
+            }
+            set { }
+        }
+        #endregion
+
+
         #region Physics "Constants"
         public static float Friction = 0.000049804687f; //0.00049804687f;
         public const float WalkingAcceleration = .00083007812f * 12;
@@ -92,6 +123,8 @@ namespace Minecraft2DRebirth.Screens.TestScreen
         }
 
         private int XMovement = 0;
+
+        
 
         public new void Update(GameTime gameTime)
         {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Minecraft2DRebirth.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

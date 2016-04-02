@@ -8,9 +8,13 @@ using Minecraft2DRebirth.Native;
 using Minecraft2DRebirth.Screens.TestScreen;
 using Minecraft2DRebirth.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Minecraft2DRebirth.Entity;
 
 namespace Minecraft2DRebirth.Screens
 {
+    //TODO: Create an 'IScene' interface for a basic 2D scene involving entities
+    //TODO: Create an 'ILightableScene' interface implementing everything in 'ILight' for direct integration with lighting.
+
     public class BlankScreen : IScreen
     {
         public override string ScreenName
@@ -67,7 +71,10 @@ namespace Minecraft2DRebirth.Screens
             graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(null);
 
             LightsRenderer.BaseScene = renderTarget;
-            LightsRenderer.Draw(graphics);
+            LightsRenderer.Draw(graphics, null, null);
+
+            var entityAsInterface = (IDynamicLightEntity)TestEntity;
+            //LightsRenderer.DrawLightOnEntity(graphics, ref entityAsInterface);
         }
 
         

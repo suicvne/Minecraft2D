@@ -391,7 +391,7 @@ namespace Minecraft2DRebirth.Input
                 actualBounds.X = game.Window.Position.X;
                 actualBounds.Y = game.Window.Position.Y;
                 pos.X += actualBounds.X; //offsettings
-                pos.Y += actualBounds.Y; //TODO: check if works fine on linux?
+                pos.Y += actualBounds.Y;
                 return actualBounds.Contains(pos);
             }
             return false;

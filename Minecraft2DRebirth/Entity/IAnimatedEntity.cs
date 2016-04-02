@@ -11,12 +11,21 @@ namespace Minecraft2DRebirth.Entity
 {
     public class IAnimatedEntity : IEntity
     {
+        //TODO: abstract this
         public enum Direction
         {
             Left,
             Right,
             Neutral
         }
+
+        #region Interface implementation
+        private string _EntityName;
+        public string EntityName { get { return _EntityName; } set { _EntityName = value; } }
+
+        private Vector2 _Position;
+        public Vector2 Position { get { return _Position; } set { _Position = value; } }
+        #endregion
 
         public Direction CurrentDirection { get; set; } = Direction.Right;
 
@@ -49,7 +58,7 @@ namespace Minecraft2DRebirth.Entity
 
         private int ElapsedTime;
 
-        public override void Draw(Graphics.Graphics graphics)
+        public void Draw(Graphics.Graphics graphics)
         {
             Rectangle sourceRectangle = new Rectangle
             (
@@ -70,7 +79,7 @@ namespace Minecraft2DRebirth.Entity
             0);
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             if (Animating)
             {

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25008.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minecraft2D (MonoGame)", "Minecraft2D\2DCraft Mono Game\Minecraft2D (MonoGame).csproj", "{DB7D2BB7-13D5-4280-8F31-A20D96CA56B6}"
 EndProject
@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaveConverter", "SaveConver
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNBExporter", "XNBExporter\XNBExporter.csproj", "{94836497-3659-405D-A08C-A095C60EED23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minecraft2DRebirth", "Minecraft2DRebirth\Minecraft2DRebirth.csproj", "{0A8F3460-66E4-4B8E-A991-5611559C7E39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaximEngine", "Minecraft2DRebirth\MaximEngine.csproj", "{0A8F3460-66E4-4B8E-A991-5611559C7E39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

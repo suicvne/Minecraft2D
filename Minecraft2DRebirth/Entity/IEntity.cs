@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Minecraft2DRebirth.Entity
 {
-    public abstract class IEntity
+    public interface IEntity
     {
-        public Vector2 Position { get; set; }
-        public string EntityName { get; set; }
+        Vector2 Position { get; set; }
+        string EntityName { get; set; }
 
-        public abstract void Draw(Graphics.Graphics graphics);
-        public abstract void Update(GameTime gameTime);
+        void Draw(Graphics.Graphics graphics);
+        void Update(GameTime gameTime);
     }
 }
