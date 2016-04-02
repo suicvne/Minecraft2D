@@ -133,7 +133,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
                     light.color);
             });
 
-            var point = Minecraft2D.inputHelper.MousePosition.ToPoint();
+            var point = Minecraft2D.InputHelper.MousePosition.ToPoint();
             point.X -= (graphics.GetTexture2DByName("circle").Width / 2);
             point.Y -= (graphics.GetTexture2DByName("circle").Height / 2);
 
@@ -159,12 +159,12 @@ namespace Minecraft2DRebirth.Screens.TestScreen
 
         public override void Update(GameTime gameTime)
         {
-            if (Minecraft2D.inputHelper.IsNewPress(Keys.Space) && Minecraft2D.inputHelper.IsMouseInsideWindow())
+            if (Minecraft2D.InputHelper.IsNewPress(Keys.Space) && Minecraft2D.InputHelper.IsMouseInsideWindow())
                 RenderLight = !RenderLight;
 
-            if(Minecraft2D.inputHelper.IsNewPress(Input.MouseButtons.LeftButton))
+            if(Minecraft2D.InputHelper.IsNewPress(Input.MouseButtons.LeftButton))
             {
-                var point = Minecraft2D.inputHelper.MousePosition.ToPoint();
+                var point = Minecraft2D.InputHelper.MousePosition.ToPoint();
                 point.X -= 50;
                 point.Y -= 50;
                 Lights.Add(QuadLightSource.MakeWithColor(point, new Color(255, 255, 255)));

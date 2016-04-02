@@ -28,7 +28,7 @@ namespace Minecraft2DRebirth
         public static Vector2 OffsetForMouseInput(this Vector2 vector)
         {
             Vector2 output = vector;
-            Vector2 windowPosition = Minecraft2D.inputHelper.game.Window.Position.ToVector2();
+            Vector2 windowPosition = Minecraft2D.InputHelper.game.Window.ClientBounds.ToVector2();
 
             var graphicsDevice = Minecraft2D.graphics.GetGraphicsDeviceManager().GraphicsDevice;
             if (!OperatingSystemDetermination.IsOnUnix())

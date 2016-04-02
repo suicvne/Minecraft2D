@@ -37,7 +37,7 @@ namespace Minecraft2DRebirth.Screens
 
             testButton3.Clicked += (sender, e) =>
             {
-                Minecraft2D.inputHelper.CallExit();
+                Minecraft2D.InputHelper.CallExit();
             };
 
             SplashLabel splashLabel = new SplashLabel();

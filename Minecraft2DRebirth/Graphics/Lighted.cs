@@ -103,7 +103,7 @@ namespace Minecraft2DRebirth.Graphics
 #if DEBUG
             if (DrawLightAtCursor)
             {
-                var point = Minecraft2D.inputHelper.MousePosition;
+                var point = Minecraft2D.InputHelper.MousePosition;
                 point.X -= graphics.GetTexture2DByName("circle").Width / 2;
                 point.Y -= graphics.GetTexture2DByName("circle").Height / 2;
                 graphics.GetSpriteBatch().Draw(graphics.GetTexture2DByName("circle"), point, CursorLightColor);

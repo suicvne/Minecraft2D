@@ -80,7 +80,7 @@ namespace Minecraft2DRebirth.Controls
         {
             if (Enabled == true)
             {
-                Rectangle mouseBounds = Minecraft2D.inputHelper.MousePosition.OffsetForMouseInput().ToRectangle(Constants.CursorSize);
+                Rectangle mouseBounds = Minecraft2D.InputHelper.MousePosition.OffsetForMouseInput().ToRectangle(Constants.CursorSize);
 
                 if (mouseBounds.Intersects(PositionSize))
                 {
@@ -97,7 +97,7 @@ namespace Minecraft2DRebirth.Controls
                         ScaleFactor = 1f;
                 }
 
-                if (Selected && Minecraft2D.inputHelper.IsNewPress(MouseButtons.LeftButton))
+                if (Selected && Minecraft2D.InputHelper.IsNewPress(MouseButtons.LeftButton))
                 {
                     //MainGame.CustomContentManager.GetSoundEffect("click").Play();
                     if (Clicked != null)

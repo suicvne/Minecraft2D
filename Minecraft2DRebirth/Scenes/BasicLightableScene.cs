@@ -87,20 +87,26 @@ namespace Minecraft2DRebirth.Scenes
             BaseScene = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice,
                 width, height);
 
-            graphics.ResolutionChanged += (sender, e) =>
+            _Entities = new List<IEntity>();
+            _StaticLights = new List<LightSource>();
+
+            if (!Minecraft2D.ScaleGame)
             {
-                Console.WriteLine("[BasicLightableScene] Destroying and recreating render targets.");
+                graphics.ResolutionChanged += (sender, e) =>
+                {
+                    Console.WriteLine("[BasicLightableScene] Destroying and recreating render targets.");
 
-                width = graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Width;
-                height = graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Height;
-                LightScene.Dispose();
-                BaseScene.Dispose();
+                    width = graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Width;
+                    height = graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Height;
+                    LightScene.Dispose();
+                    BaseScene.Dispose();
 
-                LightScene = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice,
-                    width, height);
-                BaseScene = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice,
-                    width, height);
-            };
+                    LightScene = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice,
+                        width, height);
+                    BaseScene = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice,
+                        width, height);
+                };
+            }
         }
 
         /// <summary>
@@ -130,9 +136,9 @@ namespace Minecraft2DRebirth.Scenes
         /// <param name="graphics"></param>
         private void DrawLights(Graphics.Graphics graphics)
         {
-            graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(BaseScene);
+            graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(LightScene);
             graphics.GetGraphicsDeviceManager().GraphicsDevice.Clear(AmbientLight);
-            graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+            graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 
             var texture = graphics.GetTexture2DByName("circle");
 
@@ -144,26 +150,29 @@ namespace Minecraft2DRebirth.Scenes
             });
 
             //The dynamic lights
-            _Entities.ForEach(entity =>
+            foreach(var entity in _Entities.Where(x=>x is IDynamicLightEntity))
             {
                 if(entity is IDynamicLightEntity)
                 {
                     var entityAsLight = (IDynamicLightEntity)entity;
                     var drawingPoint = entityAsLight.Position.ToRectangle();
-                    if(entityAsLight.LightOffset != null)
-                    {
-                        drawingPoint.X += (int)entityAsLight.LightOffset.X;
-                        drawingPoint.Y += (int)entityAsLight.LightOffset.Y;
-                    }
-                    if(entityAsLight.LightSize > 1.0f)
+                    drawingPoint.Width = texture.Width;
+                    drawingPoint.Height = texture.Height;
+                    if(entityAsLight.LightSize != 1.0f)
                     {
                         drawingPoint.Width = (int)(drawingPoint.Width * entityAsLight.LightSize);
                         drawingPoint.Height = (int)(drawingPoint.Height * entityAsLight.LightSize);
                     }
+                    
+                    if (entityAsLight.LightOffset != null)
+                    {
+                        drawingPoint.X += (int)(entityAsLight.LightOffset.X - (drawingPoint.Width / 2));
+                        drawingPoint.Y += (int)(entityAsLight.LightOffset.Y - (drawingPoint.Height / 2));
+                    }
 
                     graphics.GetSpriteBatch().Draw(texture, drawingPoint, entityAsLight.LightColor);
                 }
-            });
+            }
 
             graphics.GetSpriteBatch().End();
 
@@ -175,17 +184,16 @@ namespace Minecraft2DRebirth.Scenes
             DrawBaseScene(graphics);
             DrawLights(graphics);
 
-            graphics.GetGraphicsDeviceManager().GraphicsDevice.Clear(Color.CornflowerBlue);
-            graphics.GetSpriteBatch().Begin(blendState: Lighted.Multiply);
+            graphics.GetGraphicsDeviceManager().GraphicsDevice.Clear(Color.White);
+            graphics.GetSpriteBatch().Begin(blendState: Lighted.Multiply, samplerState: SamplerState.PointClamp);
 
+            var screenRect = graphics.ScreenRectangle();
             graphics.GetSpriteBatch().Draw(BaseScene, graphics.ScreenRectangle(), Color.White);
 
             if(RenderLights)
                 graphics.GetSpriteBatch().Draw(LightScene, graphics.ScreenRectangle(), Color.White);
 
             graphics.GetSpriteBatch().End();
-
-            throw new NotImplementedException();
         }
 
         public void Update(GameTime gameTime)

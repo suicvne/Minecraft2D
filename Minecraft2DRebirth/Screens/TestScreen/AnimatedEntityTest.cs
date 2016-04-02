@@ -35,7 +35,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
         {
             get
             {
-                return 1.0f;
+                return 0.35f;
             }
             set { }
         }
@@ -129,14 +129,14 @@ namespace Minecraft2DRebirth.Screens.TestScreen
         public new void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
+            if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
             {
                 Animating = true;
                 CurrentDirection = Entity.IAnimatedEntity.Direction.Right;
                 XMovement = 1;
                 UpdateX(gameTime);
             }
-            else if (Minecraft2D.inputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
+            else if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
             {
                 Animating = true;
                 CurrentDirection = Entity.IAnimatedEntity.Direction.Left;

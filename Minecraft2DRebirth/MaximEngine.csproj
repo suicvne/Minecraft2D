@@ -65,6 +65,7 @@
     <Compile Include="Scenes\ILightableScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
     <Compile Include="Screens\TestScreen\AnimatedEntityTest.cs" />
+    <Compile Include="Screens\TestScreen\AnnoyingLightEntityTest.cs" />
     <Compile Include="Screens\TestScreen\DebugScreen.cs" />
     <Compile Include="Screens\IScreen.cs" />
     <Compile Include="Screens\ScreenManager.cs" />

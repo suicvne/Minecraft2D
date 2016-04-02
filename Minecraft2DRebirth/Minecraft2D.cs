@@ -41,7 +41,12 @@ namespace Minecraft2DRebirth
 
         #region My shit
         public static Graphics.Graphics graphics;
-        public static InputHelper inputHelper;
+        public static InputHelper InputHelper;
+
+        /// <summary>
+        /// If true, the game will scale its default resolution to match the current vs. updating screen bounds.
+        /// </summary>
+        public static bool ScaleGame { get; set; } = true;
         #endregion
 
         public Minecraft2D()
@@ -78,7 +83,7 @@ namespace Minecraft2DRebirth
             graphics = new Graphics.Graphics(this, _spriteBatch, this.Content, _graphics);
             graphics.LoadContent();
 
-            inputHelper = new InputHelper(this); //this will not copy. my C++ instincts are kicking in ;)
+            InputHelper = new InputHelper(this); //this will not copy. my C++ instincts are kicking in ;)
 #if DEBUG
             graphics.DebugModeStuff();
 #endif
@@ -92,7 +97,7 @@ namespace Minecraft2DRebirth
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             base.Update(gameTime);
-            inputHelper.Update();
+            InputHelper.Update();
             graphics.Update(gameTime);
         }
 

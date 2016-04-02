@@ -41,7 +41,8 @@ namespace Minecraft2DRebirth.Input
         /// </summary>
         public void CallExit()
         {
-            game.Exit();
+            //game.Exit();
+            game.Dispose();
         }
 
         /// <summary>
@@ -388,8 +389,8 @@ namespace Minecraft2DRebirth.Input
                 Rectangle actualBounds = new Rectangle();
                 actualBounds.Width = game.GraphicsDevice.Viewport.Width;
                 actualBounds.Height = game.GraphicsDevice.Viewport.Height;
-                actualBounds.X = game.Window.Position.X;
-                actualBounds.Y = game.Window.Position.Y;
+                actualBounds.X = game.Window.ClientBounds.X;
+                actualBounds.Y = game.Window.ClientBounds.Y;
                 pos.X += actualBounds.X; //offsettings
                 pos.Y += actualBounds.Y;
                 return actualBounds.Contains(pos);
