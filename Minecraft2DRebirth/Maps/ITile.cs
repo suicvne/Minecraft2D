@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Minecraft2DRebirth.Maps
 {
-    public interface ITile : IEntity
+    public interface ITile : IAnimatedEntity
     {
         /// <summary>
         /// The name of the tile.

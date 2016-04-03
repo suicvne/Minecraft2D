@@ -24,7 +24,7 @@ namespace Minecraft2DRebirth.Scenes
         /// <summary>
         /// All of the entities in the scene.
         /// </summary>
-        IEnumerable<IEntity> Entities { get; set; }
+        IEnumerable<IAnimatedEntity> Entities { get; set; }
         
         IScreen Parent { get; set; }
 

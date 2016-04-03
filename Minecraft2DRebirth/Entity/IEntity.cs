@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Minecraft2DRebirth.Entity
 {
-    public interface IEntity
+    public interface IAnimatedEntity
     {
         Vector2 Position { get; set; }
+        Vector2 SpriteSize { get; set; }
         string EntityName { get; set; }
         Rectangle Hitbox { get; set; }
 

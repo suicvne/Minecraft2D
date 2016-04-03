@@ -20,7 +20,7 @@ namespace Minecraft2DRebirth.Scenes
         IEnumerable<LightSource> StaticLights { get; set; }
 
         void AddStaticLight(LightSource light);
-        void AddEntity(IEntity entity);
+        void AddEntity(IAnimatedEntity entity);
 
         /*
          Note to readers.

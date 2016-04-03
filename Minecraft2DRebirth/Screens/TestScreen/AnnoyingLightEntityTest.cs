@@ -19,6 +19,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
         public Vector2 Position { get; set; }
         public string EntityName { get; set; } = "Annoying Light";
         public Rectangle Hitbox { get; set; } = Rectangle.Empty;
+        public Vector2 SpriteSize { get; set; } = Vector2.Zero;
         #endregion
 
         public AnnoyingLightEntityTest()

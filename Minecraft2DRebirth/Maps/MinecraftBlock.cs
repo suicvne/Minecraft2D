@@ -23,6 +23,8 @@ namespace Minecraft2DRebirth.Maps
             }
         }
 
+        public Vector2 SpriteSize { get; set; }
+
         public float Hardness { get; set; }
 
         public bool InBackground {get; set;}

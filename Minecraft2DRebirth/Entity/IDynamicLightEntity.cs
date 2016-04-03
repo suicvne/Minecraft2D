@@ -11,7 +11,7 @@ namespace Minecraft2DRebirth.Entity
     /// An entity that is basically a normal entity but can create light.
     /// Will define extra goodies like a light color, light offset, light size, etc.
     /// </summary>
-    public interface IDynamicLightEntity : IEntity
+    public interface IDynamicLightEntity : IAnimatedEntity
     {
         /// <summary>
         /// The color of the light said entity emits.

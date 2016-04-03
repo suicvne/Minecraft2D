@@ -41,9 +41,10 @@ namespace Minecraft2DRebirth.Scenes
             graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone,
                 transformMatrix: Camera.Transformation(graphics.GetGraphicsDeviceManager().GraphicsDevice));
 
+            
             Map.Draw(graphics, Camera);
             //Draws the regular entites and their sprites and whatnot.
-            ((List<IEntity>)Entities).ForEach(entity =>
+            ((List<IAnimatedEntity>)Entities).ForEach(entity =>
             {
                 entity.Draw(graphics);
             });
@@ -98,7 +99,24 @@ namespace Minecraft2DRebirth.Scenes
             graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(null);
         }
 
-        private int offx, offy;
+        private void UpdateCameraBounds(Rectangle screenRect, IAnimatedEntity player)
+        {
+            if (player.Position.X > -1)
+            {
+                var newPosition = Camera.Position;
+                newPosition.X = (int)Math.Min(
+                    Math.Max(
+                        player.Position.X + (player.SpriteSize.X),
+                        0 + (screenRect.Width / 2) //half the viewport
+                        // TODO: correct this to account for scaling vs resolution change
+                    ),
+                    (Map.Metadata.Width * Constants.TileSize) - ((Map.Metadata.Width * Constants.TileSize) / 2)
+                );
+                Camera.Position = newPosition;
+            }
+        }
+
+        private Rectangle ScreenRect = new Rectangle(0, 0, 0, 0);
         public new void Draw(Graphics.Graphics graphics)
         {
             DrawBaseScene(graphics);
@@ -108,9 +126,8 @@ namespace Minecraft2DRebirth.Scenes
             graphics.GetSpriteBatch().Begin(blendState: Lighted.Multiply, samplerState: SamplerState.PointClamp);
 
             var screenRect = graphics.ScreenRectangle();
-            screenRect.X -= offx;
-            screenRect.Y -= offy;
             graphics.GetSpriteBatch().Draw(BaseScene, screenRect, Color.White);
+            ScreenRect = screenRect;
 
             if (RenderLights)
                 graphics.GetSpriteBatch().Draw(LightScene, screenRect, Color.White);
@@ -120,29 +137,13 @@ namespace Minecraft2DRebirth.Scenes
 
         public new void Update(GameTime gameTime)
         {
-            Vector2 playerPosition = new Vector2(-1, -1);
-            ((List<IEntity>)Entities).ForEach(entity =>
+            ((List<IAnimatedEntity>)Entities).ForEach(entity =>
             {
                 entity.Update(gameTime);
-                if (entity is AnimatedEntityTest) //current placeholder player
-                    playerPosition = entity.Position;
+                if (entity is AnimatedEntityTest)
+                    UpdateCameraBounds(ScreenRect, entity);
             });
-
-            if(playerPosition.X > -1)
-            {
-                var newPosition = Camera.Position;
-                newPosition.X = (int)Math.Min(
-                    Math.Min(
-                        playerPosition.X, 
-                        Map.Metadata.Width * Constants.TileSize
-                    ),
-                    (Map.Metadata.Width * Constants.TileSize)
-                );
-                Camera.Position = newPosition;
-                Console.WriteLine(Camera.Position);
-            }
-
-
+            
             // Static lights don't change. If dynamic/entity lights want to change/update, they can.
 
             /* This was for debugging positions and whatnot.

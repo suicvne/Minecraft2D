@@ -29,11 +29,11 @@ namespace Minecraft2DRebirth.Scenes
             set{ _BaseScene = value; }
         }
 
-        private List<IEntity> _Entities;
-        public IEnumerable<IEntity> Entities
+        private List<IAnimatedEntity> _Entities;
+        public IEnumerable<IAnimatedEntity> Entities
         {
             get{return _Entities;}
-            set { _Entities = (List<IEntity>)value; }
+            set { _Entities = (List<IAnimatedEntity>)value; }
         }
 
         public IEnumerable<LightSource> Lights
@@ -77,7 +77,7 @@ namespace Minecraft2DRebirth.Scenes
         }
         #endregion
 
-        public void AddEntity(IEntity entity)
+        public void AddEntity(IAnimatedEntity entity)
         {
             _Entities.Add(entity);
         }
@@ -100,7 +100,7 @@ namespace Minecraft2DRebirth.Scenes
             BaseScene = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice,
                 width, height);
 
-            _Entities = new List<IEntity>();
+            _Entities = new List<IAnimatedEntity>();
             _StaticLights = new List<LightSource>();
 
             if (!Minecraft2D.ScaleGame)
