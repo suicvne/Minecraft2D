@@ -37,6 +37,11 @@ namespace Minecraft2DRebirth.Screens
             Scene = new BasicLightableSceneWithMap(graphics);
             Scene.AmbientLight = Color.White;//new Color(20, 20, 20);
             TestEntity.LightSize = 0f;
+
+            int x = graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Width / 2;
+            int y = graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Height / 2;
+            TestEntity.Position = new Vector2(x + (32 * 32), y + (25 * 32) - 64);
+
             Scene.AddEntity(TestEntity); //player entity
             //FakeSunEntity = new AnnoyingLightEntityTest();
             //Scene.AddEntity(FakeSunEntity); //lol

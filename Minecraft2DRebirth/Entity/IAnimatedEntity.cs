@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Minecraft2DRebirth.Entity
 {
-    public class IAnimatedEntity : IEntity
+    public class AnimatedEntityTest : IEntity
     {
         //TODO: abstract this
         public enum Direction

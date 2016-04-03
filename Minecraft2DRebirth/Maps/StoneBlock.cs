@@ -15,7 +15,7 @@ namespace Minecraft2DRebirth.Maps
     {
         public StoneBlock() : base()
         {
-            Name = "minecraft:stone";
+            EntityName = "minecraft:stone";
             InBackground = false;
             SheetName = "terrain";
             TileIndex = new Vector2(0, 1 * Constants.SpriteSize);
@@ -24,7 +24,7 @@ namespace Minecraft2DRebirth.Maps
             PlaceSoundName = "stone{0}";
             Transparency = TileTransparency.FullyOpague;
             Hardness = 2f;
-            Drops = Name;
+            Drops = EntityName;
         }
 
         public override void Draw(Graphics.Graphics graphics)

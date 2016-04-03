@@ -12,6 +12,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Minecraft2DRebirth.Scenes
 {
+    // TODO abstract entities list into a double array restricted to the bounds of the map
+    //  might be okay at this point to just make a special map inheriting scene and stuff
     // TODO abstract entities list into the map class.
     public class BasicLightableSceneWithMap : BasicLightableScene
     {
@@ -35,17 +37,16 @@ namespace Minecraft2DRebirth.Scenes
         public void DrawBaseScene(Graphics.Graphics graphics)
         {
             graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(BaseScene);
-            graphics.GetGraphicsDeviceManager().GraphicsDevice.Clear(Color.White);
+            graphics.GetGraphicsDeviceManager().GraphicsDevice.Clear(Color.CornflowerBlue);
             graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone,
                 transformMatrix: Camera.Transformation(graphics.GetGraphicsDeviceManager().GraphicsDevice));
 
+            Map.Draw(graphics, Camera);
             //Draws the regular entites and their sprites and whatnot.
             ((List<IEntity>)Entities).ForEach(entity =>
             {
                 entity.Draw(graphics);
             });
-
-            Map.Draw(graphics, Camera);
 
             graphics.GetSpriteBatch().End();
 
@@ -119,8 +120,32 @@ namespace Minecraft2DRebirth.Scenes
 
         public new void Update(GameTime gameTime)
         {
-            ((List<IEntity>)Entities).ForEach(entity => entity.Update(gameTime));
+            Vector2 playerPosition = new Vector2(-1, -1);
+            ((List<IEntity>)Entities).ForEach(entity =>
+            {
+                entity.Update(gameTime);
+                if (entity is AnimatedEntityTest) //current placeholder player
+                    playerPosition = entity.Position;
+            });
 
+            if(playerPosition.X > -1)
+            {
+                var newPosition = Camera.Position;
+                newPosition.X = (int)Math.Min(
+                    Math.Min(
+                        playerPosition.X, 
+                        Map.Metadata.Width * Constants.TileSize
+                    ),
+                    (Map.Metadata.Width * Constants.TileSize)
+                );
+                Camera.Position = newPosition;
+                Console.WriteLine(Camera.Position);
+            }
+
+
+            // Static lights don't change. If dynamic/entity lights want to change/update, they can.
+
+            /* This was for debugging positions and whatnot.
             if (Minecraft2D.InputHelper.IsCurPress(Keys.Right))
                 Camera.Move(Vector2.UnitX);
             if (Minecraft2D.InputHelper.IsCurPress(Keys.Left))
@@ -146,6 +171,7 @@ namespace Minecraft2DRebirth.Scenes
                 Camera.Zoom += 0.1f;
             if (Minecraft2D.InputHelper.IsCurPress(Keys.OemCloseBrackets))
                 Camera.Zoom -= 0.1f;
+                */
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Minecraft2DRebirth.Maps
         {
             get
             {
-                return this.Name;
+                return this.EntityName;
             }
 
             set
@@ -27,7 +27,7 @@ namespace Minecraft2DRebirth.Maps
 
         public bool InBackground {get; set;}
 
-        public string Name { get; set; }
+        public string EntityName { get; set; }
 
         public string PlaceSoundName { get; set; }
 
@@ -49,21 +49,25 @@ namespace Minecraft2DRebirth.Maps
             PreferredTool = ToolType.None;
             Transparency = TileTransparency.FullyTransparent; //can pass through
             TileIndex = new Vector2(-1, -1);
-            Name = "minecraft:air";
+            EntityName = "minecraft:air";
             InBackground = false;
             Hardness = -1;
             Drops = null;
         }
 
-        public Rectangle Bounds()
+        public Rectangle Hitbox
         {
-            return new Rectangle
+            get
             {
-                X = (int)Position.X,
-                Y = (int)Position.Y,
-                Width = Constants.TileSize,
-                Height = Constants.TileSize
-            };
+                return new Rectangle
+                {
+                    X = (int)Position.X,
+                    Y = (int)Position.Y,
+                    Width = Constants.TileSize,
+                    Height = Constants.TileSize
+                };
+            }
+            set { }
         }
 
         public float LeftSide() { return Position.X; }

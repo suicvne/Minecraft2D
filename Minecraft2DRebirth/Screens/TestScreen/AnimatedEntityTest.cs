@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Minecraft2DRebirth.Screens.TestScreen
 {
-    public class PlayerTest : IAnimatedEntity, IDynamicLightEntity
+    public class PlayerTest : AnimatedEntityTest, IDynamicLightEntity
     {
         #region Dynamic Light Stuff
         public Color LightColor
@@ -132,14 +132,14 @@ namespace Minecraft2DRebirth.Screens.TestScreen
             if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
             {
                 Animating = true;
-                CurrentDirection = Entity.IAnimatedEntity.Direction.Right;
+                CurrentDirection = Entity.AnimatedEntityTest.Direction.Right;
                 XMovement = 1;
                 UpdateX(gameTime);
             }
             else if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
             {
                 Animating = true;
-                CurrentDirection = Entity.IAnimatedEntity.Direction.Left;
+                CurrentDirection = Entity.AnimatedEntityTest.Direction.Left;
                 XMovement = -1;
                 UpdateX(gameTime);
             }

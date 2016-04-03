@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Minecraft2DRebirth.Maps
 {
+    // TODO: seperate background and foreground draw calls.
     public class MinecraftMap : IMap
     {
         public MapMetadata Metadata { get; set; }
@@ -40,7 +41,7 @@ namespace Minecraft2DRebirth.Maps
             {
                 for(int x = 0; x < Metadata.Height; x++)
                 {
-                    //if(y > 32)
+                    if(y > 32)
                         TileMap[y, x] = new StoneBlock { Position = new Vector2(x * Constants.TileSize, y * Constants.TileSize) };
                 }
             }
@@ -57,12 +58,19 @@ namespace Minecraft2DRebirth.Maps
         /// </returns>
         private int[] GetMaxRenderPoints(Graphics.Graphics graphics, Camera2D camera)
         {
-            int minX = (int)Math.Ceiling(((float)camera.Position.X - (graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Width / 2)) / Constants.TileSize);
-            int maxX = (int)Math.Ceiling(((float)camera.Position.X + (graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Width / 2)) / Constants.TileSize);
-            int minY = (int)Math.Ceiling(((float)camera.Position.Y - (graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Height / 2)) / Constants.TileSize);
-            int maxY = (int)Math.Ceiling(((float)camera.Position.Y + (graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Height / 2)) / Constants.TileSize);
+            int minX = (int)Math.Ceiling(((float)camera.Position.X - ((Metadata.Width * Constants.TileSize) / 2)) / Constants.TileSize);
+            int maxX = (int)Math.Ceiling(((float)camera.Position.X + ((Metadata.Width * Constants.TileSize) / 2)) / Constants.TileSize);
+            int minY = (int)Math.Ceiling(((float)camera.Position.Y - ((Metadata.Height * Constants.TileSize) / 2)) / Constants.TileSize);
+            int maxY = (int)Math.Ceiling(((float)camera.Position.Y + ((Metadata.Height * Constants.TileSize) / 2)) / Constants.TileSize);
 
-            return new int[4] { Math.Abs(minX), Math.Abs(maxX), Math.Abs(minY), Math.Abs(maxY) }; ;
+            return new int[4] { Zeroize(minX), Zeroize(maxX), Zeroize(minY), Zeroize(maxY) }; ;
+        }
+
+        private int Zeroize(int number)
+        {
+            if (number < 0)
+                return 0;
+            return Math.Abs(number);
         }
 
         public void Draw(Graphics.Graphics graphics, Camera2D camera = null)
@@ -82,9 +90,9 @@ namespace Minecraft2DRebirth.Maps
             {
                 for(int x = tx; x < wBounds; x++)
                 {
-                    if (y < 0)
+                    if (y < 0 || y > Metadata.Height - 1)
                         continue;
-                    if (x < 0)
+                    if (x < 0 || x > Metadata.Width - 1)
                         continue;
 
                     if (TileMap[y, x] != null)
