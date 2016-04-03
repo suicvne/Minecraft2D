@@ -14,6 +14,7 @@ namespace Minecraft2DRebirth.Scenes
     public class BasicLightableScene : ILightableScene
     {
         #region Header implementation
+        public Camera2D Camera { get; set; }
         private Color _AmbientLight = Color.White; //fully lit.
         public Color AmbientLight
         {
@@ -92,6 +93,7 @@ namespace Minecraft2DRebirth.Scenes
             width = graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Width;
             height = graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Height;
 
+            Camera = new Camera2D();
 
             LightScene = new RenderTarget2D(graphics.GetGraphicsDeviceManager().GraphicsDevice,
                 width, height);
@@ -128,7 +130,8 @@ namespace Minecraft2DRebirth.Scenes
         {
             graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(BaseScene);
             graphics.GetGraphicsDeviceManager().GraphicsDevice.Clear(Color.White);
-            graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+            graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone,
+                transformMatrix: Camera.Transformation(graphics.GetGraphicsDeviceManager().GraphicsDevice));
 
             //Draws the regular entites and their sprites and whatnot.
             _Entities.ForEach(entity =>
@@ -149,7 +152,8 @@ namespace Minecraft2DRebirth.Scenes
         {
             graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(LightScene);
             graphics.GetGraphicsDeviceManager().GraphicsDevice.Clear(AmbientLight);
-            graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+            graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone,
+                transformMatrix: Camera.Transformation(graphics.GetGraphicsDeviceManager().GraphicsDevice));
 
             var texture = graphics.GetTexture2DByName("circle");
 

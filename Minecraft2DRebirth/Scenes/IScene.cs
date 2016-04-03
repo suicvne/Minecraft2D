@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Minecraft2DRebirth.Entity;
+using Minecraft2DRebirth.Graphics;
 using Minecraft2DRebirth.Screens;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,8 @@ namespace Minecraft2DRebirth.Scenes
         IEnumerable<IEntity> Entities { get; set; }
         
         IScreen Parent { get; set; }
+
+        Camera2D Camera { get; set; }
 
         void Draw(Graphics.Graphics graphics);
         void Update(GameTime gameTime);

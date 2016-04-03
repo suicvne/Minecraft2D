@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Minecraft2DRebirth.Graphics;
 using Minecraft2DRebirth.Maps;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace Minecraft2DRebirth
         ITile[,] TileMap { get; set; }
         MapMetadata Metadata { get; set; }
 
-        void Draw(Graphics.Graphics graphics);
+        void Draw(Graphics.Graphics graphics, Camera2D camera = null);
         void Update(GameTime gameTime);
     }
 }

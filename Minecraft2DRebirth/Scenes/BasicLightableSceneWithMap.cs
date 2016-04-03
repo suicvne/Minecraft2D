@@ -8,6 +8,7 @@ using Minecraft2DRebirth.Maps;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Minecraft2DRebirth.Entity;
+using Microsoft.Xna.Framework.Input;
 
 namespace Minecraft2DRebirth.Scenes
 {
@@ -21,13 +22,22 @@ namespace Minecraft2DRebirth.Scenes
         {
             Map = new MinecraftMap();
             _Map.GenerateTestMap();
+            Camera = new Camera2D();
+            int x = graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Width / 2;
+            int y = graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Height / 2;
+            //minX = x;
+            //minY = y;
+            //maxX = (int)world.WorldSize.X - (MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferWidth / 2);
+            //maxY = (int)world.WorldSize.Y - (MainGame.GlobalGraphicsDeviceManager.PreferredBackBufferHeight / 2);
+            Camera.Position = new Vector2(x + (32 * 32), y + (25 * 32));
         }
 
         public void DrawBaseScene(Graphics.Graphics graphics)
         {
             graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(BaseScene);
             graphics.GetGraphicsDeviceManager().GraphicsDevice.Clear(Color.White);
-            graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+            graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone,
+                transformMatrix: Camera.Transformation(graphics.GetGraphicsDeviceManager().GraphicsDevice));
 
             //Draws the regular entites and their sprites and whatnot.
             ((List<IEntity>)Entities).ForEach(entity =>
@@ -35,7 +45,7 @@ namespace Minecraft2DRebirth.Scenes
                 entity.Draw(graphics);
             });
 
-            Map.Draw(graphics);
+            Map.Draw(graphics, Camera);
 
             graphics.GetSpriteBatch().End();
 
@@ -46,7 +56,7 @@ namespace Minecraft2DRebirth.Scenes
         {
             graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(LightScene);
             graphics.GetGraphicsDeviceManager().GraphicsDevice.Clear(AmbientLight);
-            graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+            graphics.GetSpriteBatch().Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, transformMatrix: Camera.Transformation(graphics.GetGraphicsDeviceManager().GraphicsDevice));
 
             var texture = graphics.GetTexture2DByName("circle");
 
@@ -87,6 +97,7 @@ namespace Minecraft2DRebirth.Scenes
             graphics.GetGraphicsDeviceManager().GraphicsDevice.SetRenderTarget(null);
         }
 
+        private int offx, offy;
         public new void Draw(Graphics.Graphics graphics)
         {
             DrawBaseScene(graphics);
@@ -96,10 +107,12 @@ namespace Minecraft2DRebirth.Scenes
             graphics.GetSpriteBatch().Begin(blendState: Lighted.Multiply, samplerState: SamplerState.PointClamp);
 
             var screenRect = graphics.ScreenRectangle();
+            screenRect.X -= offx;
+            screenRect.Y -= offy;
             graphics.GetSpriteBatch().Draw(BaseScene, screenRect, Color.White);
 
             if (RenderLights)
-                graphics.GetSpriteBatch().Draw(LightScene, graphics.ScreenRectangle(), Color.White);
+                graphics.GetSpriteBatch().Draw(LightScene, screenRect, Color.White);
 
             graphics.GetSpriteBatch().End();
         }
@@ -107,6 +120,32 @@ namespace Minecraft2DRebirth.Scenes
         public new void Update(GameTime gameTime)
         {
             ((List<IEntity>)Entities).ForEach(entity => entity.Update(gameTime));
+
+            if (Minecraft2D.InputHelper.IsCurPress(Keys.Right))
+                Camera.Move(Vector2.UnitX);
+            if (Minecraft2D.InputHelper.IsCurPress(Keys.Left))
+                Camera.Move(-Vector2.UnitX);
+            if (Minecraft2D.InputHelper.IsCurPress(Keys.Up))
+                Camera.Move(-Vector2.UnitY);
+            if (Minecraft2D.InputHelper.IsCurPress(Keys.Down))
+                Camera.Move(Vector2.UnitY);
+
+            if (Minecraft2D.InputHelper.IsCurPress(Keys.A))
+                offx -= 1;
+            if (Minecraft2D.InputHelper.IsCurPress(Keys.D))
+                offx += 1;
+            if (Minecraft2D.InputHelper.IsCurPress(Keys.S))
+                offy += 1;
+            if (Minecraft2D.InputHelper.IsCurPress(Keys.W))
+                offy -= 1;
+
+            if (Minecraft2D.InputHelper.IsCurPress(Keys.R))
+                Camera.Zoom = 1f;
+
+            if (Minecraft2D.InputHelper.IsCurPress(Keys.OemOpenBrackets))
+                Camera.Zoom += 0.1f;
+            if (Minecraft2D.InputHelper.IsCurPress(Keys.OemCloseBrackets))
+                Camera.Zoom -= 0.1f;
         }
     }
 }

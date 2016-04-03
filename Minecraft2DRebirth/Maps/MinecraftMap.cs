@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Minecraft2DRebirth;
+using Minecraft2DRebirth.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,12 +46,47 @@ namespace Minecraft2DRebirth.Maps
             }
         }
 
-        public void Draw(Graphics.Graphics graphics)
+        /// <summary>
+        /// size 4 array, meant for tile index not abs X positions
+        /// 0: minX
+        /// 1: maxX
+        /// 2: minY
+        /// 3: maxY
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private int[] GetMaxRenderPoints(Graphics.Graphics graphics, Camera2D camera)
         {
-            for(int y = 0; y < Metadata.Width; y++)
+            int minX = (int)Math.Ceiling(((float)camera.Position.X - (graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Width / 2)) / Constants.TileSize);
+            int maxX = (int)Math.Ceiling(((float)camera.Position.X + (graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Width / 2)) / Constants.TileSize);
+            int minY = (int)Math.Ceiling(((float)camera.Position.Y - (graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Height / 2)) / Constants.TileSize);
+            int maxY = (int)Math.Ceiling(((float)camera.Position.Y + (graphics.GetGraphicsDeviceManager().GraphicsDevice.Viewport.Height / 2)) / Constants.TileSize);
+
+            return new int[4] { Math.Abs(minX), Math.Abs(maxX), Math.Abs(minY), Math.Abs(maxY) }; ;
+        }
+
+        public void Draw(Graphics.Graphics graphics, Camera2D camera = null)
+        {
+            int tx = 0, ty = 0;
+            int wBounds = Metadata.Width, hBounds = Metadata.Height;
+            if(camera != null) //if given a full camera, let's only render a viewport so we don't use as many resources!
             {
-                for(int x = 0; x < Metadata.Height; x++)
+                var renderPoints = GetMaxRenderPoints(graphics, camera);
+                tx = renderPoints[0] - 1;
+                wBounds = renderPoints[1] + 1;
+                ty = renderPoints[2] - 1;
+                hBounds = renderPoints[3] + 1;
+            }
+
+            for(int y = ty; y < hBounds; y++)
+            {
+                for(int x = tx; x < wBounds; x++)
                 {
+                    if (y < 0)
+                        continue;
+                    if (x < 0)
+                        continue;
+
                     if (TileMap[y, x] != null)
                         TileMap[y, x].Draw(graphics);
                 }

@@ -52,6 +52,7 @@
     <Compile Include="Entity\IDynamicLightEntity.cs" />
     <Compile Include="Entity\IEntity.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Graphics\Camera2D.cs" />
     <Compile Include="Graphics\Graphics.cs" />
     <Compile Include="Graphics\ILighted.cs" />
     <Compile Include="Graphics\Lighted.cs" />
