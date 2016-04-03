@@ -106,7 +106,7 @@ namespace Minecraft2DRebirth.Scenes
                 var newPosition = Camera.Position;
                 newPosition.X = (int)Math.Min(
                     Math.Max(
-                        player.Position.X + (player.SpriteSize.X),
+                        player.Position.X + (player.SpriteSize.X ),
                         0 + (screenRect.Width / 2) //half the viewport
                         // TODO: correct this to account for scaling vs resolution change
                     ),
