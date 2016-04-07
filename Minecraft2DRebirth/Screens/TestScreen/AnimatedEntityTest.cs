@@ -71,7 +71,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
             FrameCount = 3;
             YFrameIndex = 0;
             SpriteSize = new Vector2(17, 30);
-            Position = new Vector2(200, 200);
+            Position = new Vector2(200, 50);
             CurrentDirection = Direction.Right;
         }
 
@@ -89,6 +89,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
                 ty = 0
             };
             var tiles = map.GetCollidingTiles(rectangle);
+            Console.WriteLine(tiles.Count);
             for (int i = 0; i < tiles.Count; i++)
             {
                 if (tiles[i].Transparency == Maps.TileTransparency.FullyOpague)

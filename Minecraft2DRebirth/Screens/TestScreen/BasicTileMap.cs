@@ -37,7 +37,10 @@ namespace Minecraft2DRebirth.Screens.TestScreen
 
         private int GameToIndex(int game)
         {
-            return (int)Math.Floor((double)game / Constants.TileSize);
+            var returnValue = (int)Math.Floor((double)game / Constants.TileSize);
+            if (returnValue < 0)
+                returnValue = 0;
+            return returnValue;
         }
 
         public List<ITile> GetCollidingTiles(Rectangle rectangle)
@@ -49,9 +52,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
             beginning_x = GameToIndex(rectangle.Left);
             end_x = GameToIndex(rectangle.Right);
             beginning_y = GameToIndex(rectangle.Top);
-            end_y = Math.Min(0, GameToIndex(rectangle.Bottom));
-
-
+            end_y = Math.Max(0, GameToIndex(rectangle.Bottom));
 
             for (int y = beginning_y; y <= end_y; y++)
                 for (int x = beginning_x; x <= end_x; x++)
