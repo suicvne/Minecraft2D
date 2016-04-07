@@ -10,6 +10,12 @@ using System.Threading.Tasks;
 
 namespace Minecraft2DRebirth.Screens.TestScreen
 {
+    struct CollisionInfo
+    {
+        public bool Collided;
+        public int tx, ty;
+    }
+
     public class PlayerTest : AnimatedEntityTest, IDynamicLightEntity
     {
         #region Dynamic Light Stuff
@@ -47,8 +53,15 @@ namespace Minecraft2DRebirth.Screens.TestScreen
         public const float WalkingAcceleration = .00083007812f * 12;
         public const float RunningAcceleration = .00083007812f * 32;
         public const float MaxSpeedX = 0.25859375f;
+
+        public const float MaxSpeedY = 0.325f;
+        public const float Gravity = 0.0012f;
+        public const float JumpGravity = 0.25f;
+
         public const int MaxAnimationFPS = 45;
         #endregion
+
+        private bool IsOnGround { get; set; } = false;
 
 
         public PlayerTest()
@@ -67,8 +80,57 @@ namespace Minecraft2DRebirth.Screens.TestScreen
             base.Draw(graphics);
         }
 
+        private CollisionInfo GetCollisionInfoFromMap(BasicTileMap map, Rectangle rectangle)
+        {
+            CollisionInfo info = new CollisionInfo
+            {
+                Collided = false,
+                tx = 0,
+                ty = 0
+            };
+            var tiles = map.GetCollidingTiles(rectangle);
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                if (tiles[i].Transparency == Maps.TileTransparency.FullyOpague)
+                {
+                    info.Collided = true;
+                    info.tx = (int)Math.Floor(tiles[i].Position.X / Constants.TileSize);
+                    info.ty = (int)Math.Floor(tiles[i].Position.Y / Constants.TileSize);
+                }
+            }
+            return info;
+        }
+
         private float runningFrame = WalkingAcceleration;
         public float xVelocity = 0.0f;
+        private void UpdateY(GameTime gameTime, BasicTileMap map)
+        {
+            float gravity = (velocity_y > 0f ? JumpGravity : Gravity);
+
+            velocity_y = Math.Min(velocity_y + gravity * gameTime.ElapsedGameTime.Milliseconds, MaxSpeedY);
+
+            float delta = velocity_y * gameTime.ElapsedGameTime.Milliseconds;
+            Position = new Vector2(Position.X, Position.Y + delta);
+
+            if (delta > 0) //going down
+            {
+                CollisionInfo info = GetCollisionInfoFromMap(map, Hitbox);
+                if(info.Collided)
+                {
+                    Position = new Vector2(Position.X, (info.ty * Constants.TileSize) - Hitbox.Bottom);
+                    velocity_y = 0f;
+                    IsOnGround = true;
+                }
+                else
+                {
+                    Position = new Vector2(Position.X, Position.Y + delta);
+                    IsOnGround = false;
+                }
+            }
+            else //up
+            {
+            }
+        }
         private void UpdateX(GameTime gameTime)
         {
             float actualAcceleration = 0.0f;
@@ -117,18 +179,17 @@ namespace Minecraft2DRebirth.Screens.TestScreen
                 Position.Y);
         }
 
-        public void UpdateY(GameTime gameTime)
-        {
-
-        }
-
         private int XMovement = 0;
-
+        private float velocity_y = 0f;
         
-
-        public new void Update(GameTime gameTime)
+        public new void Update(GameTime gameTime) { throw new Exception(); }
+        public void Update(GameTime gameTime, BasicTileMap map)
         {
             base.Update(gameTime);
+
+            Hitbox = new Rectangle(Hitbox.Width, Hitbox.Height, (int)Position.X, (int)Position.Y);
+
+            UpdateY(gameTime, map);
             if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
             {
                 Animating = true;

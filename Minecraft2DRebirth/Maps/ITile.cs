@@ -8,6 +8,16 @@ using System.Threading.Tasks;
 
 namespace Minecraft2DRebirth.Maps
 {
+    /// <summary>
+    /// The "transparency" of a tile defining whether or not you can fully pass through it or not.
+    /// </summary>
+    public enum TileTransparency : int
+    {
+        FullyOpague, //cant be passed through
+        FullyTransparent, //can be passed through
+        PassThroughBreakable //can pass through but can't break
+    }
+
     public interface ITile : IAnimatedEntity
     {
         /// <summary>
@@ -29,6 +39,11 @@ namespace Minecraft2DRebirth.Maps
         /// The location of the tile on the sheet.
         /// </summary>
         Vector2 TileIndex { get; set; }
+
+        /// <summary>
+        /// The transparency of the tile (eg: passable, etc)
+        /// </summary>
+        TileTransparency Transparency { get; set; }
 
         /// <summary>
         /// Returns a rectangle object representing the tile's rectangle in the world.

@@ -56,6 +56,7 @@
     <Compile Include="Graphics\Graphics.cs" />
     <Compile Include="Graphics\ILighted.cs" />
     <Compile Include="Graphics\Lighted.cs" />
+    <Compile Include="Graphics\RectangleUtils.cs" />
     <Compile Include="Graphics\SkinRegion.cs" />
     <Compile Include="Maps\IMap.cs" />
     <Compile Include="Input\Input.cs" />
@@ -73,10 +74,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\BasicLightableScene.cs" />
     <Compile Include="Scenes\BasicLightableSceneWithMap.cs" />
+    <Compile Include="Scenes\BasicMapScene.cs" />
     <Compile Include="Scenes\ILightableScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
     <Compile Include="Screens\TestScreen\AnimatedEntityTest.cs" />
     <Compile Include="Screens\TestScreen\AnnoyingLightEntityTest.cs" />
+    <Compile Include="Screens\TestScreen\BasicTileMap.cs" />
     <Compile Include="Screens\TestScreen\DebugScreen.cs" />
     <Compile Include="Screens\IScreen.cs" />
     <Compile Include="Screens\ScreenManager.cs" />

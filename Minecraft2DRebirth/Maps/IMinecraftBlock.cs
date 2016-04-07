@@ -17,17 +17,7 @@ namespace Minecraft2DRebirth.Maps
         Axe = 2,
         Pickaxe = 3
     }
-
-    /// <summary>
-    /// The "transparency" of a tile defining whether or not you can fully pass through it or not.
-    /// </summary>
-    public enum TileTransparency : int
-    {
-        FullyOpague, //cant be passed through
-        FullyTransparent, //can be passed through
-        PassThroughBreakable //can pass through but can't break
-    }
-
+    
     /// <summary>
     /// dont ask
     /// </summary>
@@ -41,8 +31,6 @@ namespace Minecraft2DRebirth.Maps
         string PlaceSoundName { get; set; }
 
         ToolType PreferredTool { get; set; }
-
-        TileTransparency Transparency { get; set; }
 
         /// <summary>
         /// How hard the block is.

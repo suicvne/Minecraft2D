@@ -13,18 +13,21 @@ namespace Minecraft2DRebirth.Maps
     /// </summary>
     class StoneBlock : MinecraftBlock
     {
+        private Rectangle Region { get; set; }
         public StoneBlock() : base()
         {
-            EntityName = "minecraft:stone";
+            EntityName = "minecraft:grass";
             InBackground = false;
             SheetName = "terrain";
-            TileIndex = new Vector2(0, 1 * Constants.SpriteSize);
+            TileIndex = new Vector2(1 * Constants.SpriteSize, 3 * Constants.SpriteSize);
             Position = Vector2.Zero;
             PreferredTool = ToolType.Pickaxe;
             PlaceSoundName = "stone{0}";
             Transparency = TileTransparency.FullyOpague;
             Hardness = 2f;
             Drops = EntityName;
+
+            Region = new Rectangle((int)TileIndex.X, (int)TileIndex.Y, Constants.SpriteSize, Constants.SpriteSize);
         }
 
         public override void Draw(Graphics.Graphics graphics)
@@ -33,7 +36,7 @@ namespace Minecraft2DRebirth.Maps
             graphics.GetSpriteBatch().Draw(
                 texture, 
                 Position.ToRectangle(),
-                new Rectangle((int)TileIndex.X, (int)TileIndex.Y, Constants.SpriteSize, Constants.SpriteSize),
+                Region,
                 Color.White
             );
         }
