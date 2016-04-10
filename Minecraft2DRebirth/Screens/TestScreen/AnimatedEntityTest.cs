@@ -80,7 +80,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
         public new void Draw(Graphics.Graphics graphics)
         {
             if (!IsOnGround)
-                CurrentFrameIndex = 1;
+                CurrentFrameIndex = 2;
 
             base.Draw(graphics);
         }
@@ -222,7 +222,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
                 XMovement = 0;
             }
             
-            if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Keys.Up))
+            if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Keys.Z))
             {
                 IsOnGround = false;
                 velocity_y = (velocity_y == 0 ? -.5f : velocity_y);

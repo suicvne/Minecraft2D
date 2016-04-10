@@ -68,6 +68,10 @@ namespace Minecraft2DRebirth.Scenes
         {
             Map.Update(gameTime);
             TestPlayer.Update(gameTime, Map);
+
+            int tx, ty;
+            tx = (int)Math.Floor(Minecraft2D.InputHelper.MousePosition.X / Constants.TileSize);
+            ty = (int)Math.Floor(Minecraft2D.InputHelper.MousePosition.Y / Constants.TileSize);
         }
     }
 }
