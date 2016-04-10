@@ -19,6 +19,7 @@ namespace Minecraft2DRebirth.Graphics
         /// </summary>
         public event EventHandler<Rectangle> ResolutionChanged;
 
+        private Texture2D _Rectangle;
         private Dictionary<string, Texture2D> textures;
         private Dictionary<string, SpriteFont> spriteFonts;
 
@@ -55,6 +56,9 @@ namespace Minecraft2DRebirth.Graphics
                     ResolutionChanged(this, newSize);
                 }
             };
+
+            _Rectangle = new Texture2D(graphicsDeviceManager.GraphicsDevice, 1, 1);
+            _Rectangle.SetData(new Color[] { Color.White });
         }
 
 #if DEBUG //Debug testing.
@@ -69,6 +73,18 @@ namespace Minecraft2DRebirth.Graphics
             screenManager.PushScreen(debugScreen);
         }
 #endif
+
+        public void DrawRectangle(float x, float y, float w, float h, Color color)
+        {
+            Rectangle drawingPoint = new Rectangle((int)x, (int)y, (int)w, (int)h);
+            spriteBatch.Draw(_Rectangle, drawingPoint, color);
+        }
+
+        public void DrawRectangle(Rectangle rect, Color color)
+        {
+            spriteBatch.Draw(_Rectangle, rect, color);
+        }
+        
 
         public void Draw()
         {
@@ -155,6 +171,7 @@ namespace Minecraft2DRebirth.Graphics
 
         public SpriteBatch GetSpriteBatch() => spriteBatch;
         public GraphicsDeviceManager GetGraphicsDeviceManager() => graphicsDeviceManager;
+
 
         public Texture2D GetTexture2DByName(string name)
         {

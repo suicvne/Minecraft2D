@@ -33,6 +33,7 @@ namespace Minecraft2DRebirth.Screens
         public BlankScreen(Graphics.Graphics graphics)
         {
             TestEntity = new PlayerTest();
+            Console.WriteLine(TestEntity.Hitbox.ToString());
             TestEntity.Animating = false;
 
             Scene = new BasicMapScene();

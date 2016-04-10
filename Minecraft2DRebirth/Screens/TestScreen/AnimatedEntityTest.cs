@@ -63,6 +63,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
 
         private bool IsOnGround { get; set; } = false;
 
+        public new Rectangle Hitbox { get; private set; }
 
         public PlayerTest()
         {
@@ -73,10 +74,14 @@ namespace Minecraft2DRebirth.Screens.TestScreen
             SpriteSize = new Vector2(17, 30);
             Position = new Vector2(200, 50);
             CurrentDirection = Direction.Right;
+            Hitbox = new Rectangle(0, 0, 32, 64);
         }
 
         public new void Draw(Graphics.Graphics graphics)
         {
+            if (!IsOnGround)
+                CurrentFrameIndex = 1;
+
             base.Draw(graphics);
         }
 
@@ -89,14 +94,17 @@ namespace Minecraft2DRebirth.Screens.TestScreen
                 ty = 0
             };
             var tiles = map.GetCollidingTiles(rectangle);
-            Console.WriteLine(tiles.Count);
             for (int i = 0; i < tiles.Count; i++)
             {
                 if (tiles[i].Transparency == Maps.TileTransparency.FullyOpague)
                 {
-                    info.Collided = true;
-                    info.tx = (int)Math.Floor(tiles[i].Position.X / Constants.TileSize);
-                    info.ty = (int)Math.Floor(tiles[i].Position.Y / Constants.TileSize);
+                    if (tiles[i].Hitbox.Intersects(Hitbox))
+                    {
+                        info.Collided = true;
+                        info.tx = (int)Math.Floor(tiles[i].Position.X / Constants.TileSize);
+                        info.ty = (int)Math.Floor(tiles[i].Position.Y / Constants.TileSize);
+                        break;
+                    }
                 }
             }
             return info;
@@ -111,25 +119,28 @@ namespace Minecraft2DRebirth.Screens.TestScreen
             velocity_y = Math.Min(velocity_y + gravity * gameTime.ElapsedGameTime.Milliseconds, MaxSpeedY);
 
             float delta = velocity_y * gameTime.ElapsedGameTime.Milliseconds;
-            Position = new Vector2(Position.X, Position.Y + delta);
 
             if (delta > 0) //going down
             {
-                CollisionInfo info = GetCollisionInfoFromMap(map, Hitbox);
-                if(info.Collided)
+                if (!IsOnGround)
                 {
-                    Position = new Vector2(Position.X, (info.ty * Constants.TileSize) - Hitbox.Bottom);
-                    velocity_y = 0f;
-                    IsOnGround = true;
-                }
-                else
-                {
-                    Position = new Vector2(Position.X, Position.Y + delta);
-                    IsOnGround = false;
+                    CollisionInfo info = GetCollisionInfoFromMap(map, Hitbox);
+                    if (info.Collided)
+                    {
+                        Position = new Vector2(Position.X, (info.ty * Constants.TileSize) - Hitbox.Height);
+                        velocity_y = 0f;
+                        IsOnGround = true;
+                    }
+                    else
+                    {
+                        Position = new Vector2(Position.X, Position.Y + delta);
+                        IsOnGround = false;
+                    }
                 }
             }
             else //up
             {
+                Position = new Vector2(Position.X, Position.Y + delta);
             }
         }
         private void UpdateX(GameTime gameTime)
@@ -187,8 +198,7 @@ namespace Minecraft2DRebirth.Screens.TestScreen
         public void Update(GameTime gameTime, BasicTileMap map)
         {
             base.Update(gameTime);
-
-            Hitbox = new Rectangle(Hitbox.Width, Hitbox.Height, (int)Position.X, (int)Position.Y);
+            Hitbox = new Rectangle((int)Position.X, (int)Position.Y, Hitbox.Width, Hitbox.Height);
 
             UpdateY(gameTime, map);
             if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
@@ -210,6 +220,12 @@ namespace Minecraft2DRebirth.Screens.TestScreen
                 Animating = false;
                 CurrentFrameIndex = 0; //reset
                 XMovement = 0;
+            }
+            
+            if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Keys.Up))
+            {
+                IsOnGround = false;
+                velocity_y = (velocity_y == 0 ? -.5f : velocity_y);
             }
         }
 

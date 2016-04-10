@@ -54,10 +54,20 @@ namespace Minecraft2DRebirth.Screens.TestScreen
             beginning_y = GameToIndex(rectangle.Top);
             end_y = Math.Max(0, GameToIndex(rectangle.Bottom));
 
+            if (beginning_y < 0)
+                beginning_y = 0;
+            if (end_y > Metadata.Height - 1)
+                end_y = Metadata.Height - 1;
+            if (beginning_x < 0)
+                beginning_x = 0;
+            if (end_x > Metadata.Width - 1)
+                end_x = Metadata.Width - 1;
+
             for (int y = beginning_y; y <= end_y; y++)
                 for (int x = beginning_x; x <= end_x; x++)
                     if (TileMap[y, x] != null && TileMap[y, x].Transparency == TileTransparency.FullyOpague)
-                        tilesList.Add(TileMap[y, x]);
+                        if(rectangle.Intersects(TileMap[y, x].Hitbox))
+                            tilesList.Add(TileMap[y, x]);
 
 
             return tilesList;
