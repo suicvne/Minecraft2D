@@ -55,6 +55,7 @@ namespace Minecraft2DRebirth
             Content.RootDirectory = "Content";
             this.IsMouseVisible = true;
 			this.Window.AllowUserResizing = true;
+            Window.Title = "MonoGame Test Application";
 
             this.Window.ClientSizeChanged += (sender, e) =>
             {

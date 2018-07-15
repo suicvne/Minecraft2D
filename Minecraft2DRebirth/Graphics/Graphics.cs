@@ -47,7 +47,7 @@ namespace Minecraft2DRebirth.Graphics
             //Hooking up initial event so we can notify and shit.
             game.Window.ClientSizeChanged += (sender, e) =>
             {
-                if(ResolutionChanged != null)
+                if (ResolutionChanged != null)
                 {
                     Rectangle newSize = new Rectangle(0, 0,
                         graphicsDeviceManager.GraphicsDevice.Viewport.Width,
@@ -67,10 +67,11 @@ namespace Minecraft2DRebirth.Graphics
             IOverlay screenOverlay = new DebugOverlay(screenManager);
             overlayManager.PushOverlay(screenOverlay);
 
-            //IScreen titleScreen = new TitleScreen();
-            IScreen debugScreen = new BlankScreen(this);
+            IScreen titleScreen = new TitleScreen();
+            //IScreen debugScreen = new BlankScreen(this);
             //IScreen lights = new LightingTest(this);
-            screenManager.PushScreen(debugScreen);
+            screenManager.PushScreen(titleScreen);
+
         }
 #endif
 
@@ -84,7 +85,7 @@ namespace Minecraft2DRebirth.Graphics
         {
             spriteBatch.Draw(_Rectangle, rect, color);
         }
-        
+
 
         public void Draw()
         {
@@ -160,7 +161,7 @@ namespace Minecraft2DRebirth.Graphics
 
         public void UnloadContent()
         {
-            foreach(var texture in textures)
+            foreach (var texture in textures)
                 texture.Value.Dispose();
             foreach (var sprFont in spriteFonts)
                 sprFont.Value.Texture.Dispose();
