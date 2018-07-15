@@ -1,12 +1,12 @@
-﻿using Minecraft2DRebirth.Entity;
-using Minecraft2DRebirth.Graphics;
+﻿using RockSolidEngine.Entity;
+using RockSolidEngine.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft2DRebirth.Scenes
+namespace RockSolidEngine.Scenes
 {
     /// <summary>
     /// To extend on scenes, the ILightableScene directly integrates with the ILighted interface to bring dynamic

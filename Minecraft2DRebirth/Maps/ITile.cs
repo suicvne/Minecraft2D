@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using Minecraft2DRebirth.Entity;
+using RockSolidEngine.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft2DRebirth.Maps
+namespace RockSolidEngine.Maps
 {
     /// <summary>
     /// The "transparency" of a tile defining whether or not you can fully pass through it or not.

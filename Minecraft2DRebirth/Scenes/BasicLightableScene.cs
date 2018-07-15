@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Minecraft2DRebirth.Entity;
-using Minecraft2DRebirth.Graphics;
-using Minecraft2DRebirth.Screens;
+using RockSolidEngine.Entity;
+using RockSolidEngine.Graphics;
+using RockSolidEngine.Screens;
 
-namespace Minecraft2DRebirth.Scenes
+namespace RockSolidEngine.Scenes
 {
     public class BasicLightableScene : ILightableScene
     {

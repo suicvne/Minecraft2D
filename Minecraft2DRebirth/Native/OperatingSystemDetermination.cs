@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft2DRebirth.Native
+namespace RockSolidEngine.Native
 {
     public class OperatingSystemDetermination
     {

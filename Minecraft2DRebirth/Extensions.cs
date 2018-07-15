@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Minecraft2DRebirth.Native;
+using RockSolidEngine.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Minecraft2DRebirth
+namespace RockSolidEngine
 {
     public static class Extensions
     {

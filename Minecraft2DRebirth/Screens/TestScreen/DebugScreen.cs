@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Minecraft2DRebirth.Native;
-using Minecraft2DRebirth.Screens.TestScreen;
-using Minecraft2DRebirth.Graphics;
+using RockSolidEngine.Native;
+using RockSolidEngine.Screens.TestScreen;
+using RockSolidEngine.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Minecraft2DRebirth.Entity;
-using Minecraft2DRebirth.Scenes;
+using RockSolidEngine.Entity;
+using RockSolidEngine.Scenes;
 
-namespace Minecraft2DRebirth.Screens
+namespace RockSolidEngine.Screens
 {
     public class BlankScreen : IScreen
     {

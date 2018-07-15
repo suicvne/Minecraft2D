@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Minecraft2DRebirth.Graphics;
-using Minecraft2DRebirth.Input;
+using RockSolidEngine.Graphics;
+using RockSolidEngine.Input;
 
-namespace Minecraft2DRebirth.Controls
+namespace RockSolidEngine.Controls
 {
     public class Button : IControl
     {

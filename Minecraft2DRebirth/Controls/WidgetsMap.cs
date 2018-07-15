@@ -1,11 +1,11 @@
-﻿using Minecraft2DRebirth.Graphics;
+﻿using RockSolidEngine.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft2DRebirth.Controls
+namespace RockSolidEngine.Controls
 {
     /// <summary>
     /// Defines locations for widgets and whatnot.

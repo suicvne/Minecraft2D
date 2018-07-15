@@ -7,7 +7,7 @@
     <ProjectGuid>{0A8F3460-66E4-4B8E-A991-5611559C7E39}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Minecraft2DRebirth</RootNamespace>
+    <RootNamespace>RockSolidEngine</RootNamespace>
     <AssemblyName>Minecraft2DRebirth</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Linux</MonoGamePlatform>
@@ -85,6 +85,8 @@
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Screens\TestScreen\LightingTest.cs" />
     <Compile Include="Screens\TitleScreen.cs" />
+    <Compile Include="Maps\RockTileMap.cs" />
+    <Compile Include="Screens\TestScreen\RockTestScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="KeraLua, Version=1.3.2.0, Culture=neutral, PublicKeyToken=04d04586786c6f34, processorArchitecture=MSIL">

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft2DRebirth.Controls
+namespace RockSolidEngine.Controls
 {
     public abstract class IControl
     {

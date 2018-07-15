@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Minecraft2DRebirth.Graphics;
-using Minecraft2DRebirth.Controls;
+using RockSolidEngine.Graphics;
+using RockSolidEngine.Controls;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Minecraft2DRebirth.Screens
+namespace RockSolidEngine.Screens
 {
     public class TitleScreen : IScreen
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Minecraft2DRebirth.Graphics;
-using Minecraft2DRebirth.Maps;
+using RockSolidEngine.Graphics;
+using RockSolidEngine.Maps;
 using System.Collections.Generic;
 
-namespace Minecraft2DRebirth.Screens.TestScreen
+namespace RockSolidEngine.Screens.TestScreen
 {
     public class BasicTileMap : IMap
     {

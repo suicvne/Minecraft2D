@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Minecraft2DRebirth.Screens
+namespace RockSolidEngine.Screens
 {
     public class ScreenManager
     {

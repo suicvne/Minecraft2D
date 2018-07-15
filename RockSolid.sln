@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaximEngine", "Minecraft2DRebirth\MaximEngine.csproj", "{0A8F3460-66E4-4B8E-A991-5611559C7E39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockSolidEngine", "Minecraft2DRebirth\RockSolidEngine.csproj", "{0A8F3460-66E4-4B8E-A991-5611559C7E39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

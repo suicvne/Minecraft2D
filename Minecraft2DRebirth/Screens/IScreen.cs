@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Minecraft2DRebirth.Controls;
-using Minecraft2DRebirth.Native;
+using RockSolidEngine.Controls;
+using RockSolidEngine.Native;
 using System.Collections.Generic;
 
-namespace Minecraft2DRebirth.Screens
+namespace RockSolidEngine.Screens
 {
     public abstract class IScreen
     {

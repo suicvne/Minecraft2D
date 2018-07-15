@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft2DRebirth.Entity
+namespace RockSolidEngine.Entity
 {
     public interface IAnimatedEntity
     {

@@ -1,14 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Minecraft2DRebirth.Entity;
-using Minecraft2DRebirth.Graphics;
+using RockSolidEngine.Entity;
+using RockSolidEngine.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft2DRebirth.Screens.TestScreen
+namespace RockSolidEngine.Screens.TestScreen
 {
     struct CollisionInfo
     {
@@ -201,14 +201,14 @@ namespace Minecraft2DRebirth.Screens.TestScreen
             Hitbox = new Rectangle((int)Position.X, (int)Position.Y, Hitbox.Width, Hitbox.Height);
 
             UpdateY(gameTime, map);
-            if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right))
+            if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D))
             {
                 Animating = true;
                 CurrentDirection = Entity.AnimatedEntityTest.Direction.Right;
                 XMovement = 1;
                 UpdateX(gameTime);
             }
-            else if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left))
+            else if (Minecraft2D.InputHelper.CurrentKeyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A))
             {
                 Animating = true;
                 CurrentDirection = Entity.AnimatedEntityTest.Direction.Left;

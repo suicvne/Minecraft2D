@@ -1,14 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
-using Minecraft2DRebirth.Entity;
-using Minecraft2DRebirth.Graphics;
-using Minecraft2DRebirth.Screens;
+using RockSolidEngine.Entity;
+using RockSolidEngine.Graphics;
+using RockSolidEngine.Screens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft2DRebirth.Scenes
+namespace RockSolidEngine.Scenes
 {
     /// <summary>
     /// A scene is different from a screen.

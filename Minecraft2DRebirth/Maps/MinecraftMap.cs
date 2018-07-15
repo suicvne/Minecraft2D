@@ -1,13 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
-using Minecraft2DRebirth;
-using Minecraft2DRebirth.Graphics;
+using RockSolidEngine;
+using RockSolidEngine.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft2DRebirth.Maps
+namespace RockSolidEngine.Maps
 {
     // TODO: seperate background and foreground draw calls.
     public class MinecraftMap : IMap

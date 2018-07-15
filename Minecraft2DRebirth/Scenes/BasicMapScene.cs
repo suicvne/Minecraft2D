@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Minecraft2DRebirth.Entity;
-using Minecraft2DRebirth.Graphics;
-using Minecraft2DRebirth.Screens;
-using Minecraft2DRebirth.Screens.TestScreen;
+using RockSolidEngine.Entity;
+using RockSolidEngine.Graphics;
+using RockSolidEngine.Screens;
+using RockSolidEngine.Screens.TestScreen;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Minecraft2DRebirth.Scenes
+namespace RockSolidEngine.Scenes
 {
     public class BasicMapScene : IScene
     {

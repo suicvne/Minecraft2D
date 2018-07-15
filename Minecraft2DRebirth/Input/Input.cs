@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using System;
 
-namespace Minecraft2DRebirth.Input
+namespace RockSolidEngine.Input
 {
     /// <summary>
     /// an enum of all available mouse buttons.

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Minecraft2DRebirth.Graphics;
-using Minecraft2DRebirth.Screens;
+using RockSolidEngine.Graphics;
+using RockSolidEngine.Screens;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Minecraft2DRebirth.Overlay
+namespace RockSolidEngine.Overlay
 {
     class DebugOverlay : IOverlay
     {

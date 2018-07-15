@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Minecraft2DRebirth.Graphics;
+using RockSolidEngine.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Minecraft2DRebirth.Entity
+namespace RockSolidEngine.Entity
 {
     public class AnimatedEntityTest : IAnimatedEntity
     {

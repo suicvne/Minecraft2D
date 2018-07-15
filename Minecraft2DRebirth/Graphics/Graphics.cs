@@ -1,13 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Minecraft2DRebirth.Overlay;
-using Minecraft2DRebirth.Screens;
-using Minecraft2DRebirth.Screens.TestScreen;
+using RockSolidEngine.Overlay;
+using RockSolidEngine.Screens;
+using RockSolidEngine.Screens.TestScreen;
 using System;
 using System.Collections.Generic;
 
-namespace Minecraft2DRebirth.Graphics
+namespace RockSolidEngine.Graphics
 {
     /// <summary>
     /// Handles graphics related things like special drawing, content management, etc.
@@ -67,11 +67,11 @@ namespace Minecraft2DRebirth.Graphics
             IOverlay screenOverlay = new DebugOverlay(screenManager);
             overlayManager.PushOverlay(screenOverlay);
 
-            IScreen titleScreen = new TitleScreen();
+            //IScreen titleScreen = new TitleScreen();
             //IScreen debugScreen = new BlankScreen(this);
             //IScreen lights = new LightingTest(this);
-            screenManager.PushScreen(titleScreen);
-
+            IScreen rock = new RockTestScreen();
+            screenManager.PushScreen(rock);
         }
 #endif
 

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using Minecraft2DRebirth.Entity;
+using RockSolidEngine.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft2DRebirth.Screens.TestScreen
+namespace RockSolidEngine.Screens.TestScreen
 {
     public class AnnoyingLightEntityTest : IDynamicLightEntity
     {

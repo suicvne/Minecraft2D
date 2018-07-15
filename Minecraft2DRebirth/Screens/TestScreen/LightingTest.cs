@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Minecraft2DRebirth.Graphics;
+using RockSolidEngine.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Minecraft2DRebirth.Screens.TestScreen
+namespace RockSolidEngine.Screens.TestScreen
 {
     struct QuadLightSource
     {

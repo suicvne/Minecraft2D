@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Minecraft2DRebirth.Graphics;
-using Minecraft2DRebirth.Maps;
+using RockSolidEngine.Graphics;
+using RockSolidEngine.Maps;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Minecraft2DRebirth.Entity;
+using RockSolidEngine.Entity;
 using Microsoft.Xna.Framework.Input;
 
-namespace Minecraft2DRebirth.Scenes
+namespace RockSolidEngine.Scenes
 {
     // TODO abstract entities list into a double array restricted to the bounds of the map
     //  might be okay at this point to just make a special map inheriting scene and stuff

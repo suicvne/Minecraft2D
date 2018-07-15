@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Minecraft2DRebirth.Maps
+namespace RockSolidEngine.Maps
 {
     /// <summary>
     /// The type of tool to break the block with.

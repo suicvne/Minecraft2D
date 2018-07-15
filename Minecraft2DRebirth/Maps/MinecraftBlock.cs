@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Minecraft2DRebirth.Maps
+namespace RockSolidEngine.Maps
 {
     // TODO: scripting.
 

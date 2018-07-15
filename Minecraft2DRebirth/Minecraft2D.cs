@@ -1,13 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Minecraft2DRebirth.Graphics;
-using Minecraft2DRebirth.Input;
-using Minecraft2DRebirth.Native;
-using Minecraft2DRebirth.Screens;
+using RockSolidEngine.Graphics;
+using RockSolidEngine.Input;
+using RockSolidEngine.Native;
+using RockSolidEngine.Screens;
 using System;
 
-namespace Minecraft2DRebirth
+namespace RockSolidEngine
 {
     public static class Constants
     {
